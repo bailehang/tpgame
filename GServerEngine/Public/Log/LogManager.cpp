@@ -21,7 +21,6 @@ void CLogManager::LogInit(char* filename,int FileMode,int ConsoleMode,int Output
 		OpenFile();
 	}	
 	if(ConsoleMode==CONSOLE)	OpenConsole();
-	if(OutputMode==OUTPUT)		OpenDebug();
 }
 
 void CLogManager::OpenFile()
@@ -77,9 +76,6 @@ void CLogManager::Write(char* fmt ,...)
 		WriteFile(hConsole,Msg,strlen(Msg),&dwWrite,NULL);
 	}	
 
-	if(bOpenFile) LogFile.write(Msg);
-
-	if(bDebugOutput) OutputDebugStringA(Msg);
-	
+	if(bOpenFile) LogFile.write(Msg);	
 }
 
