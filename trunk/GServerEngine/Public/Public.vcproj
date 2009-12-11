@@ -146,30 +146,6 @@
 		<Filter
 			Name="obj"
 			>
-			<File
-				RelativePath=".\obj\Obj.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\obj\Obj.h"
-				>
-			</File>
-			<File
-				RelativePath=".\obj\Obj_MoveShape.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\obj\Obj_MoveShape.h"
-				>
-			</File>
-			<File
-				RelativePath=".\obj\Region.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\obj\Region.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Log"
@@ -190,34 +166,6 @@
 		<Filter
 			Name="Ai"
 			>
-			<File
-				RelativePath=".\Ai\Ai_Base.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ai\Ai_Base.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Ai\Ai_Monster.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ai\Ai_Monster.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Ai\Ai_tools.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Ai\Ai_Utilities.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ai\Ai_Utilities.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Script"
@@ -244,14 +192,6 @@
 			</File>
 			<File
 				RelativePath=".\CList.h"
-				>
-			</File>
-			<File
-				RelativePath=".\GUID.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\GUID.h"
 				>
 			</File>
 			<File
@@ -294,6 +234,10 @@
 				RelativePath=".\Algorithms\AStar.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="MemManager"
+			>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
