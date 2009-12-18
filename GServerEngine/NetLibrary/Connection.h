@@ -8,7 +8,7 @@
 
 #include "ssocket.h"
 #include "..\Public\locks.h"
-#include "..\Public\CList.h"
+#include "..\Public\List.h"
 #include "..\Public\BaseNode.h"
 
 class CConnection :
