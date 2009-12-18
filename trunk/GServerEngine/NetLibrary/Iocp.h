@@ -11,7 +11,7 @@
 
 #include "Network.h"
 #include "..\Public\locks.h"
-#include "..\Public\CList.h"
+#include "..\Public\List.h"
 #include "..\Public\Memory.h"
 
 #define MAX_WORKER_COUNT	8

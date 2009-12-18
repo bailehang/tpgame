@@ -9,10 +9,9 @@
 
 #include "LibObject.h"
 
-#define MAX_CONNECTION	1800
-#define KEEPALIVE_TIMER	10000
-
-#define  CONNECTIONMANAGER CNetwork::ConnectionManager
+#define  MAX_CONNECTION		1800
+#define  KEEPALIVE_TIMER	10000
+#define  CONNECTIONMANAGER  CNetwork::ConnectionManager
 
 class CNetwork :
 	public CLibObject
