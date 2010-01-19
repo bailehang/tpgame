@@ -11,7 +11,7 @@ class   CPlayerEntity : public CBaseEntity
 private:
 	State*			m_pCurrentState;
 
-	eAction			m_Local;
+	eState			m_State;
 
 public:
 
@@ -21,6 +21,6 @@ public:
 
 	void	ChangeState( State* new_state );
 
-	eAction GetAction()const  {	return m_Local; }
+	eState	GetState()const  {	return m_State; }
 
 };

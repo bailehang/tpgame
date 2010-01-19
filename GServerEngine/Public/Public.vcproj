@@ -207,6 +207,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ai\Ai_States.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ai\Ai_States.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ai\Ai_StatesManager.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ai\Ai_tools.h"
 				>
 			</File>
@@ -218,14 +230,6 @@
 				RelativePath=".\Ai\Ai_Utilities.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Ai\States.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ai\States.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Script"
@@ -234,6 +238,26 @@
 		<Filter
 			Name="Timer"
 			>
+			<File
+				RelativePath=".\GameEvent.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Timer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Timer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TimerList.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TimerList.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="public"
@@ -251,11 +275,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\CList.h"
+				RelativePath=".\GUID.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GUID.h"
 				>
 			</File>
 			<File
 				RelativePath=".\KeepAlive.h"
+				>
+			</File>
+			<File
+				RelativePath=".\List.h"
 				>
 			</File>
 			<File
@@ -272,6 +304,10 @@
 			</File>
 			<File
 				RelativePath=".\Queue.h"
+				>
+			</File>
+			<File
+				RelativePath=".\singleton.cpp"
 				>
 			</File>
 			<File
@@ -294,11 +330,83 @@
 				RelativePath=".\Algorithms\AStar.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Algorithms\bit.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Algorithms\findMinValue.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="MemManager"
 			>
+			<File
+				RelativePath=".\MemManger\MemTools.h"
+				>
+			</File>
 		</Filter>
+		<Filter
+			Name="TestAi"
+			>
+			<File
+				RelativePath=".\BaseEntity.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BaseEntity.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ConsoleUtil.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RegEntityName.h"
+				>
+			</File>
+			<File
+				RelativePath=".\State.h"
+				>
+			</File>
+			<Filter
+				Name="Ai1"
+				>
+				<File
+					RelativePath=".\TestAi\AI1\FleeState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TestAi\AI1\FleeState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TestAi\AI1\PeaceState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TestAi\AI1\PeaceState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TestAi\AI1\PlayerEntity.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TestAi\AI1\PlayerEntity.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<File
+			RelativePath=".\ClassDiagram1.cd"
+			>
+		</File>
+		<File
+			RelativePath=".\gtools.h"
+			>
+		</File>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>
