@@ -1,7 +1,7 @@
 
 #pragma  once 
 
-enum  eAction
+enum  eState
 {
 	ent_Flee,
 	ent_Peace,
@@ -18,4 +18,6 @@ public:
 
 	// Exit
 	virtual void  Exit(CBaseEntity* )=0;
+
+	virtual	~State();
 };
