@@ -254,6 +254,10 @@
 				RelativePath=".\Public\StateMachine.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Public\StateSet.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Tools"
@@ -270,6 +274,62 @@
 		<Filter
 			Name="Entity"
 			>
+			<File
+				RelativePath=".\Entity\CHumanEntity.h"
+				>
+			</File>
+			<Filter
+				Name="StatePro"
+				>
+				<File
+					RelativePath=".\Entity\StatePro\DeadState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Entity\StatePro\DeadState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Entity\StatePro\FightState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Entity\StatePro\FightState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Entity\StatePro\FleeState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Entity\StatePro\FleeState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Entity\StatePro\FollowState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Entity\StatePro\FollowState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Entity\StatePro\GoHomeState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Entity\StatePro\GoHomeState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Entity\StatePro\PeaceState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Entity\StatePro\PeaceState.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
