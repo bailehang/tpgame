@@ -8,7 +8,7 @@ class CState
 public:
 
 	// Handle Event
-	virtual	void  HandleEvent( eEventAi& e , entity_type*) = 0;
+	virtual	void		  HandleEvent( eEventAi& e , entity_type*) = 0;
 
 	// return state
 	virtual eStateAi	  GetState()	{	return  Ent_InValidState ;	}

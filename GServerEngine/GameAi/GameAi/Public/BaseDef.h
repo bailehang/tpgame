@@ -27,6 +27,7 @@ enum	eStateAi
 // 事件类型
 enum	eEventAi
 {
+	Ent_InValidEvent=-1,
 	Ent_MoveEvent	= 0,
 	Ent_StopEvent	   ,
 	Ent_UseSkillEvent  ,
