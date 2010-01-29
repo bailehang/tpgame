@@ -13,25 +13,39 @@
 using namespace std;
 
 long  Ssum = 0;
+long  STick= 0;
+long  CCount=0;
 void fun1( unsigned long v)
 {
-	std::cout << " Summ = " << Ssum << " fun1  v= " << v << std::endl; 
+	if ( ++ STick >= 5000)
+	{
+		std::cout << " Summ = " << Ssum << " fun1  v= " << v << std::endl; 
+		STick = 0;
+	}
 }
 
 void fun2( unsigned long v)
 {
-	std::cout << " Summ = " << Ssum << " fun2  v= " << v << std::endl; 
+	if ( ++ STick >= 5000)
+	{
+		std::cout << " Summ = " << Ssum << " fun2  v= " << v << std::endl; 
+		STick = 0;
+	}
 }
 
 void fun3( unsigned long v)
 {
-	std::cout << " Summ = " << Ssum << " fun3  v= " << v << std::endl; 
+	if ( ++ STick >= 5000)
+	{
+		std::cout << " Summ = " << Ssum << " fun3  v= " << v << std::endl; 
+		STick = 0;
+	}
 }
 
 #define TBITS1	6
 #define	TBITS2	8
 #define TSIZE1  ( 1 << TBITS1)
-#define TSIZE2  ( 1 << TBITS1)
+#define TSIZE2  ( 1 << TBITS2)
 #define	TMASK1	( TSIZE1 - 1 )
 #define TMASK2  ( TSIZE2 - 1 )
 
@@ -55,23 +69,27 @@ struct timer_list {
 	struct list_head list_t; 
 	unsigned long expires; 
 	unsigned long data; 
+	unsigned long cys;
 	void (*function)(unsigned long); 
 }; 
 
 struct timer_vec 
 {
 	int	index;
+	long	vsie[ TSIZE1 ];
 	list_head  vec[TSIZE1];
 };
 
 struct timer_vec_root 
 {
-	int	index;
+	int		index;
+	long	vsie[ TSIZE2 ];
 	list_head  vec[TSIZE2];
 };
 
 
 static	long	m_jeffies = 0 ;
+static  long	g_jeffies = 0;
 static  struct  timer_vec tv5; 
 static  struct  timer_vec tv4; 
 static  struct  timer_vec tv3; 
@@ -122,23 +140,27 @@ static inline void internal_add_timer(struct timer_list *timer)
 	* must be cli-ed when calling this 
 	*/ 
 	//unsigned long expires = timer->expires; 
-	unsigned long expires = (timer->expires - m_jeffies) * 2 ;// 精确到0.1秒 
+	unsigned long expires = (timer->expires - m_jeffies) * 10 ;// 精确到0.1秒 
 	struct list_head * vec; 
 
 	if (expires < TSIZE2 ) { 
 		int i = expires & TMASK2; 
 		vec = tv1.vec + i; 
+		tv1.vsie[ i ] ++ ;
 		//std::cout <<" i = " << i << endl;
 	} else if (expires < 1 << (TBITS2 + TBITS1)) { 
 		int i = (expires >> TBITS2) & TMASK1; 
 		vec = tv2.vec + i; 
+		tv2.vsie[ i ] ++ ;
 		//std::cout <<" i = "<< i <<"  "<< expires << std::endl;
 	} else if (expires < 1 << (TBITS2 + 2 * TBITS1)) { 
 		int i = (expires >> (TBITS2 + TBITS1)) & TMASK1; 
 		vec = tv3.vec + i; 
+		tv3.vsie[ i ] ++ ;
 	} else if (expires < 1 << (TBITS2 + 3 * TBITS1)) { 
 		int i = (expires >> (TBITS2 + 2 * TBITS1)) & TMASK1; 
 		vec = tv4.vec + i; 
+		tv4.vsie[ i ] ++ ;
 	} else if ((signed long) expires < 0) { 
 		/* can happen if you add a timer with expires == jiffies, 
 		* or you set a timer to go off in the past 
@@ -196,15 +218,11 @@ int del_timer(struct timer_list * timer)
 
 static inline void cascade_timers(struct timer_vec *tv) 
 { 
-	/* cascade all the timers from tv up one level */ 
 	struct list_head *head, *curr, *next; 
 
 	head = tv->vec + tv->index; 
 	curr = head->next; 
-	/* 
-	* We are removing _all_ timers from the list_t, so we don't have to 
-	* detach them individually, just clear the list_t afterwards. 
-	*/ 
+
 	while (curr != head) { 
 		struct timer_list *tmp; 
 
@@ -236,18 +254,24 @@ bug:
 
 static inline void run_timer_list(long jiffies ) 
 { 
-	while ( jiffies- m_jeffies >= 0) { 
+	long	Count = ((jiffies- g_jeffies)*10) > 255 ? 255 : ((jiffies- m_jeffies)*10) ;
+	//long    jef   = m_jeffies;
+	tv1.index	  = 1;
+	m_jeffies  = jiffies;
+	while ( Count >= 0 ) { 
 		struct list_head *head, *curr; 
 		if (!tv1.index) { 
 			int n = 1; 
 			do { 
 				cascade_timers(tvecs[n]); 
 			} while (tvecs[n]->index == 1 && ++n < NOOF_TVECS); 
+			g_jeffies = jiffies;
 		 } 
 repeat: 
 		head = tv1.vec + tv1.index; 
 		curr = head->next; 
 		if (curr != head) { 
+
 			struct timer_list *timer; 
 			void (*fn)(unsigned long); 
 			unsigned long data; 
@@ -256,20 +280,35 @@ repeat:
 			//list_entry(curr, struct timer_list, list_t); 
 			fn = timer->function; 
 			data= timer->data; 
+			
+			/// 超时触发
+			fn(data); 
 
 			detach_timer(timer); 
-			timer->list_t.next = timer->list_t.prev = NULL; 
+			timer->list_t.next = timer->list_t.prev = NULL;
 
-			/// 超时触发
-			//timer_enter(timer); 
-			fn(data); 
-			//timer_exit(); 
-
+			if ( timer->cys > 0 )
+			{
+				timer->expires = timer->expires + timer->cys;
+				add_timer( timer );
+			}
+			else
+				delete timer;
+			
 			Ssum ++ ;
 			goto repeat; 
 		} 
-		++m_jeffies; 
-		tv1.index = (tv1.index + 1) & TMASK1; 
+		//++m_jeffies; 
+		tv1.index = (tv1.index + 1) & TMASK2; 
+
+		if ( tv1.index == 0 )
+			std::cout << tv1.index << std::endl;
+		--Count ;
+		//CCount ++;
+		//if ( CCount % 10000000 == 0 )
+		{
+			//std::cout << CCount << std::endl;
+		}
 	} 
 } 
 
@@ -283,12 +322,13 @@ int mod_timer(struct timer_list *timer, unsigned long expires)
 	ret = detach_timer(timer); 
 	internal_add_timer(timer); 
 	return ret; 
-} 
+}
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	srand(time(NULL));
 	m_jeffies = time( NULL );
+	g_jeffies = m_jeffies;
 
 	void (*f1)(unsigned long);
 	void (*f2)(unsigned long);
@@ -300,16 +340,17 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	init_timervecs();
 
+	Sleep( 1000 );
 	//std::cout << m_jeffies << std::endl;
-	for ( int i = 0 ; i < 1000 ; i++ )
+	for ( int i = 0 ; i < 100000 ; i++ )
 	{
 		timer_list *tm = new timer_list();
-		tm->expires = time(NULL) + rand() % 50 ;
-		tm->data    = rand() % 10;
+		tm->expires = time(NULL) + rand() % 30 ;
+		tm->data    = tm->expires - m_jeffies ;
 
-		if ( tm->expires % 3 ==  0 )
+		if ( tm->data < 26 )
 			tm->function = f1;
-		else if ( tm->expires % 3 == 1)
+		else if ( tm->data < 1024*1024 )
 		{
 			tm->function = f2;
 		}
@@ -318,11 +359,18 @@ int _tmain(int argc, _TCHAR* argv[])
 			tm->function = f3;
 		}
 
+		tm->cys		= rand() % 10;
 		//std::cout << tm->expires << std::endl;
 		add_timer( tm );
 		//Sleep( 1 );
 		//std::cout << i << std::endl;
 	}
+	
+	tv2.index	  = 1;
+	tv3.index	  = 1;
+	tv4.index	  = 1;
+	tv5.index	  = 1;
+	
 
 	std::cout << time(NULL) - m_jeffies << std::endl;
 	for ( ;; )
