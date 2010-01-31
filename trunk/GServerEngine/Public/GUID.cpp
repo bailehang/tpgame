@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include ".\guid.h"
+#include "guid.h"
 
 
 CGUID CGUID::GUID_INVALID;

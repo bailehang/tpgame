@@ -2,7 +2,7 @@
  * Brief :  一个CGUID类，通过win32的com直接生成，这里主要参考某些实现写的一个直接CUID一些扩展函数
  * Author:  Expter  
  * Date  :  [2009-12-10]
- * 使用该类 必须先调用Initialize初始COM   ，重载了=、==。     
+ * 参考星尘传说CGUID的实现，使用该类 必须先调用Initialize初始COM   ，重载了=、==。     
  **/
 
 #pragma warning(disable:4996)
@@ -24,10 +24,10 @@ private:
 	friend class hash_guid_compare;
 
 public:
-	static void Initialize();
-	static void Uninitialize();
+	static void  Initialize();
+	static void  Uninitialize();
 
-	static bool CreateGUID(CGUID &guid);
+	static bool  CreateGUID(CGUID &guid);
 	static CGUID GUID_INVALID;
 
 	CGUID(void)
@@ -81,7 +81,6 @@ public:
 	}
 
 	bool CopyConstrucutureCalFunc(const char* szValue, long& retValue);
-	//strGuid的大小至少为36
 	bool tostring(char * strGuid) const
 	{
 		if(strGuid == 0 )	return false;
@@ -90,7 +89,6 @@ public:
 		Data4[2],Data4[3],Data4[4],Data4[5],Data4[6],Data4[7]);
 		return true;
 	}
-	
 	bool IsInvalided()
 	{
 		if( memcmp(this, 0, sizeof(CGUID)) )

@@ -1,9 +1,13 @@
 #pragma once
 
+#include "State.h"
+
+class CState;
+
 template < class  entity_type>
 class  CStateMachine
 {
-	typedef   entity_type   Entity;
+	typedef   entity_type					Entity;
 
 private:
 	Entity*				m_pOwner;
@@ -50,11 +54,10 @@ public:
 		
 		if ( pNewState != m_pCurrentState )
 		{
+			m_pPreviousState = m_pCurrentState;
 			m_pCurrentState->Exit( m_pOwner );
 			m_pCurrentState->Enter(m_pOwner );
-			m_pCurrentState->Exectue(m_pOwner);
-
-			m_pPreviousState =
+			m_pCurrentState->Exectue(m_pOwner);	
 		}
 	}
 
@@ -63,4 +66,9 @@ public:
 		ChangeState( m_pPreviousState );
 	}
 
+	bool 	HandleEvent(const tagEevent&  e  )
+	{
+		assert( m_pCurrentState );
+		return m_pCurrentState->HandleEvent( e.eEvent , m_pOwner );
+	}
 };

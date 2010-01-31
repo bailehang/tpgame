@@ -243,6 +243,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Public\Event.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Public\Event.h"
 				>
 			</File>
@@ -276,6 +280,10 @@
 			>
 			<File
 				RelativePath=".\Entity\CHumanEntity.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Entity\CMonsterEntity.h"
 				>
 			</File>
 			<Filter
