@@ -16,7 +16,7 @@ class  CHumanEntity : public CBaseGameEntity
 private:
 	
 	// an instance of state machine class 
-	CStateMachine<self>*		m_pMachine;
+	CStateMachine<self>*	m_pMachine;
 
 	//
 public:
@@ -27,4 +27,13 @@ public:
 		m_pMachine->SetCurrentState( GetInst(CStateSet).GetState( e ) );
 	}
 
+	void  HandleEvent(  const tagEevent& e ) 
+	{
+		m_pMachine->HandleEvent( e );
+	}
+
+	void  Update()
+	{
+		m_pMachine->Update();
+	}
 };

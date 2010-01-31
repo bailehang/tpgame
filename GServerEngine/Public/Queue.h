@@ -6,7 +6,7 @@
 */
 
 #include "locks.h"
-#include "CList.h"
+#include "List.h"
 
 template < class T >
 class CQueue

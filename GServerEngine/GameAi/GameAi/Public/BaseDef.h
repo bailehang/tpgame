@@ -35,3 +35,12 @@ enum	eEventAi
 
 	Ent_EventNum
 };
+
+
+struct  tagEevent
+{
+	void*		Sender;
+	void*		Receiver;
+
+	eEventAi	eEvent;
+};

@@ -1,3 +1,10 @@
+/**
+ * File  :
+ * Brief :  about  Console Config
+ * Author:  Expter  
+ * Date  :  [2010-1-23]
+ *                             
+ **/
 #pragma once
 
 inline void SetConsoleTextColor( DWORD Color)
