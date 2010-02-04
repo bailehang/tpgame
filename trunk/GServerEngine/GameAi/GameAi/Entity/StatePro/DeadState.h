@@ -6,7 +6,7 @@ template< class entity_name>
 class  CDeadState : public CState<entity_name>
 {
 
-	typedef  entity_type    Entity;
+	typedef  entity_name    Entity;
 
 public:
 

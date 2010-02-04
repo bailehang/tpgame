@@ -7,7 +7,7 @@ template< class entity_name>
 class  CFightState : public CState<entity_name>
 {
 
-	typedef  entity_type    Entity;
+	typedef  entity_name    Entity;
 
 public:
 
