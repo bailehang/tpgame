@@ -41,7 +41,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -274,6 +273,70 @@
 		<Filter
 			Name="Script"
 			>
+			<File
+				RelativePath=".\Script\BLuaScript.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Script\BLuaScript.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Script\itable.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Script\LuaFnRegister.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Script\LuaFnRegister.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Script\LuaInterface.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Script\LuaInterface.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Script\LuaScript.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Script\LuaScript.h"
+				>
+			</File>
+			<Filter
+				Name="Lua"
+				>
+				<File
+					RelativePath=".\Script\Lua\lauxlib.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Script\Lua\lua.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Script\Lua\lua.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Script\Lua\LuaLib.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="LuaFunc"
+				>
+				<File
+					RelativePath=".\Script\LuaFunc\LuaFnTest.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Entity"

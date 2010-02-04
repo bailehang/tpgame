@@ -6,7 +6,7 @@ template< class entity_name>
 class  CPeaceState : public CState<entity_name>
 {
 
-	typedef  entity_type    Entity;
+	typedef  entity_name    Entity;
 
 public:
 

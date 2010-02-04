@@ -18,6 +18,7 @@ namespace  tp_script
 		 LUA_SCRIPT_NOT_TABLE_ERROR =12,
 		 LUA_SCRIPT_STATES_IS_NULL  =20
 	};
+
 	class   CBaseScript
 	{
 	public:
