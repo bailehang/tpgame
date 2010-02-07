@@ -33,6 +33,7 @@ namespace tp_script
 	{
 		typedef std::map<std::string, tableitem > TableL;
 		typedef TableL::iterator                  TIter;
+
 		enum 
 		{
 			ID_EMPTY  = 0 ,
@@ -49,8 +50,8 @@ namespace tp_script
 		template< typename Var>
 		bool   AddTable(const char* name , const Var & value )
 		{
-			tableitem  item.m_pPtr = value;
-			m_tablelist[ name ] = item;
+			//tableitem  item.m_pPtr = value;
+			//m_tablelist[ name ] = item;
 		}
 		
 		template< typename Var>

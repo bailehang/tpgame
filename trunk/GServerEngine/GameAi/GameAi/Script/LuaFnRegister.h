@@ -8,7 +8,7 @@
 #pragma  once
 
 #include "LuaScript.h"
-#include "InterfaceLua.h"
+//#include "LuaInterface.h"
 
 
 namespace tp_script
@@ -17,16 +17,13 @@ namespace tp_script
 typedef int (* func)( lua_State * );
 #define regluafunction( funcname ) {#funcname, func(funcname) } ;
 
-	class CInterfaceLua;
-
+	class CLuaInterface;
 
 	class CLuaFnRegister
 	{
-
 	private:
-
 		// CLuaScript  
-		CInterfaceLua * pOwner;
+		CLuaInterface* m_pOwner;
 
 	public:
 
@@ -34,9 +31,9 @@ typedef int (* func)( lua_State * );
 
 		~CLuaFnRegister();
 
-		void   SetOwner( CInterfaceLua* pOwner ); 
+		void   SetOwner( CLuaInterface* pOwner ); 
 
-		CInterfaceLua* GetOwner();
+		CLuaInterface* GetOwner() const;
 
 		void   RegisterFun();
 

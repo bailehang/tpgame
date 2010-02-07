@@ -1,32 +1,41 @@
 #pragma  once
 
+#include <map>
+
+#include "BaseDef.h"
 #include "State.h"
+#include "../Entity/StatePro/DeadState.h"
+#include "../Entity/StatePro/FightState.h"
+#include "../Entity/StatePro/FleeState.h"
+#include "../Entity/StatePro/FollowState.h"
+#include "../Entity/StatePro/GoHomeState.h"
+#include "../Entity/StatePro/PeaceState.h"
 #include "../singleton.h"
 
-#define  CreateStateSet( StateName )	\
-		 GetInst(StateName)
 
-template<class class_value>
 class  CStateSet
 {
-	typedef  class_value	Ctype;
-	typedef  std::map< eStateAi , Ctype* >	eState;
-	eState::iterator						Eiter;
+	typedef  std::map< eStateAi , CState* >			eState;
+	typedef  eState::iterator					    Eiter;
 
 public:
-	// µ¥¼þ
-	CStateSet&	Instance()
+
+	void       Create()
 	{
-		static CStateSet   CSet;
-		return   CSet;
+		RegCStateSet( Ent_PeaceState , static_cast<CState*>(&GetInstObj(CPeaceState)));
+		RegCStateSet( Ent_FleeState ,  static_cast<CState*>(&GetInstObj(CFleeState)) );
+		RegCStateSet( Ent_FightState , static_cast<CState*>(&GetInstObj(CFightState)));
+		RegCStateSet( Ent_FollowState, static_cast<CState*>(&GetInstObj(CFollowState)));
+		RegCStateSet( Ent_DeadState  , static_cast<CState*>(&GetInstObj(CDeadState)) );
+		RegCStateSet( Ent_GoHomeState, static_cast<CState*>(&GetInstObj(CGoHomeState)));
 	}
 
-	void		RegCStateSet( eStateAi&  e ,const  char*  StateName)
+	void		RegCStateSet( eStateAi  e , CState*  tp )
 	{
-		m_stateset.insert( std::make_pair( e , CreateStateSet(StateName)) );	
+		m_stateset.insert( std::make_pair( e , tp ) );
 	}
 	
-	Ctype*		GetState( eStateAi& e)
+	CState*		GetState( eStateAi e)
 	{
 		Eiter  itr = m_stateset.find ( e );
 		if ( itr != m_stateset.end() )
@@ -36,15 +45,7 @@ public:
 		return  NULL;
 	}
 
-
-
 private:
 	eState			m_stateset;
-	
-	/// singleton
-public:
-	CStateSet();
-	CStateSet(const CStateSet&);
-	~CStateSet();
-	CStateSet& operator= (const CStateSet&);
+
 };

@@ -12,9 +12,9 @@ class  CStateMachine
 private:
 	Entity*				m_pOwner;
 	
-	CState<Entity>*		m_pCurrentState;
+	CState*				m_pCurrentState;
 
-	CState<Entity>*		m_pPreviousState;
+	CState*				m_pPreviousState;
 
 public:
 	CStateMachine( Entity* pOwner ) : m_pOwner ( pOwner )
@@ -24,21 +24,21 @@ public:
 
 	virtual ~CStateMachine()	{	}
 
-	void	SetCurrentState(CState<Entity>* cs)	
+	void	SetCurrentState(CState* cs)	
 	{
 		m_pCurrentState = cs;
 	}
 
-	void	SetPreviousState(CState<Entity>* cs)
+	void	SetPreviousState(CState* cs)
 	{
 		m_pPreviousState= cs;
 	}
 
 	void	Update() const 
 	{
-		if ( m_pCurrentState ! NULL )
+		if ( m_pCurrentState != NULL )
 		{
-			m_pCurrentState->Exectue( m_pOwner );
+			m_pCurrentState->Execute( m_pOwner );
 		}
 	}
 
@@ -48,7 +48,7 @@ public:
 		return true;
 	}
 
-	void    ChangeState(CState<Entity>*  pNewState)
+	void    ChangeState(CState*  pNewState)
 	{
 		assert( pNewState );
 		
@@ -66,9 +66,9 @@ public:
 		ChangeState( m_pPreviousState );
 	}
 
-	bool 	HandleEvent(const tagEevent&  e  )
+	bool 	HandleEvent(const tagEevent  e  )
 	{
-		assert( m_pCurrentState );
+		//assert( m_pCurrentState );
 		return m_pCurrentState->HandleEvent( e.eEvent , m_pOwner );
 	}
 };
