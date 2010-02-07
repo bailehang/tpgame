@@ -1,6 +1,6 @@
 
 #include "BLuaScript.h"
-#include <lua.hpp>
+#include "Lua/lua.hpp"
 
 namespace tp_script
 {
@@ -12,12 +12,14 @@ namespace tp_script
 
 	class  CLuaScript : public  CBaseScript
 	{
+	private:
+		int     m_UserTag;
 
 	public:
 
 		CLuaScript();
 
-		CLuaScript( int StatckSize = 0 );
+		//CLuaScript( int StatckSize = 0 );
 
 		virtual ~CLuaScript();
 
@@ -25,7 +27,7 @@ namespace tp_script
 
 		virtual  bool  Init();
 
-		virtual  bool  Exit();
+		virtual  void  Exit();
 
 		virtual  bool  Load(const char* FileName );
 
@@ -44,6 +46,8 @@ namespace tp_script
 		int		GetUserTag()		{	return  m_UserTag ;  }
 
 		bool    RegisterFun( reg_luafun funcs[] , int  n =  0 );
+
+		//bool    RegisterFunction(char* FuncName , void* Func);
 
 		bool    LoadBuffer( unsigned char* pBuffer , size_t dwLen);
 
@@ -78,12 +82,12 @@ namespace tp_script
 			// Lua_SetTable_IntFromId( m_LuaState , nIndex , Id , nNumber );
 		}
 
-		inline void SetTableMember(int nIndex, const char * szMemberName, Lua_CFunction CFun)
+		inline void SetTableMember(int nIndex, const char * szMemberName, lua_CFunction CFun)
 		{
 			//Lua_SetTable_CFunFromName(m_LuaState,  nIndex, szMemberName, CFun);
 		}
 
-		inline void SetTableMember(int nIndex, int nId, Lua_CFunction CFun)
+		inline void SetTableMember(int nIndex, int nId, lua_CFunction CFun)
 		{
 			//Lua_SetTable_CFunFromId(m_LuaState,  nIndex, nId, CFun);
 		}
@@ -109,20 +113,18 @@ namespace tp_script
 
 		bool  ExecuteCode();
 
-		void  RegisterStanderdFunctions();
+		void  RegisterStandardFunctions();
 
 		bool  m_IsRuning;
 
 		char  m_szScriptName[100];
 
-		int   m_UserTag;
+		/*	*/	//int   m_UserTag;
 
 		lua_State* m_LuaState;
 
 	private:
 		bool  CallFunction(const char* cFuncName , int nResults ,char* cFormat, va_list vlist);
-
-
 
 	};
 }

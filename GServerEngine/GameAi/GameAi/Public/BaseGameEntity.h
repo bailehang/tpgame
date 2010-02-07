@@ -18,7 +18,7 @@ public:
 
 	virtual   void  Update() = 0 ;
 
-	virtual	  void  HandleEvent( tagEevent& e ) = 0;
+	virtual	  void  HandleEvent(const tagEevent& e );
 
 	virtual	  ~CBaseGameEntity() {}
 };

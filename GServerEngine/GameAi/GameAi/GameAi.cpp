@@ -2,40 +2,40 @@
 //
 
 #include "stdafx.h"
-
+#include "Public/StateSet.h"
+#include "Public/EntityManager.h"
+#include "Public/StateMachine.h"
+#include "Public/Event.h"
+#include "Entity/CHumanEntity.h"
+#include "Entity/CMonsterEntity.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-	GetInst(CStateSet).RegCStateSet( Ent_PeaceState , "CPeaceState");
-	GetInst(CStateSet).RegCStateSet( Ent_FleeState  , "CFleeState");
-	GetInst(CStateSet).RegCStateSet( Ent_FightState , "CFightState");
-	GetInst(CStateSet).RegCStateSet( Ent_FollowState, "CFollowState");
-	GetInst(CStateSet).RegCStateSet( Ent_DeadState  , "CDeadState");
-	GetInst(CStateSet).RegCStateSet( Ent_GoHomeState, "CGoHomeState");
+	GetInstObj(CStateSet).Create();
 
 	CHumanEntity		human1(Ent_Player);
 	CHumanEntity		human2(Ent_Player);
 	CHumanEntity		human3(Ent_Player);
 
-	CMonsterEntity		Monster1(Ent_Monster);
-	CMonsterEntity		Monster2(Ent_Monster);
-	CMonsterEntity		Monster3(Ent_Monster);
+// 	CMonsterEntity		Monster1(Ent_Monster);
+// 	CMonsterEntity		Monster2(Ent_Monster);
+// 	CMonsterEntity		Monster3(Ent_Monster);
 
-	GetInst(CEntityManager).RegEntityManager( &human1 );
-	GetInst(CEntityManager).RegEntityManager( &human2 );
-	GetInst(CEntityManager).RegEntityManager( &human3 );
+	GetInstObj(CEntityManager).RegEntityManager( &human1 );
+	GetInstObj(CEntityManager).RegEntityManager( &human2 );
+	GetInstObj(CEntityManager).RegEntityManager( &human3 );
 
-	GetInst(CEntityManager).RegEntityManager( &Monster1 );
-	GetInst(CEntityManager).RegEntityManager( &Monster2 );
-	GetInst(CEntityManager).RegEntityManager( &Monster3 );
+// 	GetInst(CEntityManager).RegEntityManager( &Monster1 );
+// 	GetInst(CEntityManager).RegEntityManager( &Monster2 );
+// 	GetInst(CEntityManager).RegEntityManager( &Monster3 );
 	
 	while ( 1 )
 	{
-		// 处理所有的ai
-		GetInst(CEntityManager).Update();
-		// 处理所有的事件
-		GetInst(CEventDispatch).DispacthEevent();
+		/// 处理所有的ai
+		GetInstObj(CEntityManager).Update();
+		/// 处理所有的事件
+		GetInstObj(CEventDispatch).DispacthEevent();
 
 		Sleep( 100 );
 	}

@@ -8,17 +8,14 @@
 #pragma  once
 
 #include "LuaFnRegister.h"
-#include "itable.h"
 
 namespace tp_script
 {
 	
-	class  CLuaFnRegister; 
-
 	class  CLuaInterface
 	{
-	private:
 
+ 	public:
 		/// 脚本引擎
 		CLuaScript		m_LuaParse;
 
@@ -26,9 +23,39 @@ namespace tp_script
 		CLuaFnRegister  m_LuaFnReg;
 
 		/// 脚本列表
-		TableList		m_ScriptTable;
+		//TableList		m_ScriptTable;
+
+		/// 执行脚本的object
+		void			*m_pOwner;
 
 	public:
+
+		CLuaInterface();
+
+		~CLuaInterface();
+
+		void  Init();
+
+		void  Destroy();
+
+		template< typename owner>
+		void  SetOwner(owner * powner) { m_pOwner = powner; }
+
+		template< typename owner>
+		owner* GetOwner()			   { return m_pOwner ;  }
+	    
+		bool  FindSymbol( lua_State* L , char* funcname );
+
+		bool  PrefixCall( lua_State* L , char** funcname );
+
+		int   ExeScript( int  sid , char* funcname );
+
+		int   ExeScript( int  sid , char* funcname , int Param0 = 0);
+
+
+	private:
+
+		int   ExeFile( char * filename , char* funcanme , bool bload );
 
 	};
 

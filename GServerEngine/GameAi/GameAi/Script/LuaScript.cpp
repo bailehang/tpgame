@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "CLuaScript.h"
+#include "LuaScript.h"
 
 
 namespace tp_script
@@ -70,7 +70,7 @@ namespace tp_script
 		{
 			/// read filename buffer
 			/// pCon is filename context
-			char *pCon = NULL ;
+			unsigned char *pCon = NULL ;
 			size_t size= 0 ;
 			if ( !LoadBuffer( pCon , size /**/) )
 			{
@@ -106,8 +106,8 @@ namespace tp_script
 			return false;
 		}
 
-		int  state ;
-		if ( state = lua_execute(m_LuaState) != 0 )
+		int  state ; //lua_execute
+		if ( state = lua_pcall (m_LuaState,0,LUA_MULTRET,0) != 0 )
 		{
 			ScriptError( LUA_SCRIPT_EXECUTE_ERROR , state );
 			return false;
@@ -136,7 +136,7 @@ namespace tp_script
 
 		double nNumber ;
 		char*  cString =  NULL;
-		char*  pPoint  =  NULL;
+		void*  pPoint  =  NULL;
 		
 		lua_CFunction   CFunc;
 		
@@ -197,8 +197,9 @@ namespace tp_script
 					nArgNum ++;
 				}
 				break;
-
-			case 'v'://输入的是堆栈中Index为nIndex的数据类型
+				
+				/// 输入的是堆栈中Index为nIndex的数据类型
+			case 'v':
 				{
 					nNumber = va_arg(vlist, int);
 					int nIndex1 = (int) nNumber;
@@ -206,7 +207,9 @@ namespace tp_script
 					nArgNum ++;
 				}
 				break;
-			case 't'://输入为一Table类型
+
+				/// 输入为一Table类型
+			case 't':
 				{
 
 				}
@@ -216,7 +219,7 @@ namespace tp_script
 				{
 					pPoint = va_arg(vlist, void *);
 
-					//Lua_PushUserTag(m_LuaState, pPoint,m_UserTag);
+					/// Lua_PushUserTag(m_LuaState, pPoint,m_UserTag);
 					nArgNum ++;
 				}
 				break;
@@ -224,10 +227,10 @@ namespace tp_script
 			i++;	
 		}
 
-		nRetcode = lua_call( m_LuaState , nArgNum , nResults );
+		lua_call( m_LuaState , nArgNum , nResults );
 		if ( nRetcode != 0 )
 		{
-			ScriptError( LUA_SCRIPT_EXECUTE_ERROR , state );
+			ScriptError( LUA_SCRIPT_EXECUTE_ERROR , nRetcode );
 			return false;
 		}
 		return true;
@@ -236,7 +239,7 @@ namespace tp_script
 
 	bool CLuaScript::CallFunction(const char* cFuncName, int nResults, char* cFormat, ...)
 	{
-		bool bResult  = false;
+		bool    bResult  = false;
 		va_list vlist;
 		va_start(vlist, cFormat);
 		bResult = CallFunction(cFuncName, nResults, cFormat, vlist);
@@ -246,7 +249,7 @@ namespace tp_script
 
 	// 函数:	CLuaScript::GetValuesFromStack
 	// 功能:	从堆栈中获得变量
-	bool CLuaScript::GetValuesFromStack(char * cFormat, ...)	
+	bool CLuaScript::GetValuesFromStack(const char * cFormat, ...)	
 	{
 		va_list vlist;
 		double* pNumber = NULL;
@@ -254,17 +257,20 @@ namespace tp_script
 		int * pInt = NULL;
 		int i = 0;
 		int nTopIndex = 0;
-		int nIndex = 0;
-		int nValueNum = 0;//cFormat的字符长度，表示需要取的参数数量
+		int nIndex = 0;	  
+
+		/// cFormat的字符长度，表示需要取的参数数量
+		int nValueNum = 0;
 
 		if (! m_LuaState)
 			return false;
 
-					//Lua_GetTopIndex
+		/// Lua_GetTopIndex
 		nTopIndex = lua_gettop(m_LuaState);	
 		nValueNum = strlen(cFormat);
-
-		if (nTopIndex == 0 || nValueNum == 0)//当堆栈中无数据或不取参数是返回false
+		
+		/// 当堆栈中无数据或不取参数是返回false
+		if (nTopIndex == 0 || nValueNum == 0)
 			return false;
 
 		if (nTopIndex < nValueNum)
@@ -280,7 +286,8 @@ namespace tp_script
 
 				switch(cFormat[i])
 				{
-					//返回值为数值形,Number,此时Lua只传递double形的值
+					
+					/// 返回值为数值形,Number,此时Lua只传递double形的值
 				case 'n':
 					{
 						pNumber = va_arg(vlist, double *);
@@ -381,7 +388,7 @@ namespace tp_script
 	// 参数:	int Args = 0 //与KScript接口相容，无用
 	// 参数:	int Flag = 0 //与KScript接口相容, 无用
 	//---------------------------------------------------------------------------
-	bool CLuaScript::RegisterFunction(char* FuncName , void* Func)
+	bool CLuaScript::RegFunction(const char* FuncName , void* Func)
 	{
 		if (! m_LuaState)
 			return false;
@@ -389,7 +396,7 @@ namespace tp_script
 		return true;
 	}
 
-	bool CLuaScript::Compile(char *)
+	bool CLuaScript::Compile(const char *filename)
 	{
 		return true;
 	}
@@ -397,7 +404,7 @@ namespace tp_script
 	// 功能:	批量注册Lua的内部C函数，各个函数的信息保存在reg_luafun的数据中
 	// 参数:	reg_luafun *Funcs 数组的指针
 	// 参数:	int n 函数数量。可以为零，由系统计算得到。
-	bool CLuaScript::RegisterFunctions(reg_luafun Funcs[], int n)
+	bool CLuaScript::RegisterFun(reg_luafun Funcs[], int n)
 	{
 		if (! m_LuaState)	return false;
 		if (n == 0)	n = sizeof(Funcs) / sizeof(Funcs[0]);
@@ -409,12 +416,15 @@ namespace tp_script
 	void CLuaScript::RegisterStandardFunctions()
 	{
 		if (! m_LuaState)		return ;
+		luaL_openlibs( m_LuaState );  
+
+		/*
 // 		lua_baselibopen(m_LuaState);//Lua基本库
 // 		Lua_OpenIOLib(m_LuaState);//输入输出库
 // 		Lua_OpenStrLib(m_LuaState);//字符串处理库
 // 		Lua_OpenMathLib(m_LuaState);//数值运算库
 // 		//Lua_OpenDBLib(m_LuaState);//调试库
-		luaL_openlibs( m_LuaState );
+*/
 		return;	
 	}
 
@@ -433,6 +443,7 @@ namespace tp_script
 		m_IsRuning = false;
 
 	}
+
 	void CLuaScript::ScriptError(int Error)
 	{
 		char lszErrMsg[200];
@@ -452,8 +463,8 @@ namespace tp_script
 	//---------------------------------------------------------------------------
 	// 函数:	CLuaScript::SafeCallBegin
 	// SafeCallBegin与SafeCallEnd两函数应搭配使用，以防止在调用Lua的外部函数之后，
-	//有多余数据在堆栈中未被清除。达到调用前与调用后堆栈的占用大小不变。
-	//上述情况只需用在调用外部函数时，内部函数不需如此处理。
+	// 有多余数据在堆栈中未被清除。达到调用前与调用后堆栈的占用大小不变。
+	// 上述情况只需用在调用外部函数时，内部函数不需如此处理。
 	void CLuaScript::SafeCallBegin(int * pIndex)
 	{
 		if (! m_LuaState)		return ;
@@ -502,19 +513,19 @@ namespace tp_script
 		return nIndex;
 	}
 
-	void CLuaScript::SetGlobalName(char* szName)
+	void CLuaScript::SetGlobalName(const char* szName)
 	{
 		if (!szName) return ;
 		lua_setglobal(m_LuaState, szName);
 	}
 
-	size_t CLuaScript::ModifyTable(char* szTableName) 
+	size_t CLuaScript::ModifyTable(const char* szTableName) 
 	{
 		if (! szTableName[0])		return -1;
 
 		int nIndex = lua_gettop(m_LuaState);
 
-		lua_gettable(m_LuaState, szTableName);
+		lua_gettable(m_LuaState, nIndex);
 
 		if (lua_gettop(m_LuaState) != ++nIndex)		return -1;
 

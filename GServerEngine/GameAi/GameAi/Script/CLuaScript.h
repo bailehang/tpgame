@@ -27,7 +27,7 @@ namespace tp_script
 
 		virtual  bool  Init();
 
-		virtual  bool  Exit();
+		virtual  void  Exit();
 
 		virtual  bool  Load(const char* FileName );
 
@@ -80,12 +80,12 @@ namespace tp_script
 			// Lua_SetTable_IntFromId( m_LuaState , nIndex , Id , nNumber );
 		}
 
-		inline void SetTableMember(int nIndex, const char * szMemberName, Lua_CFunction CFun)
+		inline void SetTableMember(int nIndex, const char * szMemberName, lua_CFunction CFun)
 		{
 			//Lua_SetTable_CFunFromName(m_LuaState,  nIndex, szMemberName, CFun);
 		}
 
-		inline void SetTableMember(int nIndex, int nId, Lua_CFunction CFun)
+		inline void SetTableMember(int nIndex, int nId, lua_CFunction CFun)
 		{
 			//Lua_SetTable_CFunFromId(m_LuaState,  nIndex, nId, CFun);
 		}
@@ -117,14 +117,12 @@ namespace tp_script
 
 		char  m_szScriptName[100];
 
-		int   m_UserTag;
+/*	*/	//int   m_UserTag;
 
-		Lua_State* m_LuaState;
+		lua_State* m_LuaState;
 
 	private:
 		bool  CallFunction(const char* cFuncName , int nResults ,char* cFormat, va_list vlist);
-
-
 
 	};
 }

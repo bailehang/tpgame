@@ -18,6 +18,7 @@
 #include <list>
 #include <queue>
 #include <process.h>
+#include <windows.h>
 
 using namespace std;
 using namespace stdext;

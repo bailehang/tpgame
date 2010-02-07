@@ -1,26 +1,26 @@
 #pragma  once
 
 #include "BaseDef.h"
+#include "BaseGameEntity.h"
 
-template < class entity_type>
 class CState
 {
 public:
 
 	// Handle Event
-	virtual	bool 	  HandleEvent( eEventAi& e , entity_type*) = 0;
+	virtual	bool 	  HandleEvent( eEventAi e , CBaseGameEntity*) ;
 
 	// return state
 	virtual eStateAi  GetState() {	return  Ent_InValidState ;	}
 
 	// Enter a new State
-	virtual void  Enter(entity_type*)= 0;
+	virtual void  Enter(CBaseGameEntity*)=0;
 
 	// Exectue
-	virtual void  Exectue(entity_type* )=0;
+	virtual void  Execute(CBaseGameEntity*)=0;
 
 	// Exit
-	virtual void  Exit(entity_type* )=0;
+	virtual void  Exit(CBaseGameEntity* )=0;
 	
 	// 
 	virtual	~CState();

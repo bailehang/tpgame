@@ -2,28 +2,27 @@
 
 #include "../../Public/State.h"
 
-template< class entity_name>
-class  CPeaceState : public CState<entity_name>
+class  CPeaceState : public CState
 {
 
-	typedef  entity_name    Entity;
+	//typedef  entity_name    Entity;
 
 public:
 
-	virtual void Enter(Entity* );
+	void Enter(CBaseGameEntity* );
+		 
+	void Execute(CBaseGameEntity* );
 
-	virtual void Execute(Entity* );
+	void Exit(CBaseGameEntity* );
 
-	virtual void Exit(Entity* );
-
-	virtual	bool HandleEvent( eEventAi& e , Entity*) ;
+	bool HandleEvent( eEventAi e , CBaseGameEntity*) ;
 
 	// return state
-	virtual eStateAi GetState()	{	return  Ent_PeaceState ;	}
+	eStateAi GetState()	{	return  Ent_PeaceState ;	}
 
 private:
 	
 
 };
 
-#include "PeaceState.cpp"
+//#include "PeaceState.cpp"
