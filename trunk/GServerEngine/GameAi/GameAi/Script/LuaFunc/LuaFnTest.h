@@ -16,10 +16,10 @@ namespace  tp_script
 {
 	int   luatest1( lua_State* L)
 	{
-		int  tid = (int)lua_tonumber(L,-1);
-		double dv= (double)lua_tonumber(L,-2);
+		int  tid = (int)lua_tonumber(L,1);
+		double dv= (double)lua_tonumber(L,2);
 
-		std::string str=lua_tostring(L,-3);
+		std::string str=lua_tostring(L,3);
 
 		std::cout << "lua test1 " << tid << " " << dv <<" " << str.c_str() <<std::endl;
 

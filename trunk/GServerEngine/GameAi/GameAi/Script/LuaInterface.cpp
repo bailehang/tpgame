@@ -16,26 +16,29 @@ namespace  tp_script
 
 	void  CLuaInterface::Init()
 	{
-		m_MainState = lua_open(0);
+		m_MainState = lua_open(100);
 		luaL_openlibs( m_MainState );
 
-
-		//bool  ret = m_LuaParse.Init();
-		
-		//if ( !ret )
-		{
-			//sprintf("CLuaInterface  mLuaScript::Init  failed ");
-			return ;
-		}
-
-		//m_LuaFnReg.SetOwner( this );
-		//m_LuaFnReg.RegisterFun();
+		/// ×¢²áº¯Êý
+		m_LuaFnReg.SetOwner( this );
+		m_LuaFnReg.RegisterFun();
 
 	}
 
 	void  CLuaInterface::Destroy()
 	{
 		//m_LuaParse.Exit();
+		
+	}
+
+	CLuaScript*  CLuaInterface::Create()
+	{
+		CLuaScript* pluascript = new CLuaScript();
+
+		pluascript->Init( m_MainState );
+
+	    m_Scriptt[ pluascript ] =	 pluascript->m_LuaState;
+		return  pluascript;
 	}
 
 	bool  CLuaInterface::FindSymbol(lua_State *L, char* funcname)
@@ -70,16 +73,22 @@ namespace  tp_script
 
 	int  CLuaInterface::ExeFile(char *filename, char *funcname, bool bload)
 	{
-// 		if( bload )
-// 			bool  ret =  m_LuaParse.Load( filename );
-// 		bool  ret = m_LuaParse.CallFunction( funcname , 1, "" );
+		CLuaScript *lua = Create();
+		if ( !lua )
+			return 0;
 
+ 		if( bload )
+ 			bool  ret =  lua->Load( filename );
+		lua->ExecuteCode();
+
+		if( funcname !=NULL)
+ 		  bool  ret = lua->CallFunction( funcname , 1, "" );
 		return 0;
 	}
 
 	int  CLuaInterface::ExeScript(int sid, char *funcname)
 	{
-		return	 ExeFile("",funcname,true);
+		return	 ExeFile(funcname,"test1",true);
 	}
 
 	int  CLuaInterface::ExeScript(int sid, char *funcname, int Param0 )

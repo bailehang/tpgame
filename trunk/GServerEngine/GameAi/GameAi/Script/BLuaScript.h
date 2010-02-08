@@ -39,7 +39,7 @@ namespace  tp_script
 
 		virtual bool  CallFunction(char* cFunName , int nResults , char* cFormat, ... );
 
-		virtual bool  RegFunction(char* cFunName , void * Func ) ;
+		virtual bool  RegFunction(char* cFunName  , void* Func ) ;
 	};
 
 }

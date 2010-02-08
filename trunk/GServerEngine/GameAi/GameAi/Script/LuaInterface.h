@@ -15,7 +15,7 @@ namespace tp_script
 	class  CLuaInterface
 	{
 
-		typedef  std::map<lua_State*,CLuaScript*>   ScriptTable;
+		typedef  std::map<CLuaScript*,lua_State*>   ScriptTable;
 
  	public:
 
@@ -27,7 +27,7 @@ namespace tp_script
 		/// CLuaScript		m_LuaParse;
 
 		/// Lua注册类
-		/// CLuaFnRegister  m_LuaFnReg;
+		CLuaFnRegister  m_LuaFnReg;
 
 		/// 脚本列表
 		//TableList		m_ScriptTable;
@@ -45,7 +45,7 @@ namespace tp_script
 
 		void  Init();
 
-		void  Create();
+		CLuaScript*  Create();
 
 		void  Destroy();
 
@@ -61,7 +61,7 @@ namespace tp_script
 
 		int   ExeScript( int  sid , char* funcname );
 
-		int   ExeScript( int  sid , char* funcname , int Param0 = 0);
+		int   ExeScript( int  sid , char* funcname , int Param0 );
 
 
 	private:

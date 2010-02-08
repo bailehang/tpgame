@@ -2,6 +2,9 @@
 //
 
 #include "stdafx.h"
+
+/// 状态机测试
+
 #include "Public/StateSet.h"
 #include "Public/EntityManager.h"
 #include "Public/StateMachine.h"
@@ -9,10 +12,18 @@
 #include "Entity/CHumanEntity.h"
 #include "Entity/CMonsterEntity.h"
 
+/// 脚本测试头文件
+#include "Script/LuaInterface.h"
+
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	/// 脚本测试
-	
+	tp_script::CLuaInterface lua ;
+	lua.Init();
+
+	//lua.ExeScript( 0 ,"test.lua" );
+	lua.ExeScript( 0, "fun.lua" );
 	return 0;
 }
 
