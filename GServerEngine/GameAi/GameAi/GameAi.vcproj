@@ -404,6 +404,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Engine"
+			>
+		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>

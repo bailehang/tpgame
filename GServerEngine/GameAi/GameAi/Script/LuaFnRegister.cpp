@@ -5,7 +5,7 @@
 
 namespace tp_script
 {
-	
+				  
 	struct   reg_luafun  functbl []	=
 	{
 		{"test1" , func(tp_script::luatest1) } ,

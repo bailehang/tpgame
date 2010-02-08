@@ -12,17 +12,18 @@ namespace tp_script
 	/// 构造函数
 	CLuaScript::CLuaScript()
 	{
-		m_LuaState  = lua_open( 100 );
+		//m_LuaState  = lua_open( 100 );
 
-		if ( m_LuaState == NULL )
-		{
-			ScriptError( LUA_CREATE_ERROR );
-			m_IsRuning = false;
-			return ;
-		}
-
-		m_IsRuning = true;
-		m_szScriptName[0] = '\0';
+// 		if ( m_LuaState == NULL )
+// 		{
+// 			ScriptError( LUA_CREATE_ERROR );
+// 			m_IsRuning = false;
+// 			return ;
+// 		}
+// 
+// 		m_IsRuning = true;
+// 		m_szScriptName[0] = '\0';
+		m_LuaState = NULL;
 	}
 
 	/// 析构函数
@@ -54,7 +55,7 @@ namespace tp_script
 		{
 			if( !m_LuaState )
 				return false;
-			if ( !luaL_loadfile(m_LuaState , FileName))
+			if ( luaL_loadfile(m_LuaState , FileName))
 			{
 				ScriptError( LUA_SCRIPT_COMPILE_ERROR );
 				return false;
