@@ -15,15 +15,24 @@ namespace tp_script
 	class  CLuaInterface
 	{
 
+		typedef  std::map<lua_State*,CLuaScript*>   ScriptTable;
+
  	public:
+
+		lua_State*		m_MainState;
+
+		ScriptTable		m_Scriptt;
+
 		/// 脚本引擎
-		CLuaScript		m_LuaParse;
+		/// CLuaScript		m_LuaParse;
 
 		/// Lua注册类
-		CLuaFnRegister  m_LuaFnReg;
+		/// CLuaFnRegister  m_LuaFnReg;
 
 		/// 脚本列表
 		//TableList		m_ScriptTable;
+
+
 
 		/// 执行脚本的object
 		void			*m_pOwner;
@@ -35,6 +44,8 @@ namespace tp_script
 		~CLuaInterface();
 
 		void  Init();
+
+		void  Create();
 
 		void  Destroy();
 

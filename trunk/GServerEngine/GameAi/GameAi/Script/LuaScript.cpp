@@ -25,21 +25,6 @@ namespace tp_script
 		m_szScriptName[0] = '\0';
 	}
 
-// 	/// 
-// 	CLuaScript::CLuaScript(int StackSize = 0)
-// 	{
-// 		m_LuaState				= Lua_Create(StackSize);
-// 
-// 		if (m_LuaState == NULL )
-// 		{
-// 			ScriptError(LUA_CREATE_ERROR);
-// 			m_IsRuning = false;
-// 			return ;
-// 		}
-// 		m_IsRuning				= true;
-// 		m_szScriptName[0]		= '\0';
-// 	}
-
 	/// 析构函数
 	CLuaScript::~CLuaScript()
 	{
@@ -56,7 +41,6 @@ namespace tp_script
 
 		//prase_buffer()
 		if ( luaL_loadbuffer(m_LuaState , (char*)pBuffer , dwLen , 0) != 0 )
-		//if ( lua_compilebuffer(m_LuaState , (char*) pBuffer , dwlen ) != 0 )
 		{
 			ScriptError( LUA_SCRIPT_COMPILE_ERROR );
 			return false;
@@ -68,11 +52,9 @@ namespace tp_script
 	{
 		try
 		{
-			/// read filename buffer
-			/// pCon is filename context
-			unsigned char *pCon = NULL ;
-			size_t size= 0 ;
-			if ( !LoadBuffer( pCon , size /**/) )
+			if( !m_LuaState )
+				return false;
+			if ( !luaL_loadfile(m_LuaState , FileName))
 			{
 				ScriptError( LUA_SCRIPT_COMPILE_ERROR );
 				return false;
@@ -83,8 +65,8 @@ namespace tp_script
 			return false;
 		}
 
-		if ( !ExecuteCode() )
-			return false;
+		//if ( !ExecuteCode() )
+		//	return false;
 		return true;
 	}
 
@@ -120,7 +102,7 @@ namespace tp_script
 	 * 功能:	调用Lua脚本内的函数
 	 * 参数:	char* cFuncName
 	 * 参数:	int   nResults
-	 * 参数:	char* cFormat  调用时所传参数的类型 
+	 * 参数:	char* cFormat  调用时所传参数的类型
 	 *			n:数字型(double) d:整形(int) s:字符串型 f:C函数型  
 	            n:Nil v:Value p:Point v形为Lua支持的
 	            参数为整形的数index，指明将index所指堆栈的变量作为该函数的调用参数。	
@@ -247,8 +229,9 @@ namespace tp_script
 		return bResult;
 	}
 
-	// 函数:	CLuaScript::GetValuesFromStack
-	// 功能:	从堆栈中获得变量
+	///
+	///  CLuaScript::GetValuesFromStack 从堆栈中获得变量
+	/// 
 	bool CLuaScript::GetValuesFromStack(const char * cFormat, ...)	
 	{
 		va_list vlist;
@@ -277,36 +260,28 @@ namespace tp_script
 			return false;
 
 		nIndex = nTopIndex - nValueNum +1;
-
 		{
 			va_start(vlist, cFormat);     
-
 			while (cFormat[i] != '\0')
 			{
-
 				switch(cFormat[i])
-				{
-					
+				{					
 					/// 返回值为数值形,Number,此时Lua只传递double形的值
 				case 'n':
 					{
 						pNumber = va_arg(vlist, double *);
-
 						if (pNumber == NULL)
 							return false;
 
 						if (lua_isnumber(m_LuaState, nIndex ))
 						{
 							* pNumber = lua_tonumber(m_LuaState, nIndex ++ );
-
 						}
 						else
 						{
 							ScriptError(LUA_SCRIPT_NOT_NUMBER_ERROR);
 							return false;
 						}
-
-
 					}
 					break;
 				case 'd':
@@ -323,7 +298,6 @@ namespace tp_script
 							ScriptError(LUA_SCRIPT_NOT_NUMBER_ERROR);
 							return false;
 						}
-
 					}
 					break;
 				case 's'://字符串形
@@ -336,7 +310,6 @@ namespace tp_script
 						if (lua_isstring(m_LuaState, nIndex))
 						{
 							(*pString) = (const char *)lua_tostring(m_LuaState, nIndex++);
-
 						}
 						else
 						{
@@ -345,9 +318,7 @@ namespace tp_script
 						}
 					}
 					break;
-
 				}
-
 
 				i ++;	
 			}
@@ -358,11 +329,11 @@ namespace tp_script
 	}
 
 	/// 初始化脚本对象，注册系统标准函数库
-	bool CLuaScript::Init()
+	bool CLuaScript::Init( lua_State* LuaMain)
 	{
 		if (! m_LuaState)
 		{
-			m_LuaState				= lua_open(0);
+			m_LuaState				= lua_newthread( LuaMain );
 
 			if (m_LuaState == NULL)
 			{
@@ -398,6 +369,7 @@ namespace tp_script
 
 	bool CLuaScript::Compile(const char *filename)
 	{
+		Load(filename);
 		return true;
 	}
 
@@ -436,12 +408,68 @@ namespace tp_script
 	//---------------------------------------------------------------------------
 	void CLuaScript::Exit()
 	{
-
 		if (! m_LuaState)		return ;
 		lua_close(m_LuaState);
 		m_LuaState = NULL;
 		m_IsRuning = false;
+	}
 
+	template < typename  type>
+	type CLuaScript::PopLuaNumber( const char* vPar)
+	{
+		lua_settop( m_LuaState , 0 );
+
+		lua_getglobal( m_LuaState, vPar);
+
+		if ( !lua_isnumber(m_LuaState ,1) )
+		{
+			ScriptError(LUA_SCRIPT_NOT_NUMBER_ERROR);
+			return 0;
+		}
+
+		type val = (type)lua_tonumber(  m_LuaState , 1 );
+
+		lua_pop(m_LuaState , 1 );
+
+		return val;
+	}
+
+	std::string CLuaScript::PopLuaString( const char* vPar)
+	{
+		lua_settop( m_LuaState , 0 );
+
+		lua_getglobal( m_LuaState, vPar);
+
+		if ( !lua_isstring(m_LuaState ,1) )
+		{
+			ScriptError(LUA_SCRIPT_NOT_STRING_ERROR);
+			return 0;
+		}
+
+		std::string str = lua_tostring(  m_LuaState , 1 );
+
+		lua_pop(m_LuaState , 1 );
+
+		return str;
+	}
+
+	bool CLuaScript::PopLuaBoolean( const char* vPar)
+	{
+		lua_settop( m_LuaState , 0 );
+
+		lua_getglobal( m_LuaState, vPar);
+
+		if ( !lua_isboolean(m_LuaState ,1) )
+		{
+			ScriptError(LUA_SCRIPT_NOT_BOOLEN_ERROR);
+			return 0;
+		}
+
+		bool val = (bool)lua_toboolean( m_LuaState , 1 );
+
+		lua_pop(m_LuaState , 1 );
+
+		return val;
 	}
 
 	void CLuaScript::ScriptError(int Error)
@@ -458,6 +486,19 @@ namespace tp_script
 		sprintf(lszErrMsg, "ScriptError %d:[%d] (%s) \n", Error1, Error2, m_szScriptName);
 		LUA_OUTERRMSG(lszErrMsg);
 		return;
+	}
+
+	bool CLuaScript::RunLuaSrcipt(const char* FileName)
+	{
+		if (int error = luaL_dofile(m_LuaState, FileName) != 0)
+		{
+			//throw std::runtime_error("ERROR(" + ttos(error) + "): Problem with lua script file " + FileName);
+			char lszErrMsg[200];
+			sprintf(lszErrMsg, "runtime_error %d (%s) \n", error,  FileName);
+			LUA_OUTERRMSG(lszErrMsg);
+			return false;
+		}
+		return true;
 	}
 
 	//---------------------------------------------------------------------------
@@ -489,12 +530,14 @@ namespace tp_script
 	// 功能:	恢复已中止的脚本
 	bool CLuaScript::Resume(void)
 	{
-		if ((! m_IsRuning) && (m_LuaState))
-		{
-			m_IsRuning = true;
-			return true;
-		}
-		return false;
+// 		if ((! m_IsRuning) && (m_LuaState))
+// 		{
+// 			m_IsRuning = true;
+// 			return true;
+// 		}
+// 		return false;
+
+		return lua_resume( m_LuaState, 0 );
 	}
 
 

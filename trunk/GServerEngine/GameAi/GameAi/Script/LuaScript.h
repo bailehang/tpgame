@@ -1,6 +1,5 @@
 
 #include "BLuaScript.h"
-#include "Lua/lua.hpp"
 
 namespace tp_script
 {
@@ -25,7 +24,7 @@ namespace tp_script
 
 		int    Activate() {		Execute() ; return 1 ; }
 
-		virtual  bool  Init();
+		virtual  bool  Init( lua_State* L );
 
 		virtual  void  Exit();
 
@@ -47,9 +46,9 @@ namespace tp_script
 
 		bool    RegisterFun( reg_luafun funcs[] , int  n =  0 );
 
-		//bool    RegisterFunction(char* FuncName , void* Func);
-
 		bool    LoadBuffer( unsigned char* pBuffer , size_t dwLen);
+
+		bool    RunLuaSrcipt(const char* FileName);
 
 		void    SafeCallBegin( int *  pIndex);
 
@@ -107,6 +106,13 @@ namespace tp_script
 			//Lua_SetTable_DoubleFromName(m_LuaState,  nIndex, szMemberName, Number);
 		}
 
+		template < typename type>
+		inline   type  PopLuaNumber(const char* vPar);
+
+		inline   std::string  PopLuaString(const char* vPar);
+
+		inline   bool    PopLuaBoolean(const char* vPar);
+
 		void  ScriptError( int Error );
 
 		void  ScriptError( int , int );
@@ -118,8 +124,6 @@ namespace tp_script
 		bool  m_IsRuning;
 
 		char  m_szScriptName[100];
-
-		/*	*/	//int   m_UserTag;
 
 		lua_State* m_LuaState;
 
