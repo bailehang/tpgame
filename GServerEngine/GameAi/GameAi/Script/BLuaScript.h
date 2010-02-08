@@ -1,7 +1,8 @@
 /*
 * 
 *
-*/	
+*/
+#include "Lua/lua.hpp"
 #pragma  once
 
 namespace  tp_script
@@ -15,7 +16,8 @@ namespace  tp_script
 		 LUA_SCRIPT_EXECUTE_ERROR	= 4,
 		 LUA_SCRIPT_NOT_NUMBER_ERROR=10,
 		 LUA_SCRIPT_NOT_STRING_ERROR=11,
-		 LUA_SCRIPT_NOT_TABLE_ERROR =12,
+		 LUA_SCRIPT_NOT_BOOLEN_ERROR=12,
+		 LUA_SCRIPT_NOT_TABLE_ERROR =13,
 		 LUA_SCRIPT_STATES_IS_NULL  =20
 	};
 
@@ -25,9 +27,9 @@ namespace  tp_script
 		CBaseScript(); 
 		virtual ~CBaseScript();
 
-		virtual bool  Init()	{  return  true  ; }
+		virtual bool  Init(lua_State* L )			{  return  true  ; }
 
-		virtual void  Exit()	{  return		 ; }
+		virtual void  Exit()						{  return		 ; }
 
 		virtual bool  Load(const char* FileName )	{  return  true  ; }
 

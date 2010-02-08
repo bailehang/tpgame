@@ -9,13 +9,18 @@
 template< typename type_name>
 class  CSingleton;
 
+
 class  CMonsterEntity : public CBaseGameEntity
 {
-	typedef  CMonsterEntity		self;
+	typedef  CMonsterEntity   self;
+private:
 
+	// an instance of state machine class 
+	CStateMachine<self>*	m_pMachine;
+
+	//
 public:
-		
-	CMonsterEntity( eEntityType e ) : CBaseGameEntity(e)
+	CMonsterEntity( eEntityType  e ) : CBaseGameEntity( e )
 	{
 		m_pMachine = new CStateMachine<self>( this );
 
@@ -31,9 +36,4 @@ public:
 	{
 		m_pMachine->Update();
 	}
-
-private:
-
-	// an instance of state machine class 
-	CStateMachine<self>*	m_pMachine;
 };

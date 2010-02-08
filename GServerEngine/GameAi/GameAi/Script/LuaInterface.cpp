@@ -16,22 +16,26 @@ namespace  tp_script
 
 	void  CLuaInterface::Init()
 	{
-		bool  ret = m_LuaParse.Init();
+		m_MainState = lua_open(0);
+		luaL_openlibs( m_MainState );
+
+
+		//bool  ret = m_LuaParse.Init();
 		
-		if ( !ret )
+		//if ( !ret )
 		{
 			//sprintf("CLuaInterface  mLuaScript::Init  failed ");
 			return ;
 		}
 
-		m_LuaFnReg.SetOwner( this );
-		m_LuaFnReg.RegisterFun();
+		//m_LuaFnReg.SetOwner( this );
+		//m_LuaFnReg.RegisterFun();
 
 	}
 
 	void  CLuaInterface::Destroy()
 	{
-		m_LuaParse.Exit();
+		//m_LuaParse.Exit();
 	}
 
 	bool  CLuaInterface::FindSymbol(lua_State *L, char* funcname)
@@ -66,9 +70,9 @@ namespace  tp_script
 
 	int  CLuaInterface::ExeFile(char *filename, char *funcname, bool bload)
 	{
-		if( bload )
-			bool  ret =  m_LuaParse.Load( filename );
-		bool  ret = m_LuaParse.CallFunction( funcname , 1, "" );
+// 		if( bload )
+// 			bool  ret =  m_LuaParse.Load( filename );
+// 		bool  ret = m_LuaParse.CallFunction( funcname , 1, "" );
 
 		return 0;
 	}

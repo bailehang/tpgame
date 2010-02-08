@@ -7,6 +7,7 @@
  **/
 
 #pragma  once
+#include "../Lua/lua.hpp"
 #include <iostream>
 #include <string>
 using namespace  std;
@@ -16,7 +17,7 @@ namespace  tp_script
 	int   luatest1( lua_State* L)
 	{
 		int  tid = (int)lua_tonumber(L,-1);
-		double dv= lua_tonumber(L,-2);
+		double dv= (double)lua_tonumber(L,-2);
 
 		std::string str=lua_tostring(L,-3);
 

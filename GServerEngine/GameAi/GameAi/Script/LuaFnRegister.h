@@ -37,6 +37,8 @@ typedef int (* func)( lua_State * );
 
 		void   RegisterFun();
 
+		bool   RegisterFun(reg_luafun Funcs[], size_t n);
+
 	};
 	
 
