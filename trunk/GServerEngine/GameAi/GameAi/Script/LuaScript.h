@@ -1,4 +1,5 @@
 
+#pragma  once
 #include "BLuaScript.h"
 
 namespace tp_script
@@ -49,10 +50,6 @@ namespace tp_script
 		bool    LoadBuffer( unsigned char* pBuffer , size_t dwLen);
 
 		bool    RunLuaSrcipt(const char* FileName);
-
-		void    SafeCallBegin( int *  pIndex);
-
-		void    SafeCallEnd( int nIndex );
 
 		bool    GetValuesFromStack(const char* cFormat , ... );
 
@@ -117,7 +114,7 @@ namespace tp_script
 
 		void  ScriptError( int , int );
 
-		bool  ExecuteCode();
+		int   ExecuteCode();
 
 		void  RegisterStandardFunctions();
 

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "LuaScript.h"
+#include "LuaFnRegister.h"
 
 
 namespace tp_script
@@ -81,7 +82,7 @@ namespace tp_script
 	}
 
 	/// 执行
-	bool CLuaScript::ExecuteCode()
+	int CLuaScript::ExecuteCode()
 	{
 		if ( !( m_IsRuning && m_LuaState ))
 		{
@@ -89,13 +90,18 @@ namespace tp_script
 			return false;
 		}
 
+		if ( GetInstObj(CLuaFnRegister).GetScript(m_szScriptName) )
+		{
+			return lua_resume( m_LuaState , 0 );
+		}
+
 		int  state ; //lua_execute
 		if ( state = lua_pcall (m_LuaState,0,LUA_MULTRET,0) != 0 )
 		{
 			ScriptError( LUA_SCRIPT_EXECUTE_ERROR , state );
-			return false;
+			return state;
 		}
-		return true;
+		return state;
 	}
 
 	/**
@@ -391,13 +397,6 @@ namespace tp_script
 		if (! m_LuaState)		return ;
 		luaL_openlibs( m_LuaState );  
 
-		/*
-// 		lua_baselibopen(m_LuaState);//Lua基本库
-// 		Lua_OpenIOLib(m_LuaState);//输入输出库
-// 		Lua_OpenStrLib(m_LuaState);//字符串处理库
-// 		Lua_OpenMathLib(m_LuaState);//数值运算库
-// 		//Lua_OpenDBLib(m_LuaState);//调试库
-*/
 		return;	
 	}
 
@@ -412,7 +411,6 @@ namespace tp_script
 		if (! m_LuaState)		return ;
 		lua_close(m_LuaState);
 		m_LuaState = NULL;
-		m_IsRuning = false;
 	}
 
 	template < typename  type>
@@ -500,23 +498,6 @@ namespace tp_script
 			return false;
 		}
 		return true;
-	}
-
-	//---------------------------------------------------------------------------
-	// 函数:	CLuaScript::SafeCallBegin
-	// SafeCallBegin与SafeCallEnd两函数应搭配使用，以防止在调用Lua的外部函数之后，
-	// 有多余数据在堆栈中未被清除。达到调用前与调用后堆栈的占用大小不变。
-	// 上述情况只需用在调用外部函数时，内部函数不需如此处理。
-	void CLuaScript::SafeCallBegin(int * pIndex)
-	{
-		if (! m_LuaState)		return ;
-		//lua_gettopindex(m_LuaState, pIndex);
-	}
-
-	void CLuaScript::SafeCallEnd(int nIndex)
-	{
-		if (! m_LuaState)	return;
-		//Lua_SafeEnd(m_LuaState, nIndex);
 	}
 
 	bool CLuaScript::Stop(void)
