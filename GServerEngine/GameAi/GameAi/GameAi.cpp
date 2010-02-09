@@ -18,17 +18,17 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	/// Ω≈±æ≤‚ ‘
-	tp_script::CLuaInterface lua ;
-	lua.Init();
-
-	//lua.ExeScript( 0 ,"test.lua" );
-	lua.ExeScript( 0, "fun.lua" );
+	
 	return 0;
 }
 
-
 /** 
+/// Ω≈±æ≤‚ ‘
+	// tp_script::CLuaInterface lua ;
+	// lua.Init();
+
+	// lua.ExeScript( 0 ,"test.lua" );
+	// lua.ExeScript( 0, "fun.lua" );
 
 GetInstObj(CStateSet).Create();
 

@@ -311,6 +311,10 @@
 				RelativePath=".\Script\LuaScript.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Script\UnitLua.h"
+				>
+			</File>
 			<Filter
 				Name="Lua"
 				>

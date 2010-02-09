@@ -8,7 +8,6 @@
 #pragma  once
 
 #include "LuaScript.h"
-//#include "LuaInterface.h"
 
 
 namespace tp_script
@@ -19,11 +18,20 @@ typedef int (* func)( lua_State * );
 
 	class CLuaInterface;
 
+	///
+	/// singleton
+	/// 
 	class CLuaFnRegister
 	{
+		typedef std::map<std::string, CLuaScript* >   StrLuaScriptT;
+
+		typedef StrLuaScriptT::iterator               StrFScriptItr;
+
 	private:
 		// CLuaScript  
 		CLuaInterface* m_pOwner;
+
+		StrLuaScriptT  m_LuaRunTable;
 
 	public:
 
@@ -38,6 +46,11 @@ typedef int (* func)( lua_State * );
 		void   RegisterFun();
 
 		bool   RegisterFun(reg_luafun Funcs[], size_t n);
+
+		void   AddScript(std::string str , tp_script::CLuaScript* );
+		
+		//CLuaScript*  GetScript(std::string  str );
+		tp_script::CLuaScript*  GetScript(std::string str);
 
 	};
 	

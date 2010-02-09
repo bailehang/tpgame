@@ -7,11 +7,20 @@ namespace  tp_script
 	CLuaInterface::CLuaInterface()
 	{
 		m_pOwner = NULL;
+		m_Scriptt.clear();
 	}
 
 	CLuaInterface::~CLuaInterface()
 	{
-		Destroy();
+		for (ScriptIter itr =  m_Scriptt.begin(); itr != m_Scriptt.end() ; itr ++  )
+		{
+			CLuaScript *lua = itr->second;
+			lua->Exit();
+			lua = NULL;
+		}
+		m_Scriptt.clear();
+		lua_close(m_MainState);
+		m_MainState = NULL;
 	}
 
 	void  CLuaInterface::Init()
@@ -20,15 +29,20 @@ namespace  tp_script
 		luaL_openlibs( m_MainState );
 
 		/// ×¢²áº¯Êý
-		m_LuaFnReg.SetOwner( this );
-		m_LuaFnReg.RegisterFun();
-
+		GetInstObj(CLuaFnRegister).SetOwner( this );
+		GetInstObj(CLuaFnRegister).RegisterFun();
 	}
 
-	void  CLuaInterface::Destroy()
+	void  CLuaInterface::Destroy(lua_State* L)
 	{
-		//m_LuaParse.Exit();
-		
+		ScriptIter itr =  m_Scriptt.find( STATE_TRS(L) );
+		if ( itr != m_Scriptt.end() )
+		{
+			CLuaScript *lua = itr->second;
+			lua->Exit();
+			lua = NULL;
+			m_Scriptt.erase( itr->first );
+		}
 	}
 
 	CLuaScript*  CLuaInterface::Create()
@@ -37,7 +51,8 @@ namespace  tp_script
 
 		pluascript->Init( m_MainState );
 
-	    m_Scriptt[ pluascript ] =	 pluascript->m_LuaState;
+	    m_Scriptt[ STATE_TRS( pluascript->m_LuaState ) ] =pluascript;
+
 		return  pluascript;
 	}
 
@@ -73,22 +88,31 @@ namespace  tp_script
 
 	int  CLuaInterface::ExeFile(char *filename, char *funcname, bool bload)
 	{
-		CLuaScript *lua = Create();
+		CLuaScript *lua  = NULL;
+		if ( (lua = GetInstObj(CLuaFnRegister).GetScript( filename) ) == NULL )
+		{
+			lua = Create();
+		}
+		
 		if ( !lua )
 			return 0;
 
  		if( bload )
  			bool  ret =  lua->Load( filename );
-		lua->ExecuteCode();
+		int ret = lua->ExecuteCode();
 
-		if( funcname !=NULL)
- 		  bool  ret = lua->CallFunction( funcname , 1, "" );
+		if ( ret != LUA_YIELD )
+		{
+			Destroy( lua->m_LuaState );
+		}
+// 		if( funcname !=NULL)
+// 			bool  ret = lua->CallFunction( funcname , 3, "dns",123,345.0,"Ssss");
 		return 0;
 	}
 
 	int  CLuaInterface::ExeScript(int sid, char *funcname)
 	{
-		return	 ExeFile(funcname,"test1",true);
+		return	 ExeFile(funcname,"test3",true);
 	}
 
 	int  CLuaInterface::ExeScript(int sid, char *funcname, int Param0 )

@@ -10,6 +10,7 @@ namespace tp_script
 	{
 		{"test1" , func(tp_script::luatest1) } ,
 		{"test2" , func(tp_script::luatest2) } ,
+		{"test3" , func(tp_script::luatest3) } ,
 	};
 
 	CLuaFnRegister::CLuaFnRegister()
@@ -39,9 +40,9 @@ namespace tp_script
 	}
 
 	///
-	/// 功能:	批量注册Lua的内部C函数，各个函数的信息保存在reg_luafun的数据中
-	/// 参数:	reg_luafun *Funcs 数组的指针
-	/// 参数:	int n 函数数量。可以为零，由系统计算得到。
+	/// 批量注册Lua的内部C函数，各个函数的信息保存在reg_luafun的数据中
+	/// reg_luafun *Funcs 数组的指针
+	/// int n 函数数量。可以为零，由系统计算得到。
 	///
 	bool CLuaFnRegister::RegisterFun(reg_luafun Funcs[], size_t n)
 	{
@@ -54,4 +55,21 @@ namespace tp_script
 			lua_register(m_pOwner->m_MainState, Funcs[i].name, Funcs[i].func);
 		return true;
 	}
+
+	void  CLuaFnRegister::AddScript(std::string str, tp_script::CLuaScript * lua)
+	{
+		m_LuaRunTable[ str.c_str() ] = lua;
+	}
+
+	tp_script::CLuaScript*  CLuaFnRegister::GetScript(std::string str)
+	{
+		StrFScriptItr itr = m_LuaRunTable.find( str.c_str() );
+
+		if ( itr != m_LuaRunTable.end() )
+		{
+			return itr->second;
+		}
+		return NULL;
+	}
+
 }

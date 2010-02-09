@@ -12,10 +12,13 @@
 namespace tp_script
 {
 	
+#define STATE_TRS(S)  (long)(S)
+
 	class  CLuaInterface
 	{
 
-		typedef  std::map<CLuaScript*,lua_State*>   ScriptTable;
+		typedef  std::map<long,CLuaScript*>   ScriptTable;
+		typedef  ScriptTable::iterator		  ScriptIter;
 
  	public:
 
@@ -27,7 +30,7 @@ namespace tp_script
 		/// CLuaScript		m_LuaParse;
 
 		/// Lua注册类
-		CLuaFnRegister  m_LuaFnReg;
+		//CLuaFnRegister  m_LuaFnReg;
 
 		/// 脚本列表
 		//TableList		m_ScriptTable;
@@ -47,7 +50,7 @@ namespace tp_script
 
 		CLuaScript*  Create();
 
-		void  Destroy();
+		void  Destroy(lua_State* L);
 
 		template< typename owner>
 		void  SetOwner(owner * powner) { m_pOwner = powner; }
