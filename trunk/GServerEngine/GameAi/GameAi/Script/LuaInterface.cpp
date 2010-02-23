@@ -25,7 +25,7 @@ namespace  tp_script
 
 	void  CLuaInterface::Init()
 	{
-		m_MainState = lua_open(100);
+		m_MainState = lua_open();
 		luaL_openlibs( m_MainState );
 
 		/// ×¢²áº¯Êý
