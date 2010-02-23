@@ -411,6 +411,22 @@
 		<Filter
 			Name="Engine"
 			>
+			<Filter
+				Name="2D"
+				>
+			</Filter>
+			<Filter
+				Name="UI"
+				>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="Common"
+			>
+			<File
+				RelativePath=".\Common\Autolist.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
