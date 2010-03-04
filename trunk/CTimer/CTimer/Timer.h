@@ -1,8 +1,9 @@
 /** 
+ *	@brief: 定时器管理类,管理定时器的五个轮子
+ *          实现方式参考linux的中断处理，每次触发只触发第一个轮子的结点。
  *
- *
- *
- *
+ *  @Author:Expter
+ *	@Date : 03/02/2010
  */
 
 #pragma once
@@ -14,32 +15,65 @@
 
 class CTimer
 {
+public:	
+	///
 	///  构造函数如下
-public:
+	/// 
 	CTimer(void);
 
-	CTimer( int second =0);
+	CTimer( int second);
 
 	~CTimer(void);
 
 public:
 
+	///
+	/// 初始化定时器管理类
+	///
 	void  Init(int Second = 0);
 
+	///
+	/// 增加一个定时器
+	///
 	void  add_timer(timernode *times );
 
+	///
+	///	检测定时器是否存在
+	///
+	/// @return  如果存在返回true,否则为false
+	/// 
 	bool  check_timer(timernode* times);
 
+	///
+	///	删除定时器
+	///
+	/// @return  如果删除成功返回true,否则为false
+	///
 	bool  delete_timer(CLinkList* list, timernode *times);
 
+	///
+	/// 重新初始化一个定时器
+	///
 	void  init_timer(timernode* timers);
 
+	///
+	/// 定时器的迁移，也即将一个定时器从它原来所处的定时器向量迁移到另一个定时器向量中。
+	///
 	void  cascade_timer(CLinkList* timers);
 
+	///
+	/// 执行当前已经到期的定时器,所有小于jeffies的定时器
+	///
 	void  Expires( ulong  jeffies);
 
+	///
+	/// 重新初始化一个定时器
+	///
 	void  Cancel(timernode* timers);
 
+	///
+	/// 重新计算一个定时器
+	///
 	void  Mod_timer(timernode* timers);
 
 private:
