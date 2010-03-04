@@ -27,13 +27,11 @@ void  CLinkList::init()
 	}
 }
 
-///
 void CLinkList::init_list_self(int idx)
 {
 	m_List[idx].next = m_List[idx].prev = &m_List[idx];
 }
 
-/// 
 void CLinkList::insert_listnode(ListNode *news, ListNode *prev, ListNode *next)
 {
 	next->prev = news;
@@ -42,7 +40,6 @@ void CLinkList::insert_listnode(ListNode *news, ListNode *prev, ListNode *next)
 	prev->next = news;
 }
 
-///
 void CLinkList::insert_head( ListNode* news , ListNode* head )
 {
 	insert_listnode( news, head , head->next);

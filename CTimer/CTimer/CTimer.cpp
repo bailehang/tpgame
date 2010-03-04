@@ -6,5 +6,6 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	CTimer  mytimer( 40 );
 	return 0;
 }

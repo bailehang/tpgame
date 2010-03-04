@@ -34,8 +34,12 @@ void  CTimer::Init(int second )
 	m_tv5->init();
 
 	g_vecs = new CLinkList * [ lnum ];
-	for( int i = 1 ; i <= lnum ; i++ )
-		ListProp(g_vecs,m_tv,1);
+	//for( int i = 1 ; i <= lnum ; i++ )
+	ListProp(g_vecs,m_tv,1);
+	ListProp(g_vecs,m_tv,2);
+	ListProp(g_vecs,m_tv,3);
+	ListProp(g_vecs,m_tv,4);
+	ListProp(g_vecs,m_tv,5);
 }
 
 CTimer::~CTimer(void)
