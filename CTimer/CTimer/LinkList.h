@@ -1,5 +1,6 @@
 /** 
-* @brief: 一个包括定时器结点的双向链表
+ * @brief: 一个包括定时器结点的双向链表
+ *         一个轮子，插槽大小为m_size,表示每一个插槽都有一个双向链表。
  *
  * @Author:Expter
  * @date:  03/01/2010
@@ -10,30 +11,10 @@
 #include "TypeDef.h"
 #include "tools.h"
 
-/// 定时器指针结点
-struct ListNode
-{
-	ListNode *next,*prev;
-};
-
-/// 
-/// 定时器结点,tlist表示结点的指针,expires循环周期时间
-/// etime 触发周期时间,pFun触发函数.
-/// 
-struct timernode
-{
-	ListNode  tlist;
-	
-	ulong    expires;
-	
-	ulong    etime;
-
-	void     *pFun;
-};
-
 
 ///			  
-/// 一个轮子，一个双向链表
+/// 一个轮子,一个循环队列
+/// 
 /// 
 class CLinkList
 {
@@ -98,7 +79,7 @@ private:
 	ListNode *m_List;  
 	
 	///
-	/// 轮子的索引
+	/// 轮子当前转到的索引
 	/// 
 	int		  m_index; 
 

@@ -17,4 +17,3 @@ typedef unsigned long  ulong;
 /// ÷∏’Î
 #define SAFE_DELETE( a )	   if((a)!= NULL) {  delete  a ; a = NULL; }
 
-

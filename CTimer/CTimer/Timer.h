@@ -13,6 +13,9 @@
 #define  ListProp(g, tv,n)\
 	g[n-1] = tv##n
 
+///
+/// 定时器管理类,管理定时器的五个轮子
+/// 
 class CTimer
 {
 public:	
@@ -26,7 +29,6 @@ public:
 	~CTimer(void);
 
 public:
-
 	///
 	/// 初始化定时器管理类
 	///
@@ -77,13 +79,12 @@ public:
 	void  Mod_timer(timernode* timers);
 
 private:
-
+	/// 5个轮子
 	CLinkList*    m_tv1;
 	CLinkList*    m_tv2;
 	CLinkList*    m_tv3;
 	CLinkList*    m_tv4;
 	CLinkList*    m_tv5;
-
 	CLinkList**   g_vecs;
 
 	/// 定时器全局tick
@@ -92,5 +93,4 @@ private:
  	ulong		  m_Lasttime;
 	/// 精确到毫秒
 	ulong		  m_mSecond;
-
 };

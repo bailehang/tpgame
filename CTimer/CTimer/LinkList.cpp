@@ -11,6 +11,7 @@ CLinkList::CLinkList( int size )
 {
 	m_List = new ListNode[ size ];
 	m_Size= size;
+	m_index=0;
 }
 
 CLinkList::~CLinkList(void)

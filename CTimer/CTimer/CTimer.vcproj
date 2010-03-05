@@ -171,10 +171,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\CTimer.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\LinkList.cpp"
 				>
 			</File>
@@ -200,6 +196,10 @@
 			</File>
 			<File
 				RelativePath=".\Timer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TimerTest.cpp"
 				>
 			</File>
 		</Filter>
