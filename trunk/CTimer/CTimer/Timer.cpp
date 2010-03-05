@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Timer.h"
+#include <iostream>
 
 CTimer::CTimer(void)
 {
@@ -19,6 +20,7 @@ CTimer::CTimer(int second)
 	m_tv5 = new CLinkList( sbitsize );
 
 	m_mSecond = second;
+	Init( m_mSecond );
 }
 
 void  CTimer::Init(int second )
@@ -59,7 +61,7 @@ void  CTimer::add_timer(timernode *times)
 		return ;
 	
 	/// hash到轮子
-	ulong expires = (times->expires - m_jeffies) / m_mSecond;
+	ulong expires = (times->etime - m_jeffies) / m_mSecond;
 
 	CLinkList* lve = NULL;
 	ListNode * lvec= NULL;
@@ -144,6 +146,8 @@ void  CTimer::Expires(ulong jeffies)
 			timer= (timernode*)( (char*)curr - offsetof(timernode,tlist));
 			void* fun = timer->pFun;
 
+			static_cast<CGameEvent*>(fun)->TimeOut( timer->eType );
+
 			/// 定时器触发
 			delete_timer(m_tv1,timer);
 
@@ -158,6 +162,7 @@ void  CTimer::Expires(ulong jeffies)
 				/// 删除
 				SAFE_DELETE(timer);
 			}
+			curr = next;
 		}
 		Count --;
 
@@ -173,6 +178,7 @@ void  CTimer::Expires(ulong jeffies)
 				 do 
 				 {
 					 cascade_timer( g_vecs[n] );
+					 std::cout <<" 第 "<< n+1 <<" 个轮子,索引 " << g_vecs[n]->GetIndex() <<" 转动" << std::ends;
 				 } while ( g_vecs[n]->GetIndex() == 0 && ++n < lnum);
 				 
 			 }
