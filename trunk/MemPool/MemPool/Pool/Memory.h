@@ -3,35 +3,46 @@
 #pragma  once
 #include "List.h"
 #include "Locks.h"
+#include <list>
+#include <vector>
+using namespace std;
 
 template  < class T >
 class  CMemory : public TlinkedList<T>
 {
 	typedef  T  Obj;
-
+	typedef  std::vector<Obj>		MemList;
+	//typedef  MemList::iterator		MIter;
 public:
-	CMemory(void)  {  m_MemoryArray = NULL ; m_AllocSize = NULL; }
+	CMemory(void)  {  m_MemoryList.clear() ; m_AllocSize = NULL; }
 	~CMemory(void) {}
 
 
+	CMemory( long size ,long  ObjSize)
+	{
+		m_ObjSize = ObjSize;
+		MemoryAlloc( size);
+	}
 public:
 	long		GetAllocMemorySize()	{	return m_AllocSize ; } 
 
 	long		GetFreeMemoryNodeSize() {	return GetSize();  }
 
-	Obj*		GetMemoryNode(int index){	return m_MemoryArray + index; }
+	//Obj*		GetMemoryNode(int index){	return m_MemoryArray + index; }
 
-	bool        MemoryAlloc( int size)
+	bool        MemoryAlloc( int size )
 	{
 		m_AllocSize = size;
 
-		m_MemoryArray= (Obj*)VirtualAlloc( NULL , sizeof(Obj)*size , MEM_COMMIT , PAGE_READWRITE );
-		if(	m_MemoryArray == NULL )	return false;
+		Obj MemoryArray= (Obj)VirtualAlloc( NULL , m_ObjSize*size , MEM_COMMIT , PAGE_READWRITE );
+		if(	MemoryArray == NULL )	return false;
 
 		for ( int i = 0 ; i < size ; i++ )
 		{
-			AddNode( m_MemoryArray + i );
+			PushNode( MemoryArray + i );
 		}
+
+		m_MemoryList.push_back( MemoryArray );
 		return true;
 	}
 
@@ -39,23 +50,28 @@ public:
 	{
 		sync::scope_guard  sguid ( m_cection );
 
-		if (  m_MemoryArray != NULL )
+		if ( m_MemoryList.size() > 0  )
 		{
 			ReleaseList();
-			VirtualFree( m_MemoryArray , 0 , MEM_RELEASE );
+			for ( std::vector<Obj>::iterator it = m_MemoryList.begin() ; it != m_MemoryList.end() ; it++ )
+			{
+				VirtualFree( *it , 0 , MEM_RELEASE );
+			}		
 		}
-
-		m_MemoryArray = NULL;
+		m_MemoryList.clear();
 		m_AllocSize   = 0;
 	}
 
-	Obj*        GetNewMemoryNode()
+	Obj       GetNewMemoryNode()
 	{
 		sync::scope_guard  sguid( m_cection );
 
-		Obj*  node = GetHead();
+		Obj  node = GetHead();
 		if ( !node )
 		{
+			if( AppendMemory() )
+				return GetNewMemoryNode();
+
 			return NULL;
 		}
 
@@ -64,7 +80,7 @@ public:
 		return node;
 	}
 
-	bool  AllocNodeMemory( Obj* node)
+	bool  AllocNodeMemory( Obj node)
 	{
 		if ( !node)
 		{
@@ -72,12 +88,12 @@ public:
 		}
 		sync::scope_guard  sguid ( m_cection );
 
-		RemoveNode( node );
+		PushNode( node );
 		
 		return true;
 	}
 
-	bool   ReleaseNodeMemory( Obj* node)
+	bool   ReleaseNodeMemory( Obj node)
 	{
 		if( !node )
 		{
@@ -86,15 +102,35 @@ public:
 
 		sync::scope_guard  sguid( m_cection );
 
-		AddNode( node );
+		PushNode( node );
+
+		return true;
+	}
+
+	/// append  Memory while free Memory is emptry 
+	bool  AppendMemory()
+	{
+		Obj MemoryArray= (Obj)VirtualAlloc( NULL , m_ObjSize*m_AllocSize , MEM_COMMIT , PAGE_READWRITE );
+		if(	MemoryArray == NULL )	return false;
+
+		for ( int i = 0 ; i < m_AllocSize ; i++ )
+		{
+			PushNode( MemoryArray + i );
+		}
+
+		m_AllocSize = m_AllocSize * 2;
+		m_MemoryList.push_back( MemoryArray );
 
 		return true;
 	}
 
 private:
+	long      m_ObjSize;
+	long	  m_AllocSize;
 	/// 
-	Obj*   m_MemoryArray;
-	long   m_AllocSize;
+	MemList   m_MemoryList;
+	
+
 
 	sync::csectionlock  m_cection;
 };
