@@ -223,6 +223,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Pool\BlockPool.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Pool\BlockPool.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Pool\List.h"
 				>
 			</File>
@@ -239,6 +247,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\ClassDiagram1.cd"
+			>
+		</File>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>

@@ -1,5 +1,10 @@
-
-
+/** 
+ *  file
+ *  brief
+ *  author
+ *  
+ *  date
+ */
 
 #pragma  once 
 
@@ -9,9 +14,9 @@ class   TlinkedList
 public:
 
 	/// Constructor 
-	TlinkedList();
+	TlinkedList(){};
 	/// Destructor
-	~TlinkedList();
+	~TlinkedList(){};
 
 
 	/// the operation of linked list
@@ -22,8 +27,9 @@ public:
 	T*		GetPrev(T* Node) { return Node->prev;}
 	long    GetSize() { return  m_Size; }
 
-	/// about list add,insert,delete function
-	void    AddNode(T* Node)
+	/// about list add,insert,remove function
+	/// AddListToTail
+	void    PushNode(T* Node)
 	{
 		Node->next = Node->prev = NULL;
 
@@ -44,7 +50,8 @@ public:
 		}
 	}
 
-	void    AddNodeToHead(T* Node)
+	/// Add Node to list Head
+	void    PushNodeToHead(T* Node)
 	{
 		Node->next = Node->prev = NULL;
 		
@@ -64,6 +71,7 @@ public:
 		}
 	}
 
+	/// insert Insert_Node in Find_Node end
 	void InsertNode(T* Find_Node,T* Insert_Node)
 	{
 		Insert_Node->next = Insert_Node->prev = NULL;
