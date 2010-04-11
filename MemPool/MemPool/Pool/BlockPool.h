@@ -14,7 +14,7 @@ using namespace std;
 
 #define  MINBLOCK	  32
 #define  INDEXX(IDX)  ( INX/MINBLOCK + IDX%MINBLOCK != 0 ? 1 : 0 )
-#define  ALLOCSIZE    30*1024*1024		// 30M
+#define  ALLOCSIZE    40*1024*1024		// 30M
 
 template  <class T>
 class  PoolPolicy
@@ -182,8 +182,8 @@ private:
 		{
 			m_Buffer[idx][i].type = type;	
 			m_MemPool[idx].PushNode(&m_Buffer[idx][i]) ;
-			m_listPool[idx].push_back( m_Buffer[idx] );
 		}
+		m_listPool[idx].push_back( m_Buffer[idx] );
 	}
 
 	long  GetIndex(unsigned long size )
@@ -197,7 +197,7 @@ private:
 		return -1;
 	}
 
-	void  Init( long idx , eBuff_Type type)
+	bool  Init( long idx , eBuff_Type type)
 	{
 		if( idx == 0 )     MemoryInit<Buffer32>( idx , type );
 		else if( idx == 1) MemoryInit<Buffer64>( idx , type );
@@ -207,5 +207,6 @@ private:
 		else if( idx == 5) MemoryInit<Buffer1024>( idx , type );
 		else if( idx == 6) MemoryInit<Buffer2048>( idx , type );
 		else if( idx == 7) MemoryInit<Buffer5120>( idx , type );
+		return true;
 	}
 };
