@@ -38,6 +38,7 @@ void*  BlockPool::Alloc( unsigned long size )
 		 {
 			std::cout <<" 新增加内存分配 " ;
 			Init( idx , (eBuff_Type) idx );   
+			return Alloc( size );
 		 }
 	}
 
@@ -63,10 +64,10 @@ void   BlockPool::ReleaseAll()
 	for ( int i = 0 ; i < eBT_END ; i++ )
 	{
 		  m_MemPool[i].ReleaseList();
-		  std::cout <<" 资源释放 " << typeid(m_listPool[i]).name();
+		  std::cout <<" 资源释放 " << typeid(m_listPool[i]).name() <<" 子内存 " << m_listPool[i].size() <<std::endl;
 		  for ( std::list<Buffer*>::iterator it = m_listPool[i].begin(); it != m_listPool[i].end(); it ++ )
 		  {
-			   /// std::cout <<" 资源释放it " << typeid(*it).name() << std::endl;
+			   //std::cout <<" 资源释放it " << typeid(*it).name() << std::endl;
 			   VirtualFree(*it,0,MEM_RELEASE);
 		  }  
 	}
