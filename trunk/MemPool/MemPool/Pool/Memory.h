@@ -1,136 +1,104 @@
+/*
+*	File  :	Memory.h
+*   Brief :  一个针对对象内存池的管理，主要是通过链表来管理内存。
+*   Author:  Expter 
+*	Creat Date:  [2009/11/11]
+*/
 
+#pragma once
 
-#pragma  once
 #include "List.h"
-#include "Locks.h"
-#include <list>
-#include <vector>
-using namespace std;
+#include "locks.h"
 
-template  < class T >
-class  CMemory : public TlinkedList<T>
+template <class obj>
+class CMemory : public  TlinkedList<obj>
 {
-	typedef  T  Obj;
-	typedef  std::vector<Obj>		MemList;
-	//typedef  MemList::iterator		MIter;
 public:
-	CMemory(void)  {  m_MemoryList.clear() ; m_AllocSize = NULL; }
-	~CMemory(void) {}
 
+	///
+	///  Brief:构造函数初始化 
+	///
+	CMemory(void)	{	MemoryArray = NULL ; AllocSize = 0 ; }	
 
-	CMemory( long size ,long  ObjSize)
+	~CMemory(void)	{	}
+
+	///
+	///  Brief: 操作管理函数
+	/// 
+	int		GetAllocMemorySize()	{	return AllocSize ; } 
+
+	int		GetFreeMemoryNodeSize() {	return GetSize();  }
+
+	obj *	GetMemoryNode(int index){	return MemoryArray + index; }
+
+	///  Brief: 内存分配
+	bool	MemoryAlloc( int size ) 
 	{
-		m_ObjSize = ObjSize;
-		MemoryAlloc( size);
-	}
-public:
-	long		GetAllocMemorySize()	{	return m_AllocSize ; } 
+		AllocSize  = size;
 
-	long		GetFreeMemoryNodeSize() {	return GetSize();  }
-
-	//Obj*		GetMemoryNode(int index){	return m_MemoryArray + index; }
-
-	bool        MemoryAlloc( int size )
-	{
-		m_AllocSize = size;
-
-		Obj MemoryArray= (Obj)VirtualAlloc( NULL , m_ObjSize*size , MEM_COMMIT , PAGE_READWRITE );
+		MemoryArray= (obj*)VirtualAlloc( NULL , sizeof(obj)*size , MEM_COMMIT , PAGE_READWRITE );
 		if(	MemoryArray == NULL )	return false;
 
 		for ( int i = 0 ; i < size ; i++ )
 		{
-			PushNode( MemoryArray + i );
+			AddNode( MemoryArray + i );
 		}
-
-		m_MemoryList.push_back( MemoryArray );
 		return true;
 	}
 
-	void        MemoryRelease( )
-	{
-		sync::scope_guard  sguid ( m_cection );
-
-		if ( m_MemoryList.size() > 0  )
-		{
-			ReleaseList();
-			for ( std::vector<Obj>::iterator it = m_MemoryList.begin() ; it != m_MemoryList.end() ; it++ )
-			{
-				VirtualFree( *it , 0 , MEM_RELEASE );
-			}		
-		}
-		m_MemoryList.clear();
-		m_AllocSize   = 0;
-	}
-
-	Obj       GetNewMemoryNode()
+	void	MemoryRelease()
 	{
 		sync::scope_guard  sguid( m_cection );
 
-		Obj  node = GetHead();
-		if ( !node )
+		if ( MemoryArray)
 		{
-			if( AppendMemory() )
-				return GetNewMemoryNode();
+			ReleaseList();
+			VirtualFree( MemoryArray , 0 , MEM_RELEASE );
+		}
 
+		MemoryArray = NULL;
+		AllocSize	= 0;
+	}
+
+	obj * GetNewMemoryNode()
+	{	
+		sync::scope_guard  sguid( m_cection );
+
+		obj * node = GetHead();
+		if ( !node)
+		{
 			return NULL;
 		}
 
 		RemoveNode( node );
 
-		return node;
+		return node ;
 	}
 
-	bool  AllocNodeMemory( Obj node)
+	bool  AllocNodeMemory( obj * node)
 	{
-		if ( !node)
-		{
-			return false;
-		}
-		sync::scope_guard  sguid ( m_cection );
-
-		PushNode( node );
-		
-		return true;
-	}
-
-	bool   ReleaseNodeMemory( Obj node)
-	{
-		if( !node )
-		{
-			return false;
-		}
+		if ( !node )	return false;
 
 		sync::scope_guard  sguid( m_cection );
 
-		PushNode( node );
+		RemoveNode( node );
 
 		return true;
 	}
 
-	/// append  Memory while free Memory is emptry 
-	bool  AppendMemory()
+	bool  ReleaseNodeMemory( obj * node)
 	{
-		Obj MemoryArray= (Obj)VirtualAlloc( NULL , m_ObjSize*m_AllocSize , MEM_COMMIT , PAGE_READWRITE );
-		if(	MemoryArray == NULL )	return false;
+		if ( !node )	return false;
 
-		for ( int i = 0 ; i < m_AllocSize ; i++ )
-		{
-			PushNode( MemoryArray + i );
-		}
+		sync::scope_guard  sguid( m_cection );
 
-		m_AllocSize = m_AllocSize * 2;
-		m_MemoryList.push_back( MemoryArray );
+		AddNode( node );
 
 		return true;
 	}
 
 private:
-	long      m_ObjSize;
-	long	  m_AllocSize;
-	/// 
-	MemList   m_MemoryList;
-	
-
-
+	obj * MemoryArray;
+	int	  AllocSize;
 	sync::csectionlock  m_cection;
 };
