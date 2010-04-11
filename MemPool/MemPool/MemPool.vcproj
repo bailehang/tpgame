@@ -231,6 +231,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Pool\HeapPool.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Pool\HeapPool.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Pool\List.h"
 				>
 			</File>
@@ -243,7 +251,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Pool\Memory.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Pool\Memory.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Pool\tools.h"
 				>
 			</File>
 		</Filter>

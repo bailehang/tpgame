@@ -14,7 +14,7 @@ class   TlinkedList
 public:
 
 	/// Constructor 
-	TlinkedList(){};
+	TlinkedList(){  m_Head = m_Tail = NULL ; m_Size = 0; };
 	/// Destructor
 	~TlinkedList(){};
 
