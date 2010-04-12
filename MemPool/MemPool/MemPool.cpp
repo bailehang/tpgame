@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <list>
+#include <fstream>
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -32,18 +33,18 @@ int _tmain(int argc, _TCHAR* argv[])
 		Count[ Num[rad] ] ++;
 		memset( p , 0 , Asize );
 
-		if( Num[rad] >= 0)
+		if( Num[rad] >= 3 || (rand() % 7 < 3) )
 			m_Cachelist[p] = Asize;
 
-		if ( m_Cachelist.size() >= 5000 )
+		if ( m_Cachelist.size() >= 50000 )
 		{
 			//std::cout << p << std::endl;
 			size_t  lsize = m_Cachelist.size();
 			std::map<char*,long>::iterator it =m_Cachelist.begin()   ;
-			for ( size_t i = 0; i < 3000 ; i++ )
+			for ( size_t i = 0; i < 40000 ; i++ )
 			{
 				Memory.Free(it->first ,it->second);
-				it = m_Cachelist.erase( it );
+				m_Cachelist.erase( it++ );
 			}
 		}
 
@@ -58,11 +59,13 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 			std::cout<<"=======================================================\n\n"<<std::endl;
 			sum = 0;
-			freopen("data.in","r",stdin);
+			//freopen("data.in","r",stdin);
+			ifstream in("data.in");
 			long  n;
-			cin >> n;
-			if( n == 0 )
+			in >> n;
+			if( n != 1 )
 				break;
+			in.close();
 		}
 
 		/// Sleep( 1 );
@@ -72,7 +75,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	for ( ; it != m_Cachelist.end() ; it ++  )
 	{
 		Memory.Free(it->first ,it->second);
-		it = m_Cachelist.erase( it );
+		m_Cachelist.erase( it++ );
 	}
 	
 	long Summ = 0;
