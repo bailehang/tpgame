@@ -1,9 +1,8 @@
-/** 
- *
- *
- *
- */
-
+/// 
+///  file  BaseNode.h
+///  brief 一个双向链表需要的前后指针节点
+/// 
+ 
 #pragma  once 
 
 template < typename  T >
@@ -20,5 +19,4 @@ public:
 	{
 		next = prev = NULL;
 	}
-
 };

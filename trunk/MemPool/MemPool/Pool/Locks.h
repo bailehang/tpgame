@@ -1,9 +1,9 @@
 /*
-*	File  :  locks.h
-*   Brief :  一个支持事件和信号量锁，利用引用计数的方式，主要参考智能指针(Auto_ptr)的实现
-*   Author:  Expter 
-*	Creat Date:  [2009/11/11]
-*/
+ *	 File  :  locks.h
+ *   Brief :  一个支持事件和信号量锁，利用引用计数的方式，主要根据RAII原理
+ *   Author:  Expter 
+ *	 Creat Date:  [2009/11/11]
+ */
 
 #pragma once
 #include <windows.h>
