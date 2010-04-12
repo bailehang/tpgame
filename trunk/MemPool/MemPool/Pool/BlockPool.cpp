@@ -63,16 +63,16 @@ bool BlockPool::Free(void *Mem)
 
 void   BlockPool::ReleaseAll()
 {
-#ifdef  _DEBUG
+//#ifdef  _DEBUG
 	std::cout <<"\n\n栈分配信息: "<<std::endl;
-#endif
+//#endif
 
 	for ( int i = 0 ; i < eBT_END ; i++ )
 	{
 		  m_MemPool[i].ReleaseList();
-#ifdef  _DEBUG
+//#ifdef  _DEBUG
 		  std::cout <<" 资源释放 " << typeid(m_listPool[i]).name() <<" 子内存 " << m_listPool[i].size() <<std::endl;
-#endif		  
+//#endif		  
 		  for ( std::list<Buffer*>::iterator it = m_listPool[i].begin(); it != m_listPool[i].end(); it ++ )
 		  {
 			   //std::cout <<" 资源释放it " << typeid(*it).name() << std::endl;

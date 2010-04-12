@@ -104,7 +104,7 @@ private:
 		long  FreeSize = Heap->m_FreeList.GetSize();
 		long  UsedSize = Heap->m_Used.GetSize();
 
-		if (  UsedSize <= FreeSize )
+		if (  UsedSize <= FreeSize || FreeSize>= 100 )
 		{
 			for ( long i = 0 ; i < FreeSize/2 ; i++ )
 			{

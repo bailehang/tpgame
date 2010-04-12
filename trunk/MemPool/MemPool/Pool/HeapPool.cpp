@@ -14,9 +14,9 @@ HeapPool::~HeapPool()
 
 void  HeapPool::ReleaseAll()
 {
-#ifdef  _DEBUG
+//#ifdef  _DEBUG
 	std::cout <<"\n\n堆分配信息: "<<std::endl;
-#endif
+//#endif
 	MHIter it ( m_HeapTable.begin() );
 
 	for ( ; it != m_HeapTable.end() ; it++ )
@@ -25,9 +25,9 @@ void  HeapPool::ReleaseAll()
 		HeapNode* pNode = it->second;
 		if( !pNode ) continue;
 
-#ifdef  _DEBUG
+//#ifdef  _DEBUG
 		std::cout <<" Count = "<<pNode->m_Count <<" Size " << it->first <<" M_FreeList size:"<<pNode->m_FreeList.GetSize() <<" m_Used Size:"<<pNode->m_Used.GetSize() <<std::endl;
-#endif
+//#endif
 		/// 释放空闲的
 		while ( pNode->m_FreeList.GetSize() > 0)
 		{
