@@ -1,9 +1,9 @@
 /** 
- *  file
- *  brief
- *  author
+ *  file   list.h
+ *  brief  封装一个双向链表
+ *  author Expter
  *  
- *  date
+ *  date   2010/04/12
  */
 
 #pragma  once 
@@ -157,5 +157,4 @@ private:
 	long    m_Size;
 	T*		m_Head;
 	T*		m_Tail;
-
 };

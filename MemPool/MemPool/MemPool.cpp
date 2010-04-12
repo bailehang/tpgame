@@ -2,49 +2,88 @@
 //
 
 #include "stdafx.h"
-#include "Pool\BlockPool.h"
+#include "MemFactory.h"
 #include <stdlib.h>
+#include <time.h>
 #include <list>
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	BlockPool  Pool;
-	Pool.InitMemoryAlloc();
 
-	std::list<void*>  m_Cachelist;
-	long  arr[ ] = { 32,64,128,256,512,1024,2048,5120 };
-	long  Count[8]={0};
-	long  Num[ ] = { 0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,7,7,7};
-	for ( long c = 0 ; c < 1000000 ; c ++ )
+	/// 测试内存分配
+	CMemFactory  Memory;
+
+	freopen("data.out","w",stdout);
+	srand( time(NULL) );
+	///  测试
+	std::map<char*,long>  m_Cachelist;
+	///  分配大小
+	long  arr[ ] = { 32,64,128,256,512,1024,2048,5120,5130,7000,6000,10240,20480 };
+	long  Count[13]={0};
+	///   被分配的概率
+	long  Num[ ] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,6,6,6,6,6,7,7,7,7,7,8,8,8,8,9,9,9,10,10,11,11,12,12};
+	/*for ( long c = 0 ; c < 10000000 ; c ++ )*/
+	while( 1 )
 	{
 		long  size = sizeof(Num)/sizeof(long);
 		long  rad  = rand()%size;
-		long  Asize= arr[Num[rad]] + (Num[rad]==3 ? 1 : 0);
-		void* p =Pool.Alloc( Asize )	;
-
+		long  Asize= arr[Num[rad]] ;
+		char* p = Memory.Alloc( Asize );
 		Count[ Num[rad] ] ++;
-		memset( p , 0 , Asize )	;
+		memset( p , 0 , Asize );
 
-		//if( Num[rad] >= 3)
-		m_Cachelist.push_back( p );
+		if( Num[rad] >= 0)
+			m_Cachelist[p] = Asize;
 
-		if ( m_Cachelist.size() >= 10000 )
+		if ( m_Cachelist.size() >= 5000 )
 		{
-			//std::cout <<" 缓存有10000 个,进行释放" << std::endl;
+			//std::cout << p << std::endl;
 			size_t  lsize = m_Cachelist.size();
-			std::list<void*>::iterator it =m_Cachelist.begin()   ;
-			for ( int i = 0; i < 10000 ; i++ )
+			std::map<char*,long>::iterator it =m_Cachelist.begin()   ;
+			for ( size_t i = 0; i < 3000 ; i++ )
 			{
-				 Pool.Free( *it/*m_Cachelist[i]*/ );
-				 it = m_Cachelist.erase( it );
+				Memory.Free(it->first ,it->second);
+				it = m_Cachelist.erase( it );
 			}
 		}
-	}
 
-	for ( int i = 0 ; i < 8 ; i++)
+		static long sum = 0;
+		sum ++ ;
+		if( sum == 10000000 )
+		{
+			for ( int i = 0 ; i < 13 ; i++)
+			{
+				std::cout <<" Count[ " << i+1 <<" ] = " << Count[ i ] << std::endl;
+				//sum += Count[i];
+			}
+			std::cout<<"=======================================================\n\n"<<std::endl;
+			sum = 0;
+			freopen("data.in","r",stdin);
+			long  n;
+			cin >> n;
+			if( n == 0 )
+				break;
+		}
+
+		/// Sleep( 1 );
+	}
+	
+	std::map<char*,long>::iterator it =m_Cachelist.begin()   ;
+	for ( ; it != m_Cachelist.end() ; it ++  )
+	{
+		Memory.Free(it->first ,it->second);
+		it = m_Cachelist.erase( it );
+	}
+	
+	long Summ = 0;
+	for ( int i = 0 ; i < 13 ; i++)
 	{
 		std::cout <<" Count[ " << i+1 <<" ] = " << Count[ i ] << std::endl;
+		Summ += Count[i];
 	}
+
+	std::cout <<" Sum = " << Summ << std::endl;
+
 	return 0;
 }
 

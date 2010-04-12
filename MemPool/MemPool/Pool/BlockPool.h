@@ -1,7 +1,11 @@
-
-
-
-
+/** 
+ *  file   BlockPool.h
+ *  brief  采用静态分配的封装类,做好策略，把所有的静态分配大小全部预分配。
+ *         然后根据需要分配大小进行预分配。可以支持再分配策略..
+ *         复杂度:释放，分配 O(1)
+ *  author Expter
+ *  date   2010/04/12
+ */
 #pragma once 
 
 #include "BaseNode.h"
@@ -14,102 +18,8 @@ using namespace std;
 
 #define  MINBLOCK	  32
 #define  INDEXX(IDX)  ( INX/MINBLOCK + IDX%MINBLOCK != 0 ? 1 : 0 )
-#define  ALLOCSIZE    40*1024*1024		// 30M
+#define  ALLOCSIZE    40*1024*1024		// 40M
 
-template  <class T>
-class  PoolPolicy
-{
-
-private:
-
-public:
-
-};
-
-
-/** 
- *  通过最优查找树管理
- *
- */
-
-class  HeapPool
-{
-	struct  HeapNode
-	{	
-		/// memory request rate
-		__int64			  m_Count;
-		long			  m_Size;
-		/// all free memory list
-		std::list<void*>  m_list;
-		/// all used memory list
-		std::list<void*>  m_Used;
-		HeapNode( long Size)
-		{
-			m_Count = 1 ;
-			m_Size  = Size ;
-			m_list.clear();
-		}
-	};
-
-	struct  HeapCmp
-	{
-		bool operator() ( const HeapNode* node1 , const HeapNode* node2 )const
-		{
-			if ( node1 != node2 )
-			{
-				/// 如果访问都是一样
-				if ( node1->m_Count == node2->m_Count  )
-				{
-					if ( node1->m_list.size() ==  node2->m_list.size() )
-					{
-						return node1->m_Size > node2->m_Size;
-					}
-					else
-						return node1->m_list.size() > node2->m_list.size();
-				}
-				else
-					return node1->m_Count    > node2->m_Count;
-			}
-		}
-	};
-
-	/// size -> heapnode 
-	typedef std::map<HeapNode*,long ,HeapCmp>  MHEAPLIST;
-	typedef MHEAPLIST::iterator				   MHIter;
-
-private:
-	MHEAPLIST				m_HeapTable;
-
-public:
-
-	HeapPool(){};
-	~HeapPool(){};
-		
-	void* Alloc( unsigned long size );
-
-	bool  Free( void*  MemAddr);
-
-	bool  Free( void*  MemAddr , unsigned long size );
-
-	void  ReleaseAll();
-
-};
-
-template < typename type_value>
-class  Wapper
-{
-	typedef  type_value  type;
-
-public:
-	Wapper( type  _type) : m_type( _type )
-	{
-
-	}
-	type   TValue()  { return  m_type ;}
-
-private:
-	type     m_type;
-};
 
 enum eBuff_Type
 {
@@ -130,6 +40,12 @@ struct  Buffer: CNode<Buffer>
 	eBuff_Type   type;
 };
 
+/** 
+ *  性能分析:
+ *     分配 0(1),释放O(1),效率是常量的
+ */
+
+/// 做策略的内存分配
 class  BlockPool
 {
 public:
@@ -163,7 +79,7 @@ public:
 	
 	void  InitMemoryAlloc();
 		
-	void* Alloc( unsigned long size );
+	char* Alloc( unsigned long size );
 
 	bool  Free( void*  MemAddr);
 
@@ -172,18 +88,23 @@ public:
 
 private:
 	template< typename  Buff>
-	void   MemoryInit( long idx , eBuff_Type type)
+	bool   MemoryInit( long idx , eBuff_Type type)
 	{
 		m_Buffer[ idx ] =  (Buff*)VirtualAlloc(NULL,ALLOCSIZE,MEM_COMMIT,PAGE_READWRITE);
 
-		long  size = ALLOCSIZE / sizeof(Buff) ;
-		std::cout << typeid(Buff).name() <<"  Buffer size = " << sizeof(Buff) << " Count = "<< size << std::endl;	
+		long  ObjSize = sizeof(Buff);
+		long  size = ALLOCSIZE / ObjSize;
 		for( long i = 0 ; i < size ; i++ )
 		{
-			m_Buffer[idx][i].type = type;	
-			m_MemPool[idx].PushNode(&m_Buffer[idx][i]) ;
+			((Buff*)m_Buffer[idx]+i)->type = type;	
+			m_MemPool[idx].PushNode((Buff*)m_Buffer[idx]+i) ;
 		}
+#ifdef  _DEBUG
+		std::cout << typeid(Buff).name()<<"Bsize="<< sizeof(Buff) << "Count ="<< size 
+				  <<"size ="<<m_MemPool[idx].GetSize()<< std::endl;	
+#endif
 		m_listPool[idx].push_back( m_Buffer[idx] );
+		return true;
 	}
 
 	long  GetIndex(unsigned long size )
@@ -199,14 +120,14 @@ private:
 
 	bool  Init( long idx , eBuff_Type type)
 	{
-		if( idx == 0 )     MemoryInit<Buffer32>( idx , type );
-		else if( idx == 1) MemoryInit<Buffer64>( idx , type );
-		else if( idx == 2) MemoryInit<Buffer128>( idx , type );
-		else if( idx == 3) MemoryInit<Buffer256>( idx , type );
-		else if( idx == 4) MemoryInit<Buffer512>( idx , type );
-		else if( idx == 5) MemoryInit<Buffer1024>( idx , type );
-		else if( idx == 6) MemoryInit<Buffer2048>( idx , type );
-		else if( idx == 7) MemoryInit<Buffer5120>( idx , type );
+		if( idx == 0 )     return MemoryInit<Buffer32>( idx , type );
+		else if( idx == 1) return MemoryInit<Buffer64>( idx , type );
+		else if( idx == 2) return MemoryInit<Buffer128>( idx , type );
+		else if( idx == 3) return MemoryInit<Buffer256>( idx , type );
+		else if( idx == 4) return MemoryInit<Buffer512>( idx , type );
+		else if( idx == 5) return MemoryInit<Buffer1024>( idx , type );
+		else if( idx == 6) return MemoryInit<Buffer2048>( idx , type );
+		else if( idx == 7) return MemoryInit<Buffer5120>( idx , type );
 		return true;
 	}
 };
