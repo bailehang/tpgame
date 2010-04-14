@@ -67,6 +67,7 @@ void   BlockPool::ReleaseAll()
 	std::cout <<"\n\n栈分配信息: "<<std::endl;
 //#endif
 
+	long long  SizeSum = 0;
 	for ( int i = 0 ; i < eBT_END ; i++ )
 	{
 		  m_MemPool[i].ReleaseList();
@@ -77,6 +78,9 @@ void   BlockPool::ReleaseAll()
 		  {
 			   //std::cout <<" 资源释放it " << typeid(*it).name() << std::endl;
 			   VirtualFree(*it,0,MEM_RELEASE);
+			   SizeSum   += 20;
 		  }  
 	}
+
+	std::cout <<"BlockPool 有内存 " << SizeSum << " M "<< std::endl;
 }

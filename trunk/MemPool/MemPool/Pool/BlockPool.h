@@ -18,7 +18,7 @@ using namespace std;
 
 #define  MINBLOCK	  32
 #define  INDEXX(IDX)  ( INX/MINBLOCK + IDX%MINBLOCK != 0 ? 1 : 0 )
-#define  ALLOCSIZE    40*1024*1024		// 40M
+#define  ALLOCSIZE    20*1024*1024		// 40M
 
 
 enum eBuff_Type

@@ -19,6 +19,7 @@ void  HeapPool::ReleaseAll()
 //#endif
 	MHIter it ( m_HeapTable.begin() );
 
+	long long  SizeSum = 0;
 	for ( ; it != m_HeapTable.end() ; it++ )
 	{
 
@@ -26,8 +27,9 @@ void  HeapPool::ReleaseAll()
 		if( !pNode ) continue;
 
 //#ifdef  _DEBUG
-		std::cout <<" Count = "<<pNode->m_Count <<" Size " << it->first <<" M_FreeList size:"<<pNode->m_FreeList.GetSize() <<" m_Used Size:"<<pNode->m_Used.GetSize() <<std::endl;
+		std::cout <<" Count = "<<pNode->m_Count <<" Size " << it->first <<" M_FreeList size:"<< pNode->m_FreeList.GetSize() <<" m_Used Size:"<< pNode->m_Used.GetSize() <<std::endl;
 //#endif
+		SizeSum += ( (it->first+20)*(pNode->m_FreeList.GetSize()+pNode->m_Used.GetSize()) + 12+12+8) /(1024*1024);
 		/// ÊÍ·Å¿ÕÏÐµÄ
 		while ( pNode->m_FreeList.GetSize() > 0)
 		{
@@ -46,6 +48,8 @@ void  HeapPool::ReleaseAll()
 		}
 		delete pNode;
 	}
+
+	std::cout <<" Õ»ÄÚ´æ " << SizeSum << std::endl;
 }
 
 char*  HeapPool::Alloc(unsigned long size)
