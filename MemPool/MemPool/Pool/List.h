@@ -3,7 +3,7 @@
  *  brief  封装一个双向链表
  *  author Expter
  *  
- *  date   2010/04/12
+ *  date   2010/01/1
  */
 
 #pragma  once 
