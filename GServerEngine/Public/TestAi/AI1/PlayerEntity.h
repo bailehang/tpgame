@@ -8,6 +8,7 @@ class  State;
 
 class   CPlayerEntity : public CBaseEntity
 {
+
 private:
 	State*			m_pCurrentState;
 
@@ -15,11 +16,13 @@ private:
 
 public:
 
-	CPlayerEntity( int id );
+	CPlayerEntity( eEntityType id );
 
 	void	Update();
 
 	void	ChangeState( State* new_state );
+
+	void	ChangeState( eState new_state );
 
 	eState	GetState()const  {	return m_State; }
 

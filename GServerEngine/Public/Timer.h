@@ -22,7 +22,7 @@ public:
 	long		  AddTimer(const void * arg, 
 						   unsigned long stime,
 						   unsigned long interval);
-	long	run();
+	long		  run();
 private:
 
 	Timer	m_Timer;

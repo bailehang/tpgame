@@ -10,7 +10,7 @@
 #include "List.h"
 #include "locks.h"
 
-template < class obj>
+template < class obj , long  ObjSize>
 class CMemory  : public TLinkedList<obj>
 {
 public:

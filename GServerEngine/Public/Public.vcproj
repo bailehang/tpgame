@@ -47,7 +47,7 @@
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -141,6 +141,31 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<AssemblyReference
+			RelativePath="System.dll"
+			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="System.Data.dll"
+			AssemblyName="System.Data, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=x86"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="System.Drawing.dll"
+			AssemblyName="System.Drawing, Version=2.0.0.0, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="System.Windows.Forms.dll"
+			AssemblyName="System.Windows.Forms, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="System.XML.dll"
+			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -223,17 +248,61 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Ai\Ai_Utilities.cpp"
+				RelativePath=".\Ai\Ai_tools.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Ai\Ai_Utilities.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Ai\AiControl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ai\AiControl.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Script"
 			>
+			<File
+				RelativePath=".\script\AddScript.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\script\AddScript.h"
+				>
+			</File>
+			<Filter
+				Name="lua"
+				>
+				<File
+					RelativePath=".\script\lua\include\lauxlib.h"
+					>
+				</File>
+				<File
+					RelativePath=".\script\lua\include\lua.h"
+					>
+				</File>
+				<File
+					RelativePath=".\script\lua\include\lualib.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="lualib"
+				>
+				<File
+					RelativePath=".\script\lua\lib\lua.lib"
+					>
+				</File>
+				<File
+					RelativePath=".\script\lua\lib\lualib.lib"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Timer"
@@ -374,9 +443,17 @@
 				RelativePath=".\State.h"
 				>
 			</File>
+			<File
+				RelativePath=".\TestAi\StateMachine.h"
+				>
+			</File>
 			<Filter
 				Name="Ai1"
 				>
+				<File
+					RelativePath=".\Ai1Exectue.h"
+					>
+				</File>
 				<File
 					RelativePath=".\TestAi\AI1\FleeState.cpp"
 					>
@@ -413,6 +490,10 @@
 		</File>
 		<File
 			RelativePath=".\ReadMe.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\resource.h"
 			>
 		</File>
 		<File
