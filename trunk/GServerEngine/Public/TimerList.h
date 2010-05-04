@@ -7,10 +7,16 @@
 */
 
 #pragma once
+#include <map>
+#include <list>
+#include <queue>
+
 #include "GameEvent.h"
 #include "BaseNode.h"
 #include "List.h"
 #include "locks.h"
+
+using namespace std;
 
 #define		MAX_TIMER_NUM		2048
 
@@ -24,8 +30,9 @@ enum    TimerType
 	ObjType_Monster,
 };
 
+
 /*
- *	 Define Timer Node	with list connect together
+ *	 一个定时器结点
  */
 struct  tagTimerVar	 : CBaseNode<tagTimerVar>
 {
@@ -38,9 +45,18 @@ struct  tagTimerVar	 : CBaseNode<tagTimerVar>
 	void*		pObj;
 };
 
+struct cmp
+{
+	bool operator() ( const tagTimerVar* t1 , const tagTimerVar* t2  )
+	{
+		return t1->StartTime > t2->StartTime; 
+	}
+};
+
 template< class  type_name>
 class CTimerList
 {
+	typedef priority_queue<tagTimerVar* , vector<tagTimerVar*> , cmp >  pqueue;
 public:
 	CTimerList(void);
 
@@ -61,8 +77,14 @@ public:
 
 
 private:
-	tagTimerVar*				m_pTimerArray;
-	TLinkedList<tagTimerVar>	m_UnUsingList;
-	TLinkedList<tagTimerVar>	m_UsingList;
-	sync::csectionlock			m_section;
+	long								m_Count;
+	pqueue								m_Timerlist;
+//	typedef map<long , list<tagTimerVar> *>	 MLTagTimer;
+// 	MLTagTimer							MLIter;
+// 	tagTimerVar*						m_pTimerArray;
+// 	TLinkedList<tagTimerVar>			m_UnUsingList;
+// 	TLinkedList<tagTimerVar>			m_UsingList;
+// 	sync::csectionlock					m_section;
+// 
+// 	MLTagTimer							m_pMList;
 };
