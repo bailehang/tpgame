@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3DAStar", "3DAStar\3DAStar.vcproj", "{4814233F-EB09-473E-8791-B97A2A6AAE83}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4814233F-EB09-473E-8791-B97A2A6AAE83}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4814233F-EB09-473E-8791-B97A2A6AAE83}.Debug|Win32.Build.0 = Debug|Win32
+		{4814233F-EB09-473E-8791-B97A2A6AAE83}.Release|Win32.ActiveCfg = Release|Win32
+		{4814233F-EB09-473E-8791-B97A2A6AAE83}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
