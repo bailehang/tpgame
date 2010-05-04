@@ -1,0 +1,47 @@
+Alter Procedue [dbo].[sp_user_validate]
+
+	@account  varchar(32),
+	@crypt_password  varchar(32),
+	@curr_time  bigint
+As
+	declare  @end_time  bigint;
+	declare  @dp_password  varchar(32);
+	declare  @db_state  bigint
+
+BEGIN
+
+	if not exists ( select * from d_user_ext_info where user_account=@account and is_active= 1)
+	begin
+		return -13
+	end
+
+	slect @db_password = user_password, @db_state = user_state , @end_time = is_rejected
+		from d_user_info where user_account = @account
+
+	if @@rowaccount <= 0
+	begin
+		return -10
+	end
+
+
+	if @db_state = 1
+	begin
+		return -11
+	end
+
+	if -1 <> @end_time
+		if( @end_time > @curr_time ) or ( 0 = @end_time )
+		begin
+			return -14
+		end
+		else if 0 <> @end_time
+			update  d_user_info set is_rejected = -1 where user_account = @account 
+
+	if @db_password <> @crypt_password
+	begin
+		return -12
+	end
+
+	return 1;
+
+END
