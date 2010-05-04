@@ -414,10 +414,30 @@
 			<Filter
 				Name="2D"
 				>
+				<File
+					RelativePath=".\Engine\2D\GDI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\2D\GDI.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="UI"
 				>
+			</Filter>
+			<Filter
+				Name="Public"
+				>
+				<File
+					RelativePath=".\Engine\Public\Vector2D.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Public\Vector2D.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
