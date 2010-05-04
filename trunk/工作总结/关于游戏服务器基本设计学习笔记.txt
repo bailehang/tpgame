@@ -21,14 +21,11 @@
 
 1.CGUID 游戏唯一ID标识符.
 2.CArea区域  CServerRegion服务器场景 Region场景
-
 3.CRegion   一个场景类，包括此场景的所有信息
   1) 地图属性
   2) 阻挡类型
   3) 安全区定义
   4) 切换点类型
-
-
 4.CServerRegion  继承与CRegion类,主要管理当前场景的所有Shape
   1) 把场景划分为N*N个CArea,然后管理每一个CArea
   2) 管理场景的Monster刷新，删除频率.
