@@ -1,9 +1,9 @@
-/*
-*	File  :  Accept.h
-*   Brief :	 一个accept类，多线程管理
-*   Author:  Expter 
-*	Creat Date:  [2009/11/11]
-*/
+/**
+ *	 File  :  Accept.h
+ *   Brief :  一个accept类，多线程管理
+ *   Author:  Expter 
+ *	 Date:  [2009/11/11]
+ */
 #pragma once
 
 #include "Network.h"

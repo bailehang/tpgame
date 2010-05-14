@@ -24,6 +24,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClientTest", "ClientTest\Cl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0D608894-0449-4383-BF39-6AF2214040C7}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ai", "Ai\Ai.vcproj", "{32A27E40-7CDF-460C-A504-2759A2CDFEB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -50,6 +52,10 @@ Global
 		{BEF17F1A-97D5-4C71-8AED-50E69E550348}.Debug|Win32.Build.0 = Debug|Win32
 		{BEF17F1A-97D5-4C71-8AED-50E69E550348}.Release|Win32.ActiveCfg = Release|Win32
 		{BEF17F1A-97D5-4C71-8AED-50E69E550348}.Release|Win32.Build.0 = Release|Win32
+		{32A27E40-7CDF-460C-A504-2759A2CDFEB0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{32A27E40-7CDF-460C-A504-2759A2CDFEB0}.Debug|Win32.Build.0 = Debug|Win32
+		{32A27E40-7CDF-460C-A504-2759A2CDFEB0}.Release|Win32.ActiveCfg = Release|Win32
+		{32A27E40-7CDF-460C-A504-2759A2CDFEB0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -23,7 +23,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	long  Count[13]={0};
 	///   被分配的概率
 	long  Num[ ] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,6,6,6,6,6};//,7,7,7,7,7,8,8,8};//,8,9,9,9,10,10,11,11,12,12};
-	for ( long c = 0 ; c < 100000000 ; c ++ )
+	for ( long c = 0 ; c < 10000000 ; c ++ )
 	//while( 1 )
 	{
 		long  size = sizeof(Num)/sizeof(long);
@@ -42,7 +42,7 @@ int _tmain(int argc, _TCHAR* argv[])
  			//std::cout << p << std::endl;
  			size_t  lsize = m_Cachelist.size();
 			std::map<void*,long>::iterator it =m_Cachelist.begin()   ;
-			for ( size_t i = 0; i < 50000 ; i++ )
+			for ( size_t i = 0; i < 60000 ; i++ )
  			{
  				Memory.Free(it->first ,it->second);
  				m_Cachelist.erase( it++ );
