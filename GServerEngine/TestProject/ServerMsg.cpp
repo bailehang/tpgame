@@ -34,7 +34,6 @@ void CServerMsg::AccedeProcess(CConnection *pCon, CMessage *pMsg)
 			long lVal = pMsg->GetObjDataFromcharArray<long>();
 			LOG(" buf %s : %d ", buf , lVal);
 
-			Sleep( 5 );
 			CMessage	msg(TEST_MSG_SPEEP);
 			msg.AddtocharArray( "this is  test");
 			msg.AddtocharArray(lVal);
