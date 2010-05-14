@@ -1,14 +1,24 @@
 
 #pragma  once 
 
+#define  MaxSize  ((1<<15)-1)
 class Chunk
 {
 
+	friend class SmallObjAllocator;
 public:
+
 	Chunk( int blocksize, long  len )
 	{
-		blocksize = blocksize;
+		ReleaseAll();
+
+		if( MaxSize < len )
+		{
+			len = MaxSize;
+		}
+		m_blockSize = blocksize;
 		m_availSize = len;
+		m_Length  = len;
 		m_firstBlock = 0;
 		m_pData = new  char [ blocksize * len ];
 
@@ -17,6 +27,9 @@ public:
 		{
 			*(short*) p = ++i;
 		}
+
+		std::cout <<" ·ÖÅäÐÅÏ¢ ";
+		print();
 	}
 
 	~Chunk()
@@ -45,25 +58,34 @@ public:
 		return pReuslt;
 	}
 
-	void   Release(void* pData)
-	{
-		if ( !pData || pData < m_pData ) return ;
-		
+	bool   Release(void* pData)
+	{   
 		char*  plist = (char*)pData;
-		if ( (plist-m_pData)% m_blockSize != 0)
-		{
-			std::cout <<" release mem failed !" << std::endl;
-		}
 		*(short*)plist = m_firstBlock;
-
-		m_firstBlock = ( plist - pData ) / m_blockSize;
+		m_firstBlock = ( plist - m_pData ) / m_blockSize;
 
 		++ m_availSize;
+		//print();
+		return true;
+	}
+
+	bool   Check(void* pData)
+	{
+		if ( !pData || pData < m_pData ) return false;
+		char*  plist = (char*)pData;
+		if ( (plist-m_pData)% m_blockSize != 0 || (plist-m_pData)/ m_blockSize > m_Length )
+		{
+			//std::cout <<" release mem failed !" << std::endl;
+			return false;
+		}
+		return true;
 	}
 
 	void   print()
 	{
-		std::cout <<" blocksize " << m_blockSize ;
+		std::cout <<" blocksize  " << m_blockSize 
+				  <<" m_firstBlock "<< m_firstBlock
+				  <<" m_availSize "<< m_availSize << std::endl;
 	}
 
 private:
@@ -72,4 +94,5 @@ private:
 	char* m_pData;
 	short m_firstBlock;
 	short m_availSize;
+	short m_Length;
 };
