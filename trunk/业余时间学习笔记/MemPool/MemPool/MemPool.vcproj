@@ -205,6 +205,14 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\eEventDef.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Factory.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MemFactory.h"
 				>
 			</File>
@@ -239,6 +247,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Pool\FixBlockPool.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Pool\FreeList.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Pool\HeapPool.cpp"
 				>
 			</File>
@@ -256,6 +272,10 @@
 			</File>
 			<File
 				RelativePath=".\Pool\Locks.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Pool\SamllObjAllocator.h"
 				>
 			</File>
 			<File
