@@ -1,6 +1,7 @@
 
 #pragma  once
 
+#include "eEventDef.h"
 #include <map>
 #include <list>
 using namespace std;

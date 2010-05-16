@@ -7,7 +7,7 @@ CMemFactory::CMemFactory()
 {
 	/// æ≤Ã¨≥ı ºªØ
 	//m_Block.InitMemoryAlloc();
-	AllocMem  alloc = &SmallObjAllocator::Allocate;
+	AllocMem  alloc   = &SmallObjAllocator::Allocate;
 	Destory   destory = &SmallObjAllocator::Destory;
 	m_factory = new  Factory<long,SmallObjAllocator*,AllocMem,Destory>(alloc,destory);
 
@@ -45,6 +45,7 @@ void*   CMemFactory::Alloc(unsigned long size)
 	{
 		char *p = new char[size];
 		m_setList.insert(p);
+		return p;
 	}
 }
 

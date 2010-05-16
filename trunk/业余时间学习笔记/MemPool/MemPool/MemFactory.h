@@ -33,6 +33,26 @@ public:
 
 	void      Free(void* pAddr, unsigned long size);
 
+	DEFINE_CALL_CON(1); 
+	DEFINE_CALL_CON(2); 
+	DEFINE_CALL_CON(3); 
+	DEFINE_CALL_CON(4); 
+	DEFINE_CALL_CON(5); 
+	DEFINE_CALL_CON(6); 
+	DEFINE_CALL_CON(7); 
+	DEFINE_CALL_CON(8); 
+	DEFINE_CALL_CON(9); 
+	DEFINE_CALL_CON(10); 
+
+	template <class T> 
+	void     FreeObj( T * pt , unsigned long size) 
+	{ 
+		if( !pt ) return ;
+		pt->~T(); 
+
+		Free(pt,size);
+	} 
+
 	int		  Index(unsigned long size);
 	
 private:

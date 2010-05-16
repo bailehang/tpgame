@@ -217,6 +217,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ObjTest.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
