@@ -3,16 +3,29 @@
 
 #include "stdafx.h"
 #include "MemFactory.h"
+#include "ObjTest.h"
 #include <stdlib.h>
 #include <time.h>
 #include <list>
 #include <fstream>
 #include <limits>
 
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	/// 测试内存分配
 	CMemFactory  Memory;
+	
+	/*
+	 * 基于对象的多参数内存池分配测试
+	 */
+	A *a = Memory.Alloc<A,int,float,char*>(sizeof(A),1,2,"a");
+	Memory.FreeObj<A>(a,sizeof(A));
+
+	B *b = Memory.Alloc<B,int>(sizeof(B),10);
+	Memory.FreeObj<B>(b,sizeof(B));
+
+	return 0;
 	//freopen("data.out","w",stdout);
 	srand( time(NULL) );
 	
