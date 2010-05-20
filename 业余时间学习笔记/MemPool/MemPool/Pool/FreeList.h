@@ -28,8 +28,8 @@ public:
 			*(short*) p = ++i;
 		}
 
-		std::cout <<" 分配信息 ";
-		print();
+		//std::cout <<" 分配信息 ";
+		//print();
 	}
 
 	~Chunk()

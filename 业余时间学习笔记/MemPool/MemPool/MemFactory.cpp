@@ -3,6 +3,7 @@
 
 #define  AALLOCSIZE    20*1024*1024		// 20M
 
+
 CMemFactory::CMemFactory()
 {
 	/// æ≤Ã¨≥ı ºªØ
@@ -23,14 +24,9 @@ CMemFactory::CMemFactory()
 
 int     CMemFactory::Index(unsigned long size)
 {
-	long  arr[ ] = { 32,64,128,256,512,1024,2048,5120 };
+		unsigned long  arr[ ] = { 32,64,128,256,512,1024,2048,5120 };
 
-	for ( long i = 0; i < eBT_END ; i++ )
-	{
-		if( (long)size <= arr[i] ) return i ;
-	}
-	return -1;
-	
+		return FindIndx( arr , 0 , sizeof(arr)/sizeof(unsigned long) , size );
 }
 
 void*   CMemFactory::Alloc(unsigned long size)
