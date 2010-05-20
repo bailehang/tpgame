@@ -28,6 +28,7 @@ public:
 		{
 			delete *i;
 		}
+		m_chunk.clear();
 	}
 
 	void*  Allocate()
