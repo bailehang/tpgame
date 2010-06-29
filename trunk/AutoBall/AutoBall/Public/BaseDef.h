@@ -4,13 +4,15 @@
 enum	eEntityType
 {
 	Ent_InValid	=	-1,
-	Ent_Monster		  ,
-	Ent_Player	
+	Ent_Goal  ,			 /// 守门员
+	Ent_FieldPlayer		 /// 球员
 };
 
 enum   ePlayerType
 {
-
+	ePlayer_GoalKeeper,
+	ePlayer_Attacker,
+	ePlayer_Defender
 };
 
 // 状态类型

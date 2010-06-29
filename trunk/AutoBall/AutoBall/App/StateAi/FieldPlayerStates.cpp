@@ -34,12 +34,12 @@ void GlobalPlayerState::Execute(FieldPlayer* player)
 	//if a player is in possession and close to the ball reduce his max speed
 	if((player->BallWithinReceivingRange()) && (player->isControllingPlayer()))
 	{
-		player->SetMaxSpeed(Prm.PlayerMaxSpeedWithBall);
+		player->SetMaxSpeed(GetInstObj(CGameSetup).PlayerMaxSpeedWithBall);
 	}
 
 	else
 	{
-		player->SetMaxSpeed(Prm.PlayerMaxSpeedWithoutBall);
+		player->SetMaxSpeed(GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall);
 	}
 
 }
@@ -128,7 +128,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 
 			//make the pass   
 			player->Ball()->Kick(receiver->Pos() - player->Ball()->Pos(),
-				Prm.MaxPassingForce);
+				GetInstObj(CGameSetup).MaxPassingForce);
 
 
 #ifdef PLAYER_STATE_INFO_ON
@@ -254,7 +254,7 @@ void SupportAttacker::Execute(FieldPlayer* player)
 	//if this player has a shot at the goal AND the attacker can pass
 	//the ball to him the attacker should pass the ball to this player
 	if( player->Team()->CanShoot(player->Pos(),
-		Prm.MaxShootingForce))
+		GetInstObj(CGameSetup).MaxShootingForce))
 	{
 		player->Team()->RequestPass(player);
 	}
@@ -493,7 +493,7 @@ void KickBall::Execute(FieldPlayer* player)
 
 	//the dot product is used to adjust the shooting force. The more
 	//directly the ball is ahead, the more forceful the kick
-	double power = Prm.MaxShootingForce * dot;
+	double power = GetInstObj(CGameSetup).MaxShootingForce * dot;
 
 	//if it is determined that the player could score a goal from this position
 	//OR if he should just kick the ball anyway, the player will attempt
@@ -501,7 +501,7 @@ void KickBall::Execute(FieldPlayer* player)
 	if (player->Team()->CanShoot(player->Ball()->Pos(),
 		power,
 		BallTarget)                   || 
-		(RandFloat() < Prm.ChancePlayerAttemptsPotShot))
+		(RandFloat() < GetInstObj(CGameSetup).ChancePlayerAttemptsPotShot))
 	{
 #ifdef PLAYER_STATE_INFO_ON
 		// debug_con << "Player " << player->ID() << " attempts a shot at " << BallTarget << "";
@@ -509,7 +509,7 @@ void KickBall::Execute(FieldPlayer* player)
 
 		//add some noise to the kick. We don't want players who are 
 		//too accurate! The amount of noise can be adjusted by altering
-		//Prm.PlayerKickingAccuracy
+		//GetInstObj(CGameSetup).PlayerKickingAccuracy
 		BallTarget = AddNoiseToKick(player->Ball()->Pos(), BallTarget);
 
 		//this is the direction the ball will be kicked in
@@ -531,7 +531,7 @@ void KickBall::Execute(FieldPlayer* player)
 	//if a receiver is found this will point to it
 	PlayerBase* receiver = NULL;
 
-	power = Prm.MaxPassingForce * dot;
+	power = GetInstObj(CGameSetup).MaxPassingForce * dot;
 
 	//test if there are any potential candidates available to receive a pass
 	if (player->isThreatened()  &&
@@ -539,7 +539,7 @@ void KickBall::Execute(FieldPlayer* player)
 		receiver,
 		BallTarget,
 		power,
-		Prm.MinPassDist))
+		GetInstObj(CGameSetup).MinPassDist))
 	{     
 		//add some noise to the kick
 		BallTarget = AddNoiseToKick(player->Ball()->Pos(), BallTarget);
@@ -633,7 +633,7 @@ void Dribble::Execute(FieldPlayer* player)
 	else
 	{
 		player->Ball()->Kick(player->Team()->HomeGoal()->Facing(),
-			Prm.MaxDribbleForce);  
+			GetInstObj(CGameSetup).MaxDribbleForce);  
 	}
 
 	//the player has kicked the ball so he must now change state to follow it
@@ -673,7 +673,7 @@ void ReceiveBall::Enter(FieldPlayer* player)
 	const double PassThreatRadius = 70.0;
 
 	if (( player->InHotRegion() ||
-		RandFloat() < Prm.ChanceOfUsingArriveTypeReceiveBehavior) &&
+		RandFloat() < GetInstObj(CGameSetup).ChanceOfUsingArriveTypeReceiveBehavior) &&
 		!player->Team()->isOpponentWithinRadius(player->Pos(), PassThreatRadius))
 	{
 		player->Steering()->ArriveOn();

@@ -16,6 +16,8 @@
 #include <math.h>
 #include <vector>
 
+//const double pi = 3.14159;
+
 //given a plane and a ray this function determins how far along the ray 
 //an interestion occurs. Returns negative if the ray is parallel
 inline double DistanceToRayPlaneIntersection(Vector2D RayOrigin,
@@ -61,7 +63,7 @@ inline span_type WhereIsPoint(Vector2D point,
 }
 
 
-const double pi = 3.14159;
+
 //-------------------------- GetRayCircleIntersec -----------------------------
 inline double GetRayCircleIntersect(Vector2D RayOrigin,
 									Vector2D RayHeading,

@@ -1,14 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
-//------------------------------------------------------------------------
-//
-//  Name: utils.h
-//
-//  Desc: misc utility functions and constants
-//
-//  Author: Mat Buckland (fup@ai-junkie.com)
-//
-//------------------------------------------------------------------------
+
 #include <math.h>
 #include <sstream>
 #include <string>
@@ -17,7 +9,9 @@
 #include <cassert>
 #include <iomanip>
 
-//a few useful constants
+#define  SAFE_DELETE( ARR )		{ if(ARR) { delete ARR; ARR=NULL;} }
+#define  SAFE_DELETE_ARRAY(ARR)	{ if(ARR) { delete ARR[];ARR=NULL;}}
+
 const int     MaxInt    = (std::numeric_limits<int>::max)();
 const double  MaxDouble = (std::numeric_limits<double>::max)();
 const double  MinDouble = (std::numeric_limits<double>::min)();
@@ -29,7 +23,7 @@ const double   TwoPi     = Pi * 2;
 const double   HalfPi    = Pi / 2;
 const double   QuarterPi = Pi / 4;
 
-//returns true if the value is a NaN
+
 template <typename T>
 inline bool isNaN(T val)
 {

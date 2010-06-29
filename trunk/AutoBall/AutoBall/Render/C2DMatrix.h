@@ -121,8 +121,6 @@ inline void C2DMatrix::TransformVector2Ds(Vector2D &vPoint)
 	vPoint.y = tempY;
 }
 
-
-
 //create an identity matrix
 inline void C2DMatrix::Identity()
 {
