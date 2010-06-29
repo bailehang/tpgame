@@ -46,7 +46,7 @@ public:
 
 	double			BRadius()const		  {return m_dBoundingRadius;}
 	void			SetBRadius(double r)  {m_dBoundingRadius = r;}
-	long			GetID()const			  {return m_id;}
+	long			GetID()const		  {return m_id;}
 
 	bool			IsTagged()const{return m_bTag;}
 	void			Tag(){m_bTag = true;}
@@ -55,9 +55,12 @@ public:
 	Vector2D		Scale()const{return m_vScal;}
 	void			SetScale(Vector2D val)
 	{
-		m_dBoundingRadius *= MaxOf(val.x, val.y)/MaxOf(m_vScal.x, m_vScal.y); m_vScal = val;	}
+		m_dBoundingRadius *= MaxOf(val.x, val.y)/MaxOf(m_vScal.x, m_vScal.y); m_vScal = val;	
+	}
 	void			SetScale(double val)
-	{	m_dBoundingRadius *= (val/MaxOf(m_vScal.x, m_vScal.y)); m_vScal = Vector2D(val, val);	} 
+	{	
+		m_dBoundingRadius *= (val/MaxOf(m_vScal.x, m_vScal.y)); m_vScal = Vector2D(val, val);	
+	} 
 
 	ePlayerType    EntityType()const			{return m_itype;}
 	void           SetEntityType(ePlayerType new_type){m_itype = new_type;}
