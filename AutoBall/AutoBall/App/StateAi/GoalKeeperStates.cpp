@@ -75,7 +75,7 @@ TendGoal* TendGoal::Instance()
 void TendGoal::Enter(GoalKeeper* keeper)
 {
 	//turn interpose on
-	keeper->Steering()->InterposeOn(Prm.GoalKeeperTendingDistance);
+	keeper->Steering()->InterposeOn(GetInstObj(CGameSetup).GoalKeeperTendingDistance);
 
 	//interpose will position the agent between the ball position and a target
 	//position situated along the goal mouth. This call sets the target
@@ -252,12 +252,12 @@ void PutBallBackInPlay::Execute(GoalKeeper* keeper)
 	if (keeper->Team()->FindPass(keeper,
 		receiver,
 		BallTarget,
-		Prm.MaxPassingForce,
-		Prm.GoalkeeperMinPassDist))
+		GetInstObj(CGameSetup).MaxPassingForce,
+		GetInstObj(CGameSetup).GoalkeeperMinPassDist))
 	{     
 		//make the pass   
 		keeper->Ball()->Kick(Vec2DNormalize(BallTarget - keeper->Ball()->Pos()),
-			Prm.MaxPassingForce);
+			GetInstObj(CGameSetup).MaxPassingForce);
 
 		//goalkeeper no longer has ball 
 		keeper->Pitch()->SetGoalKeeperHasBall(false);

@@ -243,11 +243,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Public\GameSetup.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Public\GameSetup.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Public\Singleton.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Public\Stream_Utility_Fun.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Public\Tool.h"
 				>
 			</File>
 			<Filter
@@ -267,7 +279,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\App\SoccerTeam.h"
+				>
+			</File>
+			<File
+				RelativePath=".\App\SteeringBehaviors.h"
+				>
+			</File>
+			<File
 				RelativePath=".\App\Telegram.h"
+				>
+			</File>
+			<File
+				RelativePath=".\App\Wall2D.h"
 				>
 			</File>
 			<Filter
@@ -310,7 +334,59 @@
 				Name="Entity"
 				>
 				<File
+					RelativePath=".\App\Entity\BaseEntity.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\App\Entity\BaseEntity.h"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\EntityFun.h"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\EntityManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\EntityManager.h"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\FieldPlayer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\FieldPlayer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\GoalKeeper.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\GoalKeeper.h"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\MoveEntity.h"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\PlayerBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\PlayerBase.h"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\SoccerBall.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\SoccerBall.h"
 					>
 				</File>
 			</Filter>
