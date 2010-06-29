@@ -275,11 +275,23 @@
 			Name="App"
 			>
 			<File
+				RelativePath=".\App\Goal.h"
+				>
+			</File>
+			<File
 				RelativePath=".\App\Region.h"
 				>
 			</File>
 			<File
+				RelativePath=".\App\SoccerTeam.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\App\SoccerTeam.h"
+				>
+			</File>
+			<File
+				RelativePath=".\App\SteeringBehaviors.cpp"
 				>
 			</File>
 			<File
