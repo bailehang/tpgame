@@ -13,8 +13,8 @@
 
 #include <string>
 
-#include "../Common/FSM/State.h"
-#include "../Common/Messaging/Telegram.h"
+#include "State.h"
+#include "../Telegram.h"
 #include "constants.h"
 
 

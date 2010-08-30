@@ -7,6 +7,8 @@
 
 #include <limits>
 #include <cmath>
+#include <windows.h>
+
 using namespace std;
 #define  pi        3.1415926
 #define  tol       0.0000001
@@ -106,7 +108,6 @@ inline Vector2D Vec2DNormalize(const Vector2D &v)
 
 inline double Vec2DDistance(const Vector2D &v1, const Vector2D &v2)
 {
-
 	double ySeparation = v2.y - v1.y;
 	double xSeparation = v2.x - v1.x;
 

@@ -45,7 +45,7 @@ FieldPlayer::FieldPlayer(SoccerTeam* home_team,
 	m_pSteering->SeparationOn();
 
 	//set up the kick regulator
-	m_pKickLimiter = new Regulator(Prm.PlayerKickFrequency);
+	m_pKickLimiter = new Regulator(GetInstObj(CGameSetup).PlayerKickFrequency);
 }
 
 //------------------------------ Update ----------------------------------
@@ -74,7 +74,7 @@ void FieldPlayer::Update()
 	//can only turn by PlayerMaxTurnRate rads per update.
 	double TurningForce =   m_pSteering->SideComponent();
 
-	Clamp(TurningForce, -Prm.PlayerMaxTurnRate, Prm.PlayerMaxTurnRate);
+	Clamp(TurningForce, -GetInstObj(CGameSetup).PlayerMaxTurnRate, GetInstObj(CGameSetup).PlayerMaxTurnRate);
 
 	//rotate the heading vector
 	Vec2DRotateAroundOrigin(m_vHeading, TurningForce);
@@ -102,7 +102,7 @@ void FieldPlayer::Update()
 
 
 	//enforce a non-penetration constraint if desired
-	if(Prm.bNonPenetrationConstraint)
+	if(GetInstObj(CGameSetup).bNonPenetrationConstraint)
 	{
 		EnforceNonPenetrationContraint(this, AutoList<PlayerBase>::GetAllMembers());
 	}
@@ -141,26 +141,26 @@ void FieldPlayer::Render()
 
 	//and 'is 'ead
 	GetInstObj(CGDI).BrownBrush();
-	if (Prm.bHighlightIfThreatened && (Team()->ControllingPlayer() == this) && isThreatened()) GetInstObj(CGDI).YellowBrush();
+	if (GetInstObj(CGameSetup).bHighlightIfThreatened && (Team()->ControllingPlayer() == this) && isThreatened()) GetInstObj(CGDI).YellowBrush();
 	GetInstObj(CGDI).Circle(Pos(), 6);
 
 
 	//render the state
-	if (Prm.bStates)
+	if (GetInstObj(CGameSetup).bStates)
 	{  
 		GetInstObj(CGDI).TextColor(0, 170, 0);
 		GetInstObj(CGDI).TextAtPos(m_vPosition.x, m_vPosition.y -20, std::string(m_pStateMachine->GetNameOfCurrentState()));
 	}
 
 	//show IDs
-	if (Prm.bIDs)
+	if (GetInstObj(CGameSetup).bIDs)
 	{
 		GetInstObj(CGDI).TextColor(0, 170, 0);
 		GetInstObj(CGDI).TextAtPos(Pos().x-20, Pos().y-20, ttos(ID()));
 	}
 
 
-	if (Prm.bViewTargets)
+	if (GetInstObj(CGameSetup).bViewTargets)
 	{
 		GetInstObj(CGDI).RedBrush();
 		GetInstObj(CGDI).Circle(Steering()->Target(), 3);

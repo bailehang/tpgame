@@ -1,5 +1,12 @@
 
 #pragma  once 
+#include <fstream>
+
+#include "../Render/Vector2D.h"
+#include "../Render/VGdi.h"
+#include "../Public/Singleton.h"
+
+using namespace std;
 
 class Wall2D 
 {
@@ -59,9 +66,9 @@ public:
 	std::ostream& Wall2D::Write(std::ostream& os)const
 	{
 		os << std::endl;
-		os << From() << ",";
-		os << To() << ",";
-		os << Normal();
+// 		os << From() << ",";
+// 		os << To() << ",";
+// 		os << Normal();
 		return os;
 	}
 

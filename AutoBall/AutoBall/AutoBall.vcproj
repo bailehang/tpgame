@@ -45,7 +45,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -243,11 +243,35 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Public\FrameCounter.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Public\FrameCounter.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Public\GameSetup.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Public\GameSetup.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Public\PrecisionTimer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Public\PrecisionTimer.h"
 				>
 			</File>
 			<File
@@ -283,6 +307,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\App\SoccerPitch.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\App\SoccerPitch.h"
+				>
+			</File>
+			<File
 				RelativePath=".\App\SoccerTeam.cpp"
 				>
 			</File>
@@ -296,6 +328,14 @@
 			</File>
 			<File
 				RelativePath=".\App\SteeringBehaviors.h"
+				>
+			</File>
+			<File
+				RelativePath=".\App\SupportSpotCalculator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\App\SupportSpotCalculator.h"
 				>
 			</File>
 			<File
@@ -358,6 +398,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\App\Entity\EntityFunctionTemplates.h"
+					>
+				</File>
+				<File
 					RelativePath=".\App\Entity\EntityManager.cpp"
 					>
 				</File>
@@ -382,6 +426,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\App\Entity\MoveEntity.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\App\Entity\MoveEntity.h"
 					>
 				</File>
@@ -399,6 +447,26 @@
 				</File>
 				<File
 					RelativePath=".\App\Entity\SoccerBall.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Messaging"
+				>
+				<File
+					RelativePath=".\App\Messageing\MessageDispatcher.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Messageing\MessageDispatcher.h"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Messageing\SoccerMessages.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Messageing\SoccerMessages.h"
 					>
 				</File>
 			</Filter>

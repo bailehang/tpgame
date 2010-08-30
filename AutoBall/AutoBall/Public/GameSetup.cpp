@@ -1,6 +1,9 @@
-#include "stdafx.h"
+//#include "stdafx.h"
+
 #include "GameSetup.h"
 #include <fstream>
+#include <iostream>
+using namespace std;
 
 CGameSetup::CGameSetup()
 {
@@ -11,7 +14,7 @@ CGameSetup::CGameSetup()
 		return ;
 	}
 
-	string str;
+	char str[100];
 	if ( !file.eof() )
 	{
 		file >> str >>  GoalWidth 
