@@ -14,7 +14,7 @@
 #include <math.h>
 
 #include "../Render/Vector2D.h"
-#include "../Render/Cgdi.h"
+#include "../Render/VGdi.h"
 #include "../Render/Utils.h"
 #include "../Public/Singleton.h"
 #include "../Public/Stream_Utility_Fun.h"

@@ -2,6 +2,8 @@
 #pragma  once 
 
 #include "BaseEntity.h"
+#include "../../Render/Vector2D.h"
+#include "../../Render/Geometry.h"
 
 class  CMoveEntity : public CBaseEntity
 {
@@ -25,13 +27,14 @@ public:
 				double   mass,
 				Vector2D scale,
 				double   turn_rate,
-				double   max_force):CBaseEntity( CBaseEntity::GetNextValidId() ),
+				double   max_force):
+				CBaseEntity(CBaseEntity::GetNextValidId()),
 				m_vHeading(heading),
 				m_vVelocity(velocity),
 				m_dMass(mass),
 				m_dMaxSpeed(max_speed),
 				m_dMaxForce(max_force),
-				m_dMaxTurnRate(turn_rate)
+				m_dMaxTurnRate(turn_rate),
 				m_vSide(m_vHeading.Perp())
 				
 	{

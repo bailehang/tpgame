@@ -2,28 +2,36 @@
 #pragma  once 
 
 #include "MoveEntity.h"
+#include "../Wall2D.h"
+#include "../../Public/GameSetup.h"
+#include "../../Public/Singleton.h"
+#include "../../Render/VGdi.h"
 
 class  SoccerBall : public CMoveEntity
 {
+public:
+	SoccerBall(Vector2D      pos,            
+			   double        BallSize,
+			   double        mass,
+		std::vector<Wall2D>& PitchBoundary):m_PitchBoundary(PitchBoundary),
+		CMoveEntity(pos,
+			BallSize,
+			Vector2D(0,0),
+			-1.0,                
+			Vector2D(0,1),
+			mass,
+			Vector2D(1.0,1.0),  
+			0,                 
+			0)		
+	{
+
+	}
+
+	~SoccerBall(){}
 
 public:
 
 	void TestCollisionWithWalls(const std::vector<Wall2D>& walls);
-
-	SoccerBall(Vector2D           pos,            
-			   double               BallSize,
-			   double               mass,
-			   std::vector<Wall2D>& PitchBoundary):
-			   MovingEntity(pos,BallSize,
-					Vector2D(0,0),
-					-1.0,                //max speed - unused
-					Vector2D(0,1),
-					mass,
-					Vector2D(1.0,1.0),  //scale     - unused
-					0,                   //turn rate - unused
-					0),                  //max force - unused
-			  m_PitchBoundary(PitchBoundary)
-	{}
 
 	//implement base class Update
 	void      Update();

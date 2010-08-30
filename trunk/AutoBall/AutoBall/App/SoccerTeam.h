@@ -7,11 +7,8 @@ class FieldPlayer;
 class SoccerPitch;
 class GoalKeeper;
 class SupportSpotCalculator;
-
-
-
-
-
+class StateMachine;
+	  
 class SoccerTeam 
 {
 public:
@@ -21,7 +18,7 @@ public:
 private:
 
 	//an instance of the state machine class
-	StateMachine<SoccerTeam>*  m_pStateMachine;
+	//StateMachine<SoccerTeam>*  m_pStateMachine;
 
 	//the team must know its own color!
 	team_color                m_Color;
@@ -183,13 +180,21 @@ public:
 
 	void SetPlayerHomeRegion(int plyr, int region)const;
 
-	void DetermineBestSupportingPosition()const{m_pSupportSpotCalc->DetermineBestSupportingPosition();}
+	void DetermineBestSupportingPosition()const
+	{
+		m_pSupportSpotCalc->DetermineBestSupportingPosition();
+	}
 
 	void UpdateTargetsOfWaitingPlayers()const;
 
 	//returns false if any of the team are not located within their home region
 	bool AllPlayersAtHome()const;
 
-	std::string Name()const{if (m_Color == blue) return "Blue"; return "Red";}
+	std::string Name() const 
+	{
+		if (m_Color == blue) 
+			return "Blue"; 
+		return "Red";
+	}
 
 };

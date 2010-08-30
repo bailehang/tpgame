@@ -5,7 +5,7 @@
 Vector2D AddNoiseToKick(Vector2D BallPos, Vector2D BallTarget)
 {
 
-	double displacement = (Pi - Pi*Prm.PlayerKickingAccuracy) * RandomClamped();
+	double displacement = (Pi - Pi*GetInstObj(CGameSetup).PlayerKickingAccuracy) * RandomClamped();
 
 	Vector2D toTarget = BallTarget - BallPos;
 
@@ -47,11 +47,11 @@ void SoccerBall::Update()
 	//Test for collisions
 	TestCollisionWithWalls(m_PitchBoundary);
 
-	//Simulate Prm.Friction. Make sure the speed is positive 
+	//Simulate GetInstObj(CGameSetup).Friction. Make sure the speed is positive 
 	//first though
-	if (m_vVelocity.LengthSq() > Prm.Friction * Prm.Friction)
+	if (m_vVelocity.LengthSq() > GetInstObj(CGameSetup).Friction * GetInstObj(CGameSetup).Friction)
 	{
-		m_vVelocity += Vec2DNormalize(m_vVelocity) * Prm.Friction;
+		m_vVelocity += Vec2DNormalize(m_vVelocity) * GetInstObj(CGameSetup).Friction;
 
 		m_vPosition += m_vVelocity;
 
@@ -84,7 +84,7 @@ double SoccerBall::TimeToCoverDistance(Vector2D A,
 	//first calculate s (the distance between the two positions)
 	double DistanceToCover =  Vec2DDistance(A, B);
 
-	double term = speed*speed + 2.0*DistanceToCover*Prm.Friction;
+	double term = speed*speed + 2.0*DistanceToCover*GetInstObj(CGameSetup).Friction;
 
 	//if  (u^2 + 2as) is negative it means the ball cannot reach point B.
 	if (term <= 0.0) return -1.0;
@@ -98,7 +98,7 @@ double SoccerBall::TimeToCoverDistance(Vector2D A,
 	//        ---
 	//         a
 	//
-	return (v-speed)/Prm.Friction;
+	return (v-speed)/GetInstObj(CGameSetup).Friction;
 }
 
 //--------------------- FuturePosition -----------------------------------
@@ -115,7 +115,7 @@ Vector2D SoccerBall::FuturePosition(double time)const
 	Vector2D ut = m_vVelocity * time;
 
 	//calculate the 1/2at^2 term, which is scalar
-	double half_a_t_squared = 0.5 * Prm.Friction * time * time;
+	double half_a_t_squared = 0.5 * GetInstObj(CGameSetup).Friction * time * time;
 
 	//turn the scalar quantity into a vector by multiplying the value with
 	//the normalized velocity vector (because that gives the direction)
@@ -132,15 +132,15 @@ Vector2D SoccerBall::FuturePosition(double time)const
 //------------------------------------------------------------------------
 void SoccerBall::Render()
 {
-	gdi->BlackBrush();
+	GetInstObj(CGDI).BlackBrush();
 
-	gdi->Circle(m_vPosition, m_dBoundingRadius);
+	GetInstObj(CGDI).Circle(m_vPosition, m_dBoundingRadius);
 
 	/*
-	gdi->GreenBrush();
+	GetInstObj(CGDI).GreenBrush();
 	for (int i=0; i<IPPoints.size(); ++i)
 	{
-	gdi->Circle(IPPoints[i], 3);
+	GetInstObj(CGDI).Circle(IPPoints[i], 3);
 	}
 	*/
 }

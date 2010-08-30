@@ -10,6 +10,7 @@ enum	eEntityType
 
 enum   ePlayerType
 {
+	default_entity_type,
 	ePlayer_GoalKeeper,
 	ePlayer_Attacker,
 	ePlayer_Defender

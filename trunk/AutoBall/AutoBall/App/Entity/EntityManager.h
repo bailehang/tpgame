@@ -2,20 +2,21 @@
 
 #pragma once 
 #include "BaseEntity.h"
+
 #include <vector>
 #include <map>
 
 using namespace std;
 
-
+class  CBaseEntity;
 class  EntityManager
 {
 	
 	typedef  std::map<long,CBaseEntity*>  EntityMap;
 
 public:
-	EntityManager();
-	~EntityManager();
+	EntityManager(){ m_Entitymap.clear(); }
+	~EntityManager(){}
 
 	void  RegEntity(CBaseEntity* entity);
 
@@ -25,4 +26,4 @@ public:
 
 private:
 	EntityMap	m_Entitymap;
-}
+};

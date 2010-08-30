@@ -1,11 +1,10 @@
-#include "stdafx.h"
 #include "BaseEntity.h"
 
 int CBaseEntity::m_iNextValidID = 0;
 
 CBaseEntity::CBaseEntity(long id)
 {
-	SetEntityType( Ent_InValid );
+	SetEntityType( default_entity_type );
 	
 	assert( id >= m_iNextValidID &&" <BaseEntity::ID>: invalid ID");
 

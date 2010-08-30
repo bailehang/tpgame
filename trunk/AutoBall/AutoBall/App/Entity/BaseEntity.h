@@ -11,7 +11,7 @@ class Telegram;
 
 class CBaseEntity
 {
-	enum {default_entity_type = -1};
+	//enum {default_entity_type = -1};
 
 private:
 
