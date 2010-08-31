@@ -11,18 +11,6 @@
 template <class entity_type>
 class StateMachine
 {
-private:
-
-	//a pointer to the agent that owns this instance
-	entity_type*          m_pOwner;
-
-	State<entity_type>*   m_pCurrentState;
-
-	//a record of the last state the agent was in
-	State<entity_type>*   m_pPreviousState;
-
-	//this is called every time the FSM is updated
-	State<entity_type>*   m_pGlobalState;
 
 public:
 
@@ -117,5 +105,19 @@ public:
 
 		return s;
 	}
+
+private:
+
+	//a pointer to the agent that owns this instance
+	entity_type*          m_pOwner;
+
+	State<entity_type>*   m_pCurrentState;
+
+	//a record of the last state the agent was in
+	State<entity_type>*   m_pPreviousState;
+
+	//this is called every time the FSM is updated
+	State<entity_type>*   m_pGlobalState;
+
 };
 

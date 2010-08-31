@@ -15,7 +15,6 @@
 
 #include "State.h"
 #include "../Telegram.h"
-#include "constants.h"
 
 
 class FieldPlayer;

@@ -18,8 +18,8 @@
 #include "../Telegram.h"
 
 
-class CBaseEntity;
-
+class  CBaseEntity;
+class  EntityManager;
 
 //to make life easier...
 #define Dispatcher MessageDispatcher::Instance()

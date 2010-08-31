@@ -10,7 +10,7 @@
 #include "../Public/GameSetup.h"
 #include "../Render/Utils.h"
 
-
+/// ×ãÇò³¡
 class SoccerPitch
 { 
 public:

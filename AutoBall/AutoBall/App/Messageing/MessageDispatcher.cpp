@@ -1,7 +1,8 @@
 #include "MessageDispatcher.h"
 #include "../Entity/BaseEntity.h"
-//#include "misc/FrameCounter.h"
 #include "../Entity/EntityManager.h"
+#include "../../Public/FrameCounter.h"
+#include "../../Public/Singleton.h"
 //#include "Debug/DebugConsole.h"
 
 using std::set;
@@ -26,7 +27,7 @@ MessageDispatcher* MessageDispatcher::Instance()
 //------------------------------------------------------------------------
 void MessageDispatcher::Discharge(CBaseEntity* pReceiver, const Telegram& telegram)
 {
-	if (!pReceiver->HandleMessage(telegram))
+	if (!pReceiver->HandleEvent(telegram))
 	{
 		//telegram could not be handled
 #ifdef SHOW_MESSAGING_INFO
@@ -49,7 +50,7 @@ void MessageDispatcher::DispatchMsg(double       delay,
 {
 
 	//get a pointer to the receiver
-	CBaseEntity* pReceiver = EntityMgr->GetEntityFromID(receiver);
+	CBaseEntity* pReceiver = GetInstObj(EntityManager).FindEntity(receiver);
 
 	//make sure the receiver is valid
 	if (pReceiver == NULL)
@@ -116,7 +117,7 @@ void MessageDispatcher::DispatchDelayedMessages()
 		const Telegram& telegram = *PriorityQ.begin();
 
 		//find the recipient
-		CBaseEntity* pReceiver = EntityMgr->GetEntityFromID(telegram.Receiver);
+		CBaseEntity* pReceiver = GetInstObj(EntityManager).FindEntity(telegram.Receiver);
 
 #ifdef SHOW_MESSAGING_INFO
 		debug_con << "\nQueued telegram ready for dispatch: Sent to " 

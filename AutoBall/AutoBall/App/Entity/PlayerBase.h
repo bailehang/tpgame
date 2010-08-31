@@ -5,6 +5,13 @@
 #include "../../Public/Common/Autolist.h"
 #include "MoveEntity.h"
 
+class SoccerTeam;
+class SoccerPitch;
+class SoccerBall;
+class SteeringBehaviors;
+class Region;
+
+/// 球员基类类 
 class  PlayerBase : public  CMoveEntity,
 					public  CAutoList<PlayerBase>
 {
@@ -97,7 +104,7 @@ public:
 	SoccerTeam*const         Team()const{return m_pTeam;}
 
 private:
-	player_role		m_PlayerRole;
+	player_role				m_PlayerRole;
 
 	//a pointer to this player's team
 	SoccerTeam*             m_pTeam;

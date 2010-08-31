@@ -1,6 +1,15 @@
-
-#include "stdafx.h"
 #include "PlayerBase.h"
+#include "../Region.h"
+#include "../SoccerTeam.h"
+#include "../SoccerPitch.h"
+#include "../Goal.h"
+#include "../SteeringBehaviors.h"
+#include "../Messageing/MessageDispatcher.h"
+#include "../../Render/Transformations.h"
+#include "../../Render/Vector2D.h"
+#include "../../Render/VGdi.h"
+#include "../../Render/Geometry.h"
+#include "../../Render/Utils.h"
 
 
 //----------------------------- dtor -------------------------------------
