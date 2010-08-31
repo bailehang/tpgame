@@ -7,6 +7,7 @@
 #include "../../Public/Singleton.h"
 #include "../../Render/VGdi.h"
 
+///	 ×ãÇòÀà
 class  SoccerBall : public CMoveEntity
 {
 public:

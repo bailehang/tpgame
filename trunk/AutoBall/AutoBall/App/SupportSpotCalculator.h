@@ -14,9 +14,9 @@
 
 #include <vector>
 
-#include "Game/Region.h"
-#include "2D/Vector2D.h"
-#include "misc/Cgdi.h"
+#include "Region.h"
+#include "../Render/Vector2D.h"
+#include "../Render/VGdi.h"
 
 
 class PlayerBase;
@@ -25,10 +25,7 @@ class SoccerBall;
 class SoccerTeam;
 class Regulator;
 
-
-
-//------------------------------------------------------------------------
-
+/// 行为计算类
 class SupportSpotCalculator
 {
 private:

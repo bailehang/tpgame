@@ -1,4 +1,4 @@
-#include "stdafx.h"
+//#include "stdafx.h"
 #include "SoccerTeam.h"
 #include "Entity/PlayerBase.h"
 #include "Entity/SoccerBall.h"

@@ -7,9 +7,8 @@
 #include "../../Public/BaseDef.h"
 #include "../Telegram.h"
 
-class Telegram;
-
-class CBaseEntity
+struct Telegram;
+class  CBaseEntity
 {
 	//enum {default_entity_type = -1};
 

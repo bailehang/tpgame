@@ -1,6 +1,7 @@
 
 #pragma  once 
 
+/// ×ãÇòÔË¶¯Ô±
 class FieldPlayer : public PlayerBase
 {
 private:
@@ -38,6 +39,5 @@ public:
 	StateMachine<FieldPlayer>* GetFSM()const{return m_pStateMachine;}
 
 	bool        isReadyForNextKick()const{return m_pKickLimiter->isReady();}
-
 
 };
