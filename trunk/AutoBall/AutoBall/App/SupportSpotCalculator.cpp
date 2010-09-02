@@ -1,14 +1,13 @@
 #include "SupportSpotCalculator.h"
-#include "PlayerBase.h"
+#include "Entity/PlayerBase.h"
 #include "Goal.h"
-#include "SoccerBall.h"
-#include "constants.h"
-#include "time/regulator.h"
+#include "Entity/SoccerBall.h"
+#include "regulator.h"
 #include "SoccerTeam.h"
-#include "ParamLoader.h"
 #include "SoccerPitch.h"
+#include "../Public/GameSetup.h"
 
-#include "debug/DebugConsole.h"
+//#include "debug/DebugConsole.h"
 
 //------------------------------- dtor ----------------------------------------
 //-----------------------------------------------------------------------------
@@ -55,7 +54,7 @@ SupportSpotCalculator::SupportSpotCalculator(int           numX,
 	}
 
 	//create the regulator
-	m_pRegulator = new Regulator(Prm.SupportSpotUpdateFreq);
+	m_pRegulator = new Regulator(GetInstObj(CGameSetup).SupportSpotUpdateFreq);
 }
 
 
@@ -90,17 +89,17 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 		if(m_pTeam->isPassSafeFromAllOpponents(m_pTeam->ControllingPlayer()->Pos(),
 			curSpot->m_vPos,
 			NULL,
-			Prm.MaxPassingForce))
+			GetInstObj(CGameSetup).MaxPassingForce))
 		{
-			curSpot->m_dScore += Prm.Spot_PassSafeScore;
+			curSpot->m_dScore += GetInstObj(CGameSetup).Spot_PassSafeScore;
 		}
 
 
 		//Test 2. Determine if a goal can be scored from this position.  
 		if( m_pTeam->CanShoot(curSpot->m_vPos,            
-			Prm.MaxShootingForce))
+			GetInstObj(CGameSetup).MaxShootingForce))
 		{
-			curSpot->m_dScore += Prm.Spot_CanScoreFromPositionScore;
+			curSpot->m_dScore += GetInstObj(CGameSetup).Spot_CanScoreFromPositionScore;
 		}   
 
 
@@ -120,7 +119,7 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 			{
 
 				//normalize the distance and add it to the score
-				curSpot->m_dScore += Prm.Spot_DistFromControllingPlayerScore *
+				curSpot->m_dScore += GetInstObj(CGameSetup).Spot_DistFromControllingPlayerScore *
 					(OptimalDistance-temp)/OptimalDistance;  
 			}
 		}
@@ -161,17 +160,17 @@ Vector2D SupportSpotCalculator::GetBestSupportingSpot()
 //-----------------------------------------------------------------------------
 void SupportSpotCalculator::Render()const
 {
-	gdi->HollowBrush();
-	gdi->GreyPen();
+	GetInstObj(CGDI).HollowBrush();
+	GetInstObj(CGDI).GreyPen();
 
 	for (unsigned int spt=0; spt<m_Spots.size(); ++spt)
 	{
-		gdi->Circle(m_Spots[spt].m_vPos, m_Spots[spt].m_dScore);
+		GetInstObj(CGDI).Circle(m_Spots[spt].m_vPos, m_Spots[spt].m_dScore);
 	}
 
 	if (m_pBestSupportingSpot)
 	{
-		gdi->GreenPen();
-		gdi->Circle(m_pBestSupportingSpot->m_vPos, m_pBestSupportingSpot->m_dScore);
+		GetInstObj(CGDI).GreenPen();
+		GetInstObj(CGDI).Circle(m_pBestSupportingSpot->m_vPos, m_pBestSupportingSpot->m_dScore);
 	}
 }

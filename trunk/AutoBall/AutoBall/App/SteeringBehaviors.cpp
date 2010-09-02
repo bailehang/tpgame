@@ -1,11 +1,11 @@
 #include "SteeringBehaviors.h"
-#include "PlayerBase.h"
-#include "2D/Transformations.h"
-#include "misc/utils.h"
+#include "Entity/PlayerBase.h"
+#include "../Render/Transformations.h"
+#include "../Render/utils.h"
 #include "SoccerTeam.h"
-#include "misc/autolist.h"
-#include "ParamLoader.h"
-#include "SoccerBall.h"
+#include "../Public/Common/autolist.h"
+#include "../Public/GameSetup.h"
+#include "Entity/SoccerBall.h"
 
 
 using std::string;
@@ -20,9 +20,9 @@ SteeringBehaviors::SteeringBehaviors(PlayerBase*  agent,
 
 m_pPlayer(agent),
 m_iFlags(0),
-m_dMultSeparation(Prm.SeparationCoefficient),
+m_dMultSeparation(GetInstObj(CGameSetup).SeparationCoefficient),
 m_bTagged(false),
-m_dViewDistance(Prm.ViewDistance),
+m_dViewDistance(GetInstObj(CGameSetup).ViewDistance),
 m_pBall(ball),
 m_dInterposeDist(0.0),
 m_Antenna(5,Vector2D())
@@ -236,7 +236,7 @@ Vector2D SteeringBehaviors::Pursuit(const SoccerBall* ball)
 //------------------------------------------------------------------------
 void SteeringBehaviors::FindNeighbours()
 {
-	std::list<PlayerBase*>& AllPlayers = AutoList<PlayerBase>::GetAllMembers();
+	std::list<PlayerBase*>& AllPlayers = CAutoList<PlayerBase>::GetAllMembers();
 	std::list<PlayerBase*>::iterator curPlyr;
 	for (curPlyr = AllPlayers.begin(); curPlyr!=AllPlayers.end(); ++curPlyr)
 	{
@@ -263,7 +263,7 @@ Vector2D SteeringBehaviors::Separation()
 	//iterate through all the neighbors and calculate the vector from the
 	Vector2D SteeringForce;
 
-	std::list<PlayerBase*>& AllPlayers = AutoList<PlayerBase>::GetAllMembers();
+	std::list<PlayerBase*>& AllPlayers = CAutoList<PlayerBase>::GetAllMembers();
 	std::list<PlayerBase*>::iterator curPlyr;
 	for (curPlyr = AllPlayers.begin(); curPlyr!=AllPlayers.end(); ++curPlyr)
 	{
@@ -303,9 +303,9 @@ Vector2D SteeringBehaviors::Interpose(const SoccerBall* ball,
 void SteeringBehaviors::RenderAids( )
 { 
 	//render the steering force
-	gdi->RedPen();
+	GetInstObj(CGDI).RedPen();
 
-	gdi->Line(m_pPlayer->Pos(), m_pPlayer->Pos() + m_vSteeringForce * 20);
+	GetInstObj(CGDI).Line(m_pPlayer->Pos(), m_pPlayer->Pos() + m_vSteeringForce * 20);
 
 
 

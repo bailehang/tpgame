@@ -1,9 +1,25 @@
 //#include "stdafx.h"
 #include "SoccerTeam.h"
+#include "SoccerPitch.h"
+#include "Goal.h"
+#include "Regulator.h"
+#include "SupportSpotCalculator.h"
+#include "SteeringBehaviors.h"
 #include "Entity/PlayerBase.h"
 #include "Entity/SoccerBall.h"
+#include "Entity/GoalKeeper.h"
+#include "Entity/FieldPlayer.h"
+#include "Entity/EntityManager.h"
 #include "StateAi/StateMachine.h"
-#include "SteeringBehaviors.h"
+#include "StateAi/TeamStates.h"
+#include "StateAi/GoalKeeperStates.h"
+#include "StateAi/FieldPlayerStates.h"
+#include "Messageing/MessageDispatcher.h"
+#include "Messageing/SoccerMessages.h"
+#include "../Public/Singleton.h"
+#include "../Render/VGdi.h"
+#include "../Render/Vector2D.h"
+#include "../Render/Geometry.h"
 
 //----------------------------- ctor -------------------------------------
 //
@@ -378,7 +394,7 @@ bool SoccerTeam::isPassSafeFromAllOpponents(Vector2D                from,
 	{
 		if (!isPassSafeFromOpponent(from, target, receiver, *opp, PassingForce))
 		{
-			debug_on
+			//debug_on
 
 				return false;
 		}
@@ -451,7 +467,7 @@ void SoccerTeam::ReturnAllFieldPlayersToHome()const
 		{
 			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 				1,
-				(*it)->ID(),
+				(*it)->GetID(),
 				Msg_GoHome,
 				NULL);
 		}
@@ -475,7 +491,7 @@ void SoccerTeam::Render()const
 	//show the controlling team and player at the top of the display
 	if (GetInstObj(CGameSetup).bShowControllingTeam)
 	{
-		GetInstObj(CGDI).TextColor(Cgdi::white);
+		GetInstObj(CGDI).TextColor(CGDI::white);
 
 		if ( (Color() == blue) && InControl())
 		{
@@ -487,7 +503,7 @@ void SoccerTeam::Render()const
 		}
 		if (m_pControllingPlayer != NULL)
 		{
-			GetInstObj(CGDI).TextAtPos(Pitch()->cxClient()-150, 3, "Controlling Player: " + ttos(m_pControllingPlayer->ID()));
+			GetInstObj(CGDI).TextAtPos(Pitch()->cxClient()-150, 3, "Controlling Player: " + ttos(m_pControllingPlayer->GetID()));
 		}
 	}
 
@@ -501,7 +517,7 @@ void SoccerTeam::Render()const
 #ifdef SHOW_TEAM_STATE
 	if (Color() == red)
 	{
-		GetInstObj(CGDI).TextColor(Cgdi::white);
+		GetInstObj(CGDI).TextColor(CGDI::white);
 
 		if (CurrentState() == Attacking::Instance())
 		{
@@ -699,7 +715,7 @@ void SoccerTeam::CreatePlayers()
 
 	for (it; it != m_Players.end(); ++it)
 	{
-		EntityMgr->RegisterEntity(*it);
+	     GetInstObj(EntityManager).RegEntity(*it);
 	}
 }
 
@@ -710,7 +726,7 @@ PlayerBase* SoccerTeam::GetPlayerFromID(int id)const
 
 	for (it; it != m_Players.end(); ++it)
 	{
-		if ((*it)->ID() == id) return *it;
+		if ((*it)->GetID() == id) return *it;
 	}
 
 	return NULL;
@@ -788,8 +804,8 @@ void SoccerTeam::RequestPass(FieldPlayer* requester)const
 		//tell the player to make the pass
 		//let the receiver know a pass is coming 
 		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-			requester->ID(),
-			ControllingPlayer()->ID(),
+			requester->GetID(),
+			ControllingPlayer()->GetID(),
 			Msg_PassToMe,
 			requester); 
 

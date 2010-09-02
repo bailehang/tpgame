@@ -5,6 +5,7 @@
 #include "../Goal.h"
 #include "../SteeringBehaviors.h"
 #include "../Messageing/MessageDispatcher.h"
+#include "../Messageing/SoccerMessages.h"
 #include "../../Render/Transformations.h"
 #include "../../Render/Vector2D.h"
 #include "../../Render/VGdi.h"
@@ -179,8 +180,8 @@ void PlayerBase::FindSupport()const
 		Team()->SetSupportingPlayer(BestSupportPly);
 
 		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-			ID(),
-			Team()->SupportingPlayer()->ID(),
+			GetID(),
+			Team()->SupportingPlayer()->GetID(),
 			Msg_SupportAttacker,
 			NULL);
 	}
@@ -196,8 +197,8 @@ void PlayerBase::FindSupport()const
 		if (Team()->SupportingPlayer())
 		{
 			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-				ID(),
-				Team()->SupportingPlayer()->ID(),
+				GetID(),
+				Team()->SupportingPlayer()->GetID(),
 				Msg_GoHome,
 				NULL);
 		}
@@ -207,8 +208,8 @@ void PlayerBase::FindSupport()const
 		Team()->SetSupportingPlayer(BestSupportPly);
 
 		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-			ID(),
-			Team()->SupportingPlayer()->ID(),
+			GetID(),
+			Team()->SupportingPlayer()->GetID(),
 			Msg_SupportAttacker,
 			NULL);
 	}

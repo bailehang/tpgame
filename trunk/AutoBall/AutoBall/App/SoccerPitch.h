@@ -1,14 +1,13 @@
 #pragma once
 
-#include "Entity/SoccerBall.h"
-#include "SoccerTeam.h"
-#include "../Render/Vector2D.h"
-#include "../Render/Utils.h"
-#include "../Render/VGdi.h"
+#include <vector>
+#include <assert.h>
 
-#include "../Public/Singleton.h"
-#include "../Public/GameSetup.h"
-#include "../Render/Utils.h"
+class  SoccerBall;
+class  SoccerTeam;
+class  Goal;
+class  Region;
+class  Wall2D;
 
 /// ×ãÇò³¡
 class SoccerPitch
