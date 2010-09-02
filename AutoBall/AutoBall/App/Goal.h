@@ -1,6 +1,10 @@
 
 #pragma  once 
 
+#include "Entity/SoccerBall.h"
+#include "../Render/Vector2D.h"
+#include "../Render/Geometry.h"
+
 /// «Ú√≈¿‡
 class Goal 
 {

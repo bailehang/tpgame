@@ -25,7 +25,7 @@ public:
 		m_Members.remove( static_cast<T*>(this) );
 	}
 
-	ObjectList&  GetAllMembers() const { return m_Members; }
+	static  ObjectList&  GetAllMembers()  { return m_Members; }
 
 private:
 

@@ -16,6 +16,7 @@ class  PlayerBase : public  CMoveEntity,
 					public  CAutoList<PlayerBase>
 {
 
+public:
 	enum player_role{goal_keeper, attacker, defender};
 public:
 	PlayerBase(SoccerTeam*    home_team,

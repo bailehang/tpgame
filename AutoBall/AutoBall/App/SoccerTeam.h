@@ -1,13 +1,19 @@
 
 #pragma  once 
 
+#include <vector>
+#include "../Render/Vector2D.h"
+#include "SupportSpotCalculator.h"
+
 class Goal;
 class PlayerBase;
 class FieldPlayer;
 class SoccerPitch;
 class GoalKeeper;
 class SupportSpotCalculator;
+template<class T>
 class StateMachine;
+class SupportSpotCalculator;
 	  
 class SoccerTeam 
 {
@@ -18,7 +24,7 @@ public:
 private:
 
 	//an instance of the state machine class
-	//StateMachine<SoccerTeam>*  m_pStateMachine;
+	StateMachine<SoccerTeam>*  m_pStateMachine;
 
 	//the team must know its own color!
 	team_color                m_Color;

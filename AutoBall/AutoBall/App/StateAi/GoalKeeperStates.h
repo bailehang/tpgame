@@ -3,8 +3,8 @@
 
 #include <string>
 #include "State.h"
-#include "../Common/Messaging/Telegram.h"
-#include "constants.h"
+#include "../Telegram.h"
+//#include "constants.h"
 
 
 class GoalKeeper;

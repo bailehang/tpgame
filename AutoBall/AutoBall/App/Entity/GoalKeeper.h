@@ -1,5 +1,17 @@
 
-#pragma  once 
+#pragma  once
+
+#include "../../Public/Common/Autolist.h"
+#include "MoveEntity.h"
+
+class SoccerTeam;
+class SoccerPitch;
+class SoccerBall;
+class SteeringBehaviors;
+class Region;
+
+template < class T>
+class  State;
 
 /// 封装守门员类
 class  GoalKeeper : public PlayerBase

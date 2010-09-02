@@ -1,6 +1,20 @@
 
 #pragma  once 
 
+#include "../../Public/Common/Autolist.h"
+#include "MoveEntity.h"
+
+class SoccerTeam;
+class SoccerPitch;
+class SoccerBall;
+class SteeringBehaviors;
+class Region;
+
+template < class T>
+class  StateMachine;
+template < class T>
+class  State;
+
 /// ◊„«Ú‘À∂Ø‘±
 class FieldPlayer : public PlayerBase
 {

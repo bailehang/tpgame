@@ -1,5 +1,4 @@
 
-#include "stdafx.h"
 #include "SoccerBall.h"
 
 Vector2D AddNoiseToKick(Vector2D BallPos, Vector2D BallTarget)

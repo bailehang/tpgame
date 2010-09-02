@@ -1,6 +1,24 @@
-#include "stdafx.h"
 #include "SoccerPitch.h"
-
+#include "SoccerTeam.h"
+#include "Goal.h"
+#include "Regulator.h"
+#include "SupportSpotCalculator.h"
+#include "SteeringBehaviors.h"
+#include "Entity/PlayerBase.h"
+#include "Entity/SoccerBall.h"
+#include "Entity/GoalKeeper.h"
+#include "Entity/FieldPlayer.h"
+#include "Entity/EntityManager.h"
+#include "StateAi/StateMachine.h"
+#include "StateAi/TeamStates.h"
+#include "StateAi/GoalKeeperStates.h"
+#include "StateAi/FieldPlayerStates.h"
+#include "Messageing/MessageDispatcher.h"
+#include "Messageing/SoccerMessages.h"
+#include "../Public/Singleton.h"
+#include "../Render/VGdi.h"
+#include "../Render/Vector2D.h"
+#include "../Render/Geometry.h"
 
 const int NumRegionsHorizontal = 6; 
 const int NumRegionsVertical   = 3;
@@ -187,10 +205,10 @@ bool SoccerPitch::Render()
 	}
 
 	//show the score
-	GetInstObj(CGDI).TextColor(Cgdi::red);
+	GetInstObj(CGDI).TextColor(CGDI::red);
 	GetInstObj(CGDI).TextAtPos((m_cxClient/2)-50, m_cyClient-18, "Red: " + ttos(m_pBlueGoal->NumGoalsScored()));
 
-	GetInstObj(CGDI).TextColor(Cgdi::blue);
+	GetInstObj(CGDI).TextColor(CGDI::blue);
 	GetInstObj(CGDI).TextAtPos((m_cxClient/2)+10, m_cyClient-18, "Blue: " + ttos(m_pRedGoal->NumGoalsScored()));
 
 	return true;  
