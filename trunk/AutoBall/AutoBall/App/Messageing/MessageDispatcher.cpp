@@ -1,3 +1,4 @@
+#include "Stdafx.h"
 #include "MessageDispatcher.h"
 #include "../Entity/BaseEntity.h"
 #include "../Entity/EntityManager.h"

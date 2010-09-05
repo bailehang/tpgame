@@ -1,17 +1,16 @@
-#include "GoalKeeperStates.h"
-//#include "Debug/DebugConsole.h"
-#include "SoccerPitch.h"
-#include "PlayerBase.h"
-#include "GoalKeeper.h"
-#include "SteeringBehaviors.h"
-#include "SoccerTeam.h"
-#include "Goal.h"
-#include "../Common/2D/geometry.h"
-#include "../Common/Messaging/Telegram.h"
-#include "../Common/Messaging/MessageDispatcher.h"
-#include "SoccerMessages.h"
-#include "FieldPlayer.h"
-#include "ParamLoader.h"
+#include "Stdafx.h"
+#include "StateMachine.h"
+#include "../Entity/PlayerBase.h"
+#include "../Entity/GoalKeeper.h"
+#include "GoalKeeperStates.h"		  
+#include "../Goal.h"
+#include "../SoccerTeam.h"
+#include "../SoccerPitch.h"
+#include "../Messageing/MessageDispatcher.h"
+#include "../Messageing/SoccerMessages.h"
+#include "../SteeringBehaviors.h"
+#include "../Telegram.h"
+#include "../../Config.h"		
 
 //uncomment to send state info to debug window
 //#define GOALY_STATE_INFO_ON
@@ -264,8 +263,8 @@ void PutBallBackInPlay::Execute(GoalKeeper* keeper)
 
 		//let the receiving player know the ball's comin' at him
 		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-			keeper->ID(),
-			receiver->ID(),
+			keeper->GetID(),
+			receiver->GetID(),
 			Msg_ReceiveBall,
 			&BallTarget);
 

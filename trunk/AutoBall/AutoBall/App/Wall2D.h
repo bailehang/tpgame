@@ -1,4 +1,7 @@
-
+/**
+ *   @brief 墙用一个线段和线段的法线组成
+ *
+ */
 #pragma  once 
 #include <fstream>
 

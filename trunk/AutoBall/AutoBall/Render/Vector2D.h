@@ -28,36 +28,36 @@ public:
 	bool  IsZero() const ;
 
 	/// 求模的大小
-	inline double Length() const ;
+	double Length() const ;
 
 	/// 
-	inline double LengthSq() const;
+	double LengthSq() const;
 
 	/// 格式化
-	inline void   Normalize();
+	void   Normalize();
 
 	/// 点乘
-	inline double Dot( const Vector2D& v2) const;
+	double Dot( const Vector2D& v2) const;
 
 	/// 根据v2向量在当前向量的上还是下方
-	inline int    Sign(const Vector2D& v2) const;
+	int    Sign(const Vector2D& v2) const;
 
 	/// 返回当前向量的垂直向量
-	inline Vector2D Perp()const;
+	Vector2D Perp()const;
 
 	/// 切取向量长度小于等于max
-	inline void    Truncate( double max );
+	void    Truncate( double max );
 
 	/// 计算距离2个向量距离
-	inline double  Distance( const Vector2D& v2 )const;
+	double  Distance( const Vector2D& v2 )const;
 
-	inline double  DistanceSq( const Vector2D& v2)const;
+	double  DistanceSq( const Vector2D& v2)const;
 
 	/// 根据v2计算得到反射向量
-	inline void    Reflect( const Vector2D& v2) ;
+	void    Reflect( const Vector2D& v2) ;
 
 	/// 得到反向量
-	inline Vector2D GetReverse() const;
+	Vector2D GetReverse() const;
 
 	Vector2D& operator+= ( const Vector2D& rhs );
 
@@ -70,7 +70,6 @@ public:
 	bool operator!= ( const Vector2D& rhs );
 
 	bool operator== ( const Vector2D& rhs );
-
 
 	friend Vector2D operator * (const Vector2D& a , double vsys		  );
 

@@ -1,4 +1,7 @@
-
+ /**
+  *	@brief 关于实体的基类封装
+  *
+  */
 #pragma once 
 
 #include "../../Render/Vector2D.h"
@@ -10,21 +13,7 @@
 struct Telegram;
 class  CBaseEntity
 {
-	//enum {default_entity_type = -1};
 
-private:
-
-	long	      m_id;
-	ePlayerType	  m_itype;
-	bool		  m_bTag;
-	
-	
-protected:
-	Vector2D	  m_vPosition;
-	Vector2D	  m_vScal;
-
-	double		  m_dBoundingRadius;
-	static int    m_iNextValidID;
 public:
 	CBaseEntity( long  id);
 
@@ -65,4 +54,21 @@ public:
 	void           SetEntityType(ePlayerType new_type){m_itype = new_type;}
 
 	virtual	  ~CBaseEntity() {}
+
+protected:
+	Vector2D	  m_vPosition;		///> 实体坐标
+	Vector2D	  m_vScal;			///> 实体比例
+
+	double		  m_dBoundingRadius;///> 边界比例
+	static int    m_iNextValidID;	///> 下一个有效的ID
+
+
+	//enum {default_entity_type = -1};
+
+private:
+
+	long	      m_id;				///> 实体id
+	ePlayerType	  m_itype;			///> 实体类型
+	bool		  m_bTag;			///> 实体是否有目标 
+
 };

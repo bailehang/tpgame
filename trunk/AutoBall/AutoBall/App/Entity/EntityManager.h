@@ -1,4 +1,7 @@
-
+/**
+ *   @brief 实体管理类
+ *
+ */
 
 #pragma once 
 #include "BaseEntity.h"
@@ -8,6 +11,7 @@
 
 using namespace std;
 
+/// 实体Manager
 class  CBaseEntity;
 class  EntityManager
 {

@@ -1,11 +1,11 @@
-#include "SupportSpotCalculator.h"
+#include "Stdafx.h"
 #include "Entity/PlayerBase.h"
 #include "Goal.h"
 #include "Entity/SoccerBall.h"
-#include "regulator.h"
 #include "SoccerTeam.h"
 #include "SoccerPitch.h"
 #include "../Public/GameSetup.h"
+#include "SupportSpotCalculator.h"
 
 //#include "debug/DebugConsole.h"
 
@@ -71,6 +71,7 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 	}
 
 	//reset the best supporting spot
+	/// 重置最佳接应点
 	m_pBestSupportingSpot = NULL;
 
 	double BestScoreSoFar = 0.0;
@@ -82,10 +83,12 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 		//first remove any previous score. (the score is set to one so that
 		//the viewer can see the positions of all the spots if he has the 
 		//aids turned on)
+		/// 首先删除以前的分数
 		curSpot->m_dScore = 1.0;
 
 		//Test 1. is it possible to make a safe pass from the ball's position 
 		//to this position?
+		/// 首先传到这个位置是否安全
 		if(m_pTeam->isPassSafeFromAllOpponents(m_pTeam->ControllingPlayer()->Pos(),
 			curSpot->m_vPos,
 			NULL,
@@ -94,7 +97,7 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 			curSpot->m_dScore += GetInstObj(CGameSetup).Spot_PassSafeScore;
 		}
 
-
+		/// 可以在这个位置射门
 		//Test 2. Determine if a goal can be scored from this position.  
 		if( m_pTeam->CanShoot(curSpot->m_vPos,            
 			GetInstObj(CGameSetup).MaxShootingForce))
@@ -102,7 +105,7 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 			curSpot->m_dScore += GetInstObj(CGameSetup).Spot_CanScoreFromPositionScore;
 		}   
 
-
+		/// 这个点离控球队员多远
 		//Test 3. calculate how far this spot is away from the controlling
 		//player. The further away, the higher the score. Any distances further
 		//away than OptimalDistance pixels do not receive a score.
@@ -117,13 +120,14 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 
 			if (temp < OptimalDistance)
 			{
-
+				/// 标准化距离，把它加到分数中
 				//normalize the distance and add it to the score
 				curSpot->m_dScore += GetInstObj(CGameSetup).Spot_DistFromControllingPlayerScore *
 					(OptimalDistance-temp)/OptimalDistance;  
 			}
 		}
 
+		/// 检查到目前位置这个店是否是最高分
 		//check to see if this spot has the highest score so far
 		if (curSpot->m_dScore > BestScoreSoFar)
 		{

@@ -1,3 +1,4 @@
+#include "Stdafx.h"
 #include "SoccerPitch.h"
 #include "SoccerTeam.h"
 #include "Goal.h"

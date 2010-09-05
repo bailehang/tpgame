@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+#include "stdafx.h"
 #include "Vector2D.h"
 
 void  Vector2D::Zero()

@@ -104,7 +104,7 @@ public:
 	void                     SetHomeRegion(int NewRegion){m_iHomeRegion = NewRegion;}
 	SoccerTeam*const         Team()const{return m_pTeam;}
 
-private:
+protected:
 	player_role				m_PlayerRole;
 
 	//a pointer to this player's team

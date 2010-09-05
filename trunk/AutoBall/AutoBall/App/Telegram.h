@@ -1,16 +1,11 @@
+/**
+ *  @brief 这定义了一个电报。一份电报是一种数据结构，记录所需的信息发送邮件。
+ *   邮件所使用的游戏代理，相互沟通。
+ */
+
 #ifndef TELEGRAM_H
 #define TELEGRAM_H
-//------------------------------------------------------------------------
-//
-//  Name:   Telegram.h
-//
-//  Desc:   This defines a telegram. A telegram is a data structure that
-//          records information required to dispatch messages. Messages 
-//          are used by game agents to communicate with each other.
-//
-//  Author: Mat Buckland (fup@ai-junkie.com)
-//
-//------------------------------------------------------------------------
+
 #include <iostream>
 #include <math.h>
 
