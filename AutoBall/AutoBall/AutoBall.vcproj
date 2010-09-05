@@ -412,10 +412,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\App\Entity\EntityFunctionTemplates.h"
-					>
-				</File>
-				<File
 					RelativePath=".\App\Entity\EntityManager.cpp"
 					>
 				</File>
