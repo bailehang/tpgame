@@ -14,8 +14,6 @@
 #include <string>
 
 #include "State.h"
-#include "../Telegram.h"
-
 
 class FieldPlayer;
 class SoccerPitch;

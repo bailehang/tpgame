@@ -1,6 +1,22 @@
-//#include "stdafx.h"
+#include "stdafx.h"
+#include "PlayerBase.h"
 #include "GoalKeeper.h"
-
+#include "EntityFun.h"
+#include "../Region.h"
+#include "../SoccerTeam.h"
+#include "../SoccerPitch.h"
+#include "../Goal.h"
+#include "../SteeringBehaviors.h"			
+#include "../Messageing/MessageDispatcher.h"
+#include "../Messageing/SoccerMessages.h"
+#include "../StateAi/StateMachine.h"
+#include "../StateAi/State.h"
+#include "../StateAi/GoalKeeperStates.h"
+#include "../../Render/Transformations.h"
+#include "../../Render/Vector2D.h"
+#include "../../Render/VGdi.h"
+#include "../../Render/Geometry.h"
+#include "../../Render/Utils.h"
 
 GoalKeeper::GoalKeeper(SoccerTeam*        home_team,
 					   int                home_region,
@@ -64,11 +80,11 @@ void GoalKeeper::Update()
 	//enforce a non-penetration constraint if desired
 	if(GetInstObj(CGameSetup).bNonPenetrationConstraint)
 	{
-		EnforceNonPenetrationContraint(this, AutoList<PlayerBase>::GetAllMembers());
+		EnforceNonPenetrationContraint(this, CAutoList<PlayerBase>::GetAllMembers());
 	}
 
 	//update the heading if the player has a non zero velocity
-	if ( !m_vVelocity.isZero())
+	if ( !m_vVelocity.IsZero())
 	{    
 		m_vHeading = Vec2DNormalize(m_vVelocity);
 
@@ -141,7 +157,7 @@ void GoalKeeper::Render()
 	if (GetInstObj(CGameSetup).bIDs)
 	{
 		GetInstObj(CGDI).TextColor(0, 170, 0);;
-		GetInstObj(CGDI).TextAtPos(Pos().x-20, Pos().y-20, ttos(ID()));
+		GetInstObj(CGDI).TextAtPos(Pos().x-20, Pos().y-20, ttos(GetID()));
 	}
 
 	//draw the state

@@ -1,3 +1,4 @@
+#include "Stdafx.h"
 #include "SteeringBehaviors.h"
 #include "Entity/PlayerBase.h"
 #include "../Render/Transformations.h"

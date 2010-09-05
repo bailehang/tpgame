@@ -1,22 +1,16 @@
-
+/**
+ *   @brief 可移动的实体类
+ *
+ */
 #pragma  once 
 
-#include "BaseEntity.h"
 #include "../../Render/Vector2D.h"
 #include "../../Render/Geometry.h"
+#include "BaseEntity.h"
 
 class  CMoveEntity : public CBaseEntity
 {
 
-protected:
-
-	Vector2D    m_vVelocity;
-	Vector2D    m_vHeading;
-	Vector2D    m_vSide; 
-	double      m_dMass;
-	double      m_dMaxSpeed;
-	double      m_dMaxForce;   
-	double      m_dMaxTurnRate;
 
 public:
 	CMoveEntity(Vector2D position,
@@ -45,7 +39,7 @@ public:
 
 	virtual ~CMoveEntity() {}
 	
-	Vector2D  Velocity()const{return m_vVelocity;}
+	Vector2D  Velocity()const					 {return m_vVelocity;  }
 	void      SetVelocity(const Vector2D& NewVel){m_vVelocity = NewVel;}
 
 	double    Mass()const{return m_dMass;}
@@ -69,39 +63,15 @@ public:
 	double    MaxTurnRate()const{return m_dMaxTurnRate;}
 	void      SetMaxTurnRate(double val){m_dMaxTurnRate = val;}
 
+protected:
+
+	Vector2D    m_vVelocity;	   ///> 实体速度
+	Vector2D    m_vHeading;		   ///> 指向前方的方向向量
+	Vector2D    m_vSide;	       ///> 方向的垂直向量
+	double      m_dMass;		   ///> 质量
+	double      m_dMaxSpeed;	   ///> 最大速度
+	double      m_dMaxForce;	   ///> 最大转向力
+	double      m_dMaxTurnRate;    ///> 最大转向速度
+
 };
 
-void CMoveEntity::SetHeading(Vector2D new_heading)
-{
-	assert( (new_heading.LengthSq() - 1.0) < 0.00001);
-
-	m_vHeading = new_heading;
-
-	//the side vector must always be perpendicular to the heading
-	m_vSide = m_vHeading.Perp();
-}
-
-bool CMoveEntity::RotateHeadingToFacePosition(Vector2D target)
-{
-	Vector2D toTarget = Vec2DNormalize(target - m_vPosition);
-
-	double dot = m_vHeading.Dot(toTarget);
-
-	Clamp(dot, -1, 1);
-
-	double angle = acos(dot);
-
-	if (angle < 0.00001) return true;
-
-	if (angle > m_dMaxTurnRate) angle = m_dMaxTurnRate;
-
-	C2DMatrix RotationMatrix;
-
-	RotationMatrix.Rotate(angle * m_vHeading.Sign(toTarget));	
-	RotationMatrix.TransformVector2Ds(m_vHeading);
-	RotationMatrix.TransformVector2Ds(m_vVelocity);
-
-	m_vSide = m_vHeading.Perp();
-
-	return false;
-}

@@ -39,8 +39,6 @@ enum	eEventAi
 	Ent_MoveEvent	= 0,
 	Ent_StopEvent	   ,
 	Ent_UseSkillEvent  ,
-
-
 	Ent_EventNum
 };
 

@@ -1,11 +1,13 @@
+#include "Stdafx.h"
 #include "TeamStates.h"
-//#include "SoccerTeam.h"
-#include "PlayerBase.h"
+#include "StateMachine.h"
+#include "State.h"
+#include "../SoccerTeam.h"
+#include "../Entity/PlayerBase.h"
+#include "../SoccerPitch.h"
 #include "../Messageing/MessageDispatcher.h"
-#include "SoccerMessages.h"
-#include "constants.h"
-#include "SoccerPitch.h"
-
+#include "../Messageing/SoccerMessages.h"
+#include "../../Config.h"			   
 
 
 void ChangePlayerHomeRegions(SoccerTeam* team, const int NewRegions[TeamSize])

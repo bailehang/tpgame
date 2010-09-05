@@ -9,9 +9,11 @@ class SoccerPitch;
 class SoccerBall;
 class SteeringBehaviors;
 class Region;
-
+class PlayerBase;
 template < class T>
 class  State;
+template < class T>
+class  StateMachine;
 
 /// 封装守门员类
 class  GoalKeeper : public PlayerBase
@@ -35,8 +37,8 @@ public:
 	void        Update();
 	void        Render();
 	bool        HandleMessage(const Telegram& msg);
-	void		Write(std::ostream&  os);
-	void		Read (std::ifstream& is);
+	void		Write(std::ostream&  os){}
+	void		Read (std::ifstream& is){}
 
 	bool        BallWithinRangeForIntercept()const;
 

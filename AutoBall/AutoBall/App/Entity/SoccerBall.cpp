@@ -1,19 +1,5 @@
-
+#include "Stdafx.h"
 #include "SoccerBall.h"
-
-Vector2D AddNoiseToKick(Vector2D BallPos, Vector2D BallTarget)
-{
-
-	double displacement = (Pi - Pi*GetInstObj(CGameSetup).PlayerKickingAccuracy) * RandomClamped();
-
-	Vector2D toTarget = BallTarget - BallPos;
-
-	Vec2DRotateAroundOrigin(toTarget, displacement);
-
-	return toTarget + BallPos;
-}
-
-
 
 //-------------------------- Kick ----------------------------------------
 //                                                                        

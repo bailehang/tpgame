@@ -1,21 +1,17 @@
-#include "FieldPlayerStates.h"
-//#include "../Common/Debug/DebugConsole.h"
-#include "SoccerPitch.h"
-#include "FieldPlayer.h"
-#include "SteeringBehaviors.h"
-#include "SoccerTeam.h"
-#include "Goal.h"
-#include "../Common/2D/geometry.h"
-#include "SoccerBall.h"
-#include "ParamLoader.h"
-#include "../Common/Messaging/Telegram.h"
-#include "../Common/Messaging/MessageDispatcher.h"
-#include "SoccerMessages.h"
+#include "Stdafx.h"
+#include "StateMachine.h"
+#include "../Entity/PlayerBase.h"
+#include "../Entity/FieldPlayer.h"
+#include "FieldPlayerStates.h"		  
+#include "../Goal.h"
+#include "../SoccerTeam.h"
+#include "../SoccerPitch.h"
+#include "../Messageing/MessageDispatcher.h"
+#include "../Messageing/SoccerMessages.h"
+#include "../SteeringBehaviors.h"
+#include "../Telegram.h"
+#include "../../Config.h"	
 
-#include "../Common/time/Regulator.h"
-
-
-//uncomment below to send state info to the debug window
 #define PLAYER_STATE_INFO_ON
 
 
@@ -137,8 +133,8 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 
 			//let the receiver know a pass is coming 
 			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-				player->ID(),
-				receiver->ID(),
+				player->GetID(),
+				receiver->GetID(),
 				Msg_ReceiveBall,
 				&receiver->Pos());
 
@@ -556,8 +552,8 @@ void KickBall::Execute(FieldPlayer* player)
 
 		//let the receiver know a pass is coming 
 		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-			player->ID(),
-			receiver->ID(),
+			player->GetID(),
+			receiver->GetID(),
 			Msg_ReceiveBall,
 			&BallTarget);                            
 

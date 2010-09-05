@@ -1,3 +1,4 @@
+#include "Stdafx.h"
 #include "BaseEntity.h"
 
 int CBaseEntity::m_iNextValidID = 0;

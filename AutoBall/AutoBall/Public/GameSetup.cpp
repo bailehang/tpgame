@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+#include "stdafx.h"
 
 #include "GameSetup.h"
 #include <fstream>
@@ -35,7 +35,43 @@ CGameSetup::CGameSetup()
 			 >> str >>  KeeperInBallRangeSq
 			 >> str >>  PlayerInTargetRange
 			 >> str >>  PlayerInTargetRangeSq
-			 >> str >>  PlayerMass;
+			 >> str >>  PlayerMass
+			 >> str >>  PlayerMaxForce 
+			 >> str >>  PlayerMaxSpeedWithBall
+			 >> str >>  PlayerMaxSpeedWithoutBall
+			 >> str >>  PlayerMaxTurnRate
+			 >> str >>  PlayerScale
+			 >> str >>  PlayerComfortZone
+			 >> str >>  PlayerKickingDistance
+			 >> str >>  PlayerKickingDistanceSq
+			 >> str >>  PlayerKickFrequency 
+			 >> str >>  MaxDribbleForce
+			 >> str >>  MaxShootingForce
+			 >> str >>  MaxPassingForce
+			 >> str >>  PlayerComfortZoneSq
+			 >> str >>  PlayerKickingAccuracy
+			 >> str >>  NumAttemptsToFindValidStrike
+			 >> str >>  WithinRangeOfHome
+			 >> str >>  WithinRangeOfSupportSpot
+			 >> str >>  WithinRangeOfSupportSpotSq
+			 >> str >>  MinPassDist
+			 >> str >>  GoalkeeperMinPassDist
+			 >> str >>  GoalKeeperTendingDistance
+			 >> str >>  GoalKeeperInterceptRange
+			 >> str >>  GoalKeeperInterceptRangeSq
+			 >> str >>  BallWithinReceivingRange
+			 >> str >>  BallWithinReceivingRangeSq
+			 >> str >>  bStates
+			 >> str >>  bIDs
+			 >> str >>  bSupportSpots
+			 >> str >>  bRegions
+			 >> str >>  bShowControllingTeam
+			 >> str >>  bViewTargets
+			 >> str >>  bHighlightIfThreatened
+			 >> str >>  FrameRate
+			 >> str >>  SeparationCoefficient
+			 >> str >>  ViewDistance
+			 >> str >>  bNonPenetrationConstraint;
 	}
 }
 

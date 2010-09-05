@@ -9,20 +9,6 @@
 class Goal 
 {
 
-private:
-
-	Vector2D   m_vLeftPost;
-	Vector2D   m_vRightPost;
-
-	//a vector representing the facing direction of the goal
-	Vector2D   m_vFacing;
-
-	//the position of the center of the goal line
-	Vector2D   m_vCenter;
-
-	//each time Scored() detects a goal this is incremented
-	int        m_iNumGoalsScored;
-
 public:
 
 	Goal(Vector2D left, Vector2D right, Vector2D facing):m_vLeftPost(left),
@@ -45,11 +31,22 @@ public:
 
 	int      NumGoalsScored()const{return m_iNumGoalsScored;}
 	void     ResetGoalsScored(){m_iNumGoalsScored = 0;}
+
+private:
+
+	Vector2D   m_vLeftPost;				   ///> 左右2根门柱
+	Vector2D   m_vRightPost;
+
+	Vector2D   m_vFacing;				   ///> 球门的朝向向量
+	Vector2D   m_vCenter;				   ///> 球门线的中间位置
+
+	//each time Scored() detects a goal this is incremented
+	int        m_iNumGoalsScored;		  ///> 进球数量
+
 };
 
 
-/////////////////////////////////////////////////////////////////////////
-
+/// 如果跨过球门口，改方法返回真
 bool Goal::Scored(const SoccerBall*const ball)
 {
 	if (LineIntersection2D(ball->Pos(), ball->OldPos(), m_vLeftPost, m_vRightPost))

@@ -128,13 +128,11 @@ inline double PrecisionTimer::TimeElapsed()
 		{
 			return m_TimeElapsed;
 		}
-
 		else
 		{
 			return 0.0;
 		}
 	}
-
 	else
 	{
 		return m_TimeElapsed;

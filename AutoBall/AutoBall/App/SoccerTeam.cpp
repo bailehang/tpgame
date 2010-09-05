@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+#include "stdafx.h"
 #include "SoccerTeam.h"
 #include "SoccerPitch.h"
 #include "Goal.h"

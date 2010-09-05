@@ -1,3 +1,4 @@
+#include "Stdafx.h"
 #include "EntityManager.h"
 
 void  EntityManager::RegEntity(CBaseEntity *entity)

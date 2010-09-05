@@ -12,44 +12,6 @@ class  Wall2D;
 /// 足球场
 class SoccerPitch
 { 
-public:
-
-	SoccerBall*          m_pBall;
-
-	SoccerTeam*          m_pRedTeam;
-	SoccerTeam*          m_pBlueTeam;
-
-	Goal*                m_pRedGoal;
-	Goal*                m_pBlueGoal;
-
-	//container for the boundary walls
-	std::vector<Wall2D>  m_vecWalls;
-
-	//defines the dimensions of the playing area
-	Region*              m_pPlayingArea;
-
-	//the playing field is broken up into regions that the team
-	//can make use of to implement strategies.
-	std::vector<Region*> m_Regions;
-
-	//true if a goal keeper has possession
-	bool                 m_bGoalKeeperHasBall;
-
-	//true if the game is in play. Set to false whenever the players
-	//are getting ready for kickoff
-	bool                 m_bGameOn;
-
-	//set true to pause the motion
-	bool                 m_bPaused;
-
-	//local copy of client window dimensions
-	int                  m_cxClient,
-		m_cyClient;  
-
-	//this instantiates the regions the players utilize to  position
-	//themselves
-	void CreateRegions(double width, double height);
-
 
 public:
 
@@ -85,4 +47,30 @@ public:
 	void  SetGameOn(){m_bGameOn = true;}
 	void  SetGameOff(){m_bGameOn = false;}
 
+public:
+
+	SoccerBall*          m_pBall;       ///> 足球类 
+	SoccerTeam*          m_pRedTeam;	///> 红队
+	SoccerTeam*          m_pBlueTeam;	///> 蓝队
+
+	Goal*                m_pRedGoal;	///> 红队球门
+	Goal*                m_pBlueGoal;	///> 蓝队球门
+
+	std::vector<Wall2D>  m_vecWalls;	///> 边界墙的容器
+
+	Region*              m_pPlayingArea;///> 定义赛场的尺寸
+	std::vector<Region*> m_Regions;		///> 记录所有的场景信息
+	bool                 m_bGoalKeeperHasBall;///> 守门员是否控制了球
+	bool                 m_bGameOn;		///> 记录游戏是否进行中，或者球进了中断比赛
+
+	//set true to pause the motion
+	bool                 m_bPaused;	    ///> 游戏暂停
+
+	//local copy of client window dimensions
+	int                  m_cxClient,    ///> 客户端窗口的本地副本尺寸
+		int				   	 m_cyClient;  
+
+	//this instantiates the regions the players utilize to  position
+	//themselves
+	void CreateRegions(double width, double height);/// 创建一个场景区域
 };

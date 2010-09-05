@@ -2,14 +2,14 @@
 #pragma  once 
 
 #include "../../Public/Common/Autolist.h"
-#include "MoveEntity.h"
+#include "../Regulator.h"
 
 class SoccerTeam;
 class SoccerPitch;
 class SoccerBall;
 class SteeringBehaviors;
 class Region;
-
+class Regulator;
 template < class T>
 class  StateMachine;
 template < class T>

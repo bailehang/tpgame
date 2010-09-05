@@ -1,10 +1,15 @@
-
+/**
+ *   @brief  封装一些实体的函数模板
+ *	 @author expter
+ */
 #pragma  once
 
 #include "BaseEntity.h"
 #include "../../Render/Geometry.h"
 
-
+/**
+ *  判断2个实体是否重叠
+ */
 template <class T, class conT>
 bool Overlapped(const T* ob, const conT& conOb, double MinDistBetweenObstacles = 40.0)
 {

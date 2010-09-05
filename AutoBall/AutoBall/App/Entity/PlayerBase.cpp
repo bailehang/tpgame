@@ -1,3 +1,4 @@
+#include "Stdafx.h"
 #include "PlayerBase.h"
 #include "../Region.h"
 #include "../SoccerTeam.h"
