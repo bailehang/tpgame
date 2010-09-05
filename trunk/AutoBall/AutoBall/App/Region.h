@@ -27,14 +27,15 @@ public:
 
 protected:
 
+	/// 前后左右，坐标
 	double        m_dTop;
 	double        m_dLeft;
 	double        m_dRight;
 	double        m_dBottom;
-
+	/// 长宽
 	double        m_dWidth;
 	double        m_dHeight;
-
+	/// 
 	Vector2D     m_vCenter;
 
 	int          m_iID;
