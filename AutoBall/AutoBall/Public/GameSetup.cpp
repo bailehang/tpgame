@@ -9,7 +9,7 @@ CGameSetup::CGameSetup()
 {
 	ifstream file("setup.ini");
 
-	if ( file.is_open() || file.eof() )
+	if ( !file.is_open() || file.eof() )
 	{
 		return ;
 	}
@@ -17,6 +17,7 @@ CGameSetup::CGameSetup()
 	char str[100];
 	if ( !file.eof() )
 	{
+
 		file >> str >>  GoalWidth 
 			 >> str >>  NumSupportSpotsX
 			 >> str >>  NumSupportSpotsY
@@ -32,9 +33,9 @@ CGameSetup::CGameSetup()
 			 >> str >>  BallMass
 			 >> str >>  Friction
 			 >> str >>  KeeperInBallRange
-			 >> str >>  KeeperInBallRangeSq
 			 >> str >>  PlayerInTargetRange
-			 >> str >>  PlayerInTargetRangeSq
+			 >> str >>  PlayerKickingDistance
+			 >> str >>  PlayerKickFrequency
 			 >> str >>  PlayerMass
 			 >> str >>  PlayerMaxForce 
 			 >> str >>  PlayerMaxSpeedWithBall
@@ -42,25 +43,18 @@ CGameSetup::CGameSetup()
 			 >> str >>  PlayerMaxTurnRate
 			 >> str >>  PlayerScale
 			 >> str >>  PlayerComfortZone
-			 >> str >>  PlayerKickingDistance
-			 >> str >>  PlayerKickingDistanceSq
-			 >> str >>  PlayerKickFrequency 
+			 >> str >>  PlayerKickingAccuracy
+			 >> str >>  NumAttemptsToFindValidStrike
 			 >> str >>  MaxDribbleForce
 			 >> str >>  MaxShootingForce
 			 >> str >>  MaxPassingForce
-			 >> str >>  PlayerComfortZoneSq
-			 >> str >>  PlayerKickingAccuracy
-			 >> str >>  NumAttemptsToFindValidStrike
 			 >> str >>  WithinRangeOfHome
 			 >> str >>  WithinRangeOfSupportSpot
-			 >> str >>  WithinRangeOfSupportSpotSq
 			 >> str >>  MinPassDist
 			 >> str >>  GoalkeeperMinPassDist
 			 >> str >>  GoalKeeperTendingDistance
 			 >> str >>  GoalKeeperInterceptRange
-			 >> str >>  GoalKeeperInterceptRangeSq
 			 >> str >>  BallWithinReceivingRange
-			 >> str >>  BallWithinReceivingRangeSq
 			 >> str >>  bStates
 			 >> str >>  bIDs
 			 >> str >>  bSupportSpots
@@ -72,7 +66,16 @@ CGameSetup::CGameSetup()
 			 >> str >>  SeparationCoefficient
 			 >> str >>  ViewDistance
 			 >> str >>  bNonPenetrationConstraint;
+
 	}
+	BallWithinReceivingRangeSq = BallWithinReceivingRange * BallWithinReceivingRange;
+	KeeperInBallRangeSq      = KeeperInBallRange * KeeperInBallRange;
+	PlayerInTargetRangeSq    = PlayerInTargetRange * PlayerInTargetRange;   
+	PlayerKickingDistance   += BallSize;
+	PlayerKickingDistanceSq  = PlayerKickingDistance * PlayerKickingDistance;
+	PlayerComfortZoneSq      = PlayerComfortZone * PlayerComfortZone;
+	GoalKeeperInterceptRangeSq     = GoalKeeperInterceptRange * GoalKeeperInterceptRange;
+	WithinRangeOfSupportSpotSq = WithinRangeOfSupportSpot * WithinRangeOfSupportSpot;
 }
 
 CGameSetup::~CGameSetup()

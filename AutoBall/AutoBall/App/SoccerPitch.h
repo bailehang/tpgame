@@ -67,8 +67,8 @@ public:
 	bool                 m_bPaused;	    ///> 游戏暂停
 
 	//local copy of client window dimensions
-	int                  m_cxClient,    ///> 客户端窗口的本地副本尺寸
-		int				   	 m_cyClient;  
+	int                  m_cxClient;    ///> 客户端窗口的本地副本尺寸
+	int				   	 m_cyClient;  
 
 	//this instantiates the regions the players utilize to  position
 	//themselves
