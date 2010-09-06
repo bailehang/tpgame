@@ -152,12 +152,20 @@ Vector2D operator / (const Vector2D& a , double vsys )
 
 Vector2D operator + (const Vector2D& a , const Vector2D& b )
 {
-	return  a + b;
+	Vector2D result(a);
+	result.x += b.x;
+	result.y += b.y;
+
+	return result;
 }
 
 Vector2D operator - (const Vector2D& a , const Vector2D& b )
 {
-	return  a - b;
+	Vector2D result(a);
+	result.x -= b.x;
+	result.y -= b.y;
+
+	return result;
 }
 
 

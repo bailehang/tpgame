@@ -152,7 +152,7 @@ public:
 public:
 	void   StartDrawing(HDC hdc)
 	{
-		assert(m_hdc);
+		assert(m_hdc == NULL);
 
 		m_hdc = hdc;
 		m_OldPen = (HPEN)SelectObject( hdc, m_blackPen);
