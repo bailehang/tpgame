@@ -27,6 +27,7 @@ GlobalPlayerState* GlobalPlayerState::Instance()
 
 void GlobalPlayerState::Execute(FieldPlayer* player)                                     
 {
+	/// 如果球员占有并接近球，那么降低他的最大速度
 	//if a player is in possession and close to the ball reduce his max speed
 	if((player->BallWithinReceivingRange()) && (player->isControllingPlayer()))
 	{
@@ -60,12 +61,13 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 
 	case Msg_SupportAttacker:
 		{
-			//if already supporting just return
+			//如果已经在接应，立即返回
 			if (player->GetFSM()->isInState(*SupportAttacker::Instance()))
 			{
 				return true;
 			}
 
+			/// 设置目标最佳接应位置
 			//set the target to be the best supporting position
 			player->Steering()->SetTarget(player->Team()->GetSupportSpot());
 
@@ -100,7 +102,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 
 	case Msg_PassToMe:
 		{  
-
+			/// 得到请求传球的队员位置
 			//get the position of the player requesting the pass 
 			FieldPlayer* receiver = static_cast<FieldPlayer*>(telegram.ExtraInfo);
 
@@ -109,6 +111,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 			//              receiver->ID() << " to make pass" << "";
 #endif
 
+			/// 如果球不在球员可触及的范围，或请求队员不具备射门的条件，改队员不能传球给请求队员
 			//if the ball is not within kicking range or their is already a 
 			//receiving player, this player cannot pass the ball to the player
 			//making the request.
@@ -122,7 +125,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 				return true;
 			}
 
-			//make the pass   
+			//make the pass   传球
 			player->Ball()->Kick(receiver->Pos() - player->Ball()->Pos(),
 				GetInstObj(CGameSetup).MaxPassingForce);
 
@@ -131,6 +134,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 			//debug_con << "Player " << player->ID() << " Passed ball to requesting player" << "";
 #endif
 
+			///通知接球队员，开始传球
 			//let the receiver know a pass is coming 
 			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 				player->GetID(),
@@ -179,6 +183,7 @@ void ChaseBall::Enter(FieldPlayer* player)
 
 void ChaseBall::Execute(FieldPlayer* player)                                     
 {
+	/// 如果球在他能踢到 ，那么该队员改变状态为KickBall
 	//if the ball is within kicking range the player changes state to KickBall.
 	if (player->BallWithinKickingRange())
 	{
@@ -186,7 +191,8 @@ void ChaseBall::Execute(FieldPlayer* player)
 
 		return;
 	}
-
+	
+	/// 如果改球队员离球最近，继续追球
 	//if the player is the closest player to the ball then he should keep
 	//chasing it
 	if (player->isClosestTeamMemberToBall())
@@ -196,6 +202,7 @@ void ChaseBall::Execute(FieldPlayer* player)
 		return;
 	}
 
+	/// 如果该队员不是离球最近，那么他应该回到自己的初始位置，等待下一次
 	//if the player is not closest to the ball anymore, he should return back
 	//to his home region and wait for another opportunity
 	player->GetFSM()->ChangeState(ReturnToHomeRegion::Instance());
@@ -381,6 +388,7 @@ void Wait::Enter(FieldPlayer* player)
 
 void Wait::Execute(FieldPlayer* player)
 {    
+	/// 如果队员被挤出位置，那么要回来原来位置
 	//if the player has been jostled out of position, get back in position  
 	if (!player->AtTarget())
 	{
@@ -395,10 +403,13 @@ void Wait::Execute(FieldPlayer* player)
 
 		player->SetVelocity(Vector2D(0,0));
 
+		///该队员盯球
 		//the player should keep his eyes on the ball!
 		player->TrackBall();
 	}
 
+	/// 如果该队员的球正在控制着球，改队员不是进攻队员，冰球该队员比进攻队员更靠近前场
+	/// 那么他应该请求传球
 	//if this player's team is controlling AND this player is not the attacker
 	//AND is further up the field than the attacker he should request a pass.
 	if ( player->Team()->InControl()    &&
@@ -412,6 +423,7 @@ void Wait::Execute(FieldPlayer* player)
 
 	if (player->Pitch()->GameOn())
 	{
+		/// 如果该队员是球队中离球最近的，球队也没有分配接球队员，同时守门员没有拿着球，那么去追球
 		//if the ball is nearer this player than any other team member  AND
 		//there is not an assigned receiver AND neither goalkeeper has
 		//the ball, go chase it

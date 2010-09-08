@@ -8,6 +8,7 @@
 
 class SoccerTeam;
 
+/// 进攻状态
 //------------------------------------------------------------------------
 class Attacking : public State<SoccerTeam>
 { 
@@ -29,6 +30,7 @@ public:
 	bool OnMessage(SoccerTeam*, const Telegram&){return false;}
 };
 
+/// 防御，队伍归队，回到初始位置
 //------------------------------------------------------------------------
 class Defending : public State<SoccerTeam>
 { 
@@ -50,6 +52,7 @@ public:
 	bool OnMessage(SoccerTeam*, const Telegram&){return false;}
 };
 
+/// 准备开球
 //------------------------------------------------------------------------
 class PrepareForKickOff : public State<SoccerTeam>
 { 
