@@ -292,14 +292,6 @@
 				RelativePath=".\Public\Tool.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Public\WindowUtils.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Public\WindowUtils.h"
-				>
-			</File>
 			<Filter
 				Name="Common"
 				>

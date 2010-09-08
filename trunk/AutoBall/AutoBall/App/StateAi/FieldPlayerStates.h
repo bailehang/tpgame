@@ -18,7 +18,7 @@
 class FieldPlayer;
 class SoccerPitch;
 
-
+/// 全局队员状态
 //------------------------------------------------------------------------
 class GlobalPlayerState : public State<FieldPlayer>
 {
@@ -40,6 +40,7 @@ public:
 	bool OnMessage(FieldPlayer*, const Telegram&);
 };
 
+/// 追球
 //------------------------------------------------------------------------
 class ChaseBall : public State<FieldPlayer>
 {
@@ -61,6 +62,7 @@ public:
 	bool OnMessage(FieldPlayer*, const Telegram&){return false;}
 };
 
+/// 带球
 //------------------------------------------------------------------------
 class Dribble : public State<FieldPlayer>
 {
@@ -82,7 +84,7 @@ public:
 	bool OnMessage(FieldPlayer*, const Telegram&){return false;}
 };
 
-
+/// 归位
 //------------------------------------------------------------------------
 class ReturnToHomeRegion: public State<FieldPlayer>
 {
@@ -104,6 +106,7 @@ public:
 	bool OnMessage(FieldPlayer*, const Telegram&){return false;}
 };
 
+/// 等待
 //------------------------------------------------------------------------
 class Wait: public State<FieldPlayer>
 {
@@ -125,6 +128,7 @@ public:
 	bool OnMessage(FieldPlayer*, const Telegram&){return false;}
 };
 
+/// 踢球
 //------------------------------------------------------------------------
 class KickBall: public State<FieldPlayer>
 {
@@ -146,6 +150,7 @@ public:
 	bool OnMessage(FieldPlayer*, const Telegram&){return false;}
 };
 
+/// 接球
 //------------------------------------------------------------------------
 class ReceiveBall: public State<FieldPlayer>
 {
@@ -167,7 +172,7 @@ public:
 	bool OnMessage(FieldPlayer*, const Telegram&){return false;}
 };
 
-
+/// 接应
 //------------------------------------------------------------------------
 class SupportAttacker: public State<FieldPlayer>
 {

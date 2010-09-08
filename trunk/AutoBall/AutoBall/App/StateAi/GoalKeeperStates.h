@@ -7,6 +7,7 @@
 class GoalKeeper;
 class SoccerPitch;
 
+/// ÊØÃÅÔ±×´Ì¬
 class GlobalKeeperState: public State<GoalKeeper>
 {
 private:

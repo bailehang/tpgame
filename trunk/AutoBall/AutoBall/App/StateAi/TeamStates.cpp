@@ -57,12 +57,14 @@ void Attacking::Enter(SoccerTeam* team)
 
 void Attacking::Execute(SoccerTeam* team)
 {
+	/// 如果队伍不在控球，改变状态
 	//if this team is no longer in control change states
 	if (!team->InControl())
 	{
 		team->GetFSM()->ChangeState(Defending::Instance()); return;
 	}
 
+	/// 给接应队员计算最佳位置
 	//calculate the best position for any supporting attacker to move to
 	team->DetermineBestSupportingPosition();
 }
@@ -132,6 +134,7 @@ PrepareForKickOff* PrepareForKickOff::Instance()
 
 void PrepareForKickOff::Enter(SoccerTeam* team)
 {
+	/// 重置关键队伍的指针
 	//reset key player pointers
 	team->SetControllingPlayer(NULL);
 	team->SetSupportingPlayer(NULL);
