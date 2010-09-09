@@ -182,15 +182,19 @@ bool SoccerTeam::FindPass(const PlayerBase*const passer,
 						  double                  MinPassingDistance)const
 {  
 
+
 	std::vector<PlayerBase*>::const_iterator curPlyr = Members().begin();
 
 	double    ClosestToGoalSoFar = MaxFloat;
 	Vector2D Target;
 
+
+	/// 迭代这个队员所在球队的所有队员，计算谁是接球对象
 	//iterate through all this player's team members and calculate which
 	//one is in a position to be passed the ball 
 	for (curPlyr; curPlyr != Members().end(); ++curPlyr)
 	{   
+		/// 确保潜在的接球队员不是这个队员自己，切他所在位置与传球队员的距离大于最小传球距离
 		//make sure the potential receiver being examined is not this player
 		//and that it is further away than the minimum pass distance
 		if ( (*curPlyr != passer) &&            
@@ -199,6 +203,7 @@ bool SoccerTeam::FindPass(const PlayerBase*const passer,
 		{           
 			if (GetBestPassToReceiver(passer, *curPlyr, Target, power))
 			{
+				///	如果传球目标是到目标位置所找到的离对方球门线最近的记录它
 				//if the pass target is the closest to the opponent's goal line found
 				// so far, keep a record of it
 				double Dist2Goal = fabs(Target.x - OpponentsGoal()->Center().x);
@@ -207,9 +212,11 @@ bool SoccerTeam::FindPass(const PlayerBase*const passer,
 				{
 					ClosestToGoalSoFar = Dist2Goal;
 
+					/// 记录这个队员
 					//keep a record of this player
 					receiver = *curPlyr;
 
+					/// 和这个目标
 					//and the target
 					PassTarget = Target;
 				}     
@@ -239,23 +246,28 @@ bool SoccerTeam::GetBestPassToReceiver(const PlayerBase* const passer,
 									   Vector2D&               PassTarget,
 									   double                   power)const
 {  
+	/// 首先，计算球到达这个接球队员要花多长时间
 	//first, calculate how much time it will take for the ball to reach 
 	//this receiver, if the receiver was to remain motionless 
 	double time = Pitch()->Ball()->TimeToCoverDistance(Pitch()->Ball()->Pos(),
 		receiver->Pos(),
 		power);
 
+	/// 如果在给定的力的作用下无法失球到达接球队员那里，返回假
 	//return false if ball cannot reach the receiver after having been
 	//kicked with the given power
 	if (time < 0) return false;
 
+	/// 这段时间中，接球队员能覆盖的最大距离
 	//the maximum distance the receiver can cover in this time
 	double InterceptRange = time * receiver->MaxSpeed();
 
+	/// 缩小截球范围
 	//Scale the intercept range
 	const double ScalingFactor = 0.3;
 	InterceptRange *= ScalingFactor;
 
+	/// 计算在球道接球队员圈的切线范围内的传球目标
 	//now calculate the pass targets which are positioned at the intercepts
 	//of the tangents from the ball to the receiver's range circle.
 	Vector2D ip1, ip2;
@@ -269,6 +281,11 @@ bool SoccerTeam::GetBestPassToReceiver(const PlayerBase* const passer,
 	const int NumPassesToTry = 3;
 	Vector2D Passes[NumPassesToTry] = {ip1, receiver->Pos(), ip2};
 
+
+	/// 目前为止这个传球的最佳的，如果
+	/// 1.目前为止找到的比最近的有效传球更前场的位置
+	/// 2.在赛场上
+	/// 3.球不会被对方截中
 
 	// this pass is the best found so far if it is:
 	//
@@ -312,6 +329,7 @@ bool SoccerTeam::isPassSafeFromOpponent(Vector2D    from,
 										const PlayerBase* const opp,
 										double       PassingForce)const
 {
+	/// 把对手移动本地空间
 	//move the opponent into local space.
 	Vector2D ToTarget = target - from;
 	Vector2D ToTargetNormalized = Vec2DNormalize(ToTarget);
@@ -321,6 +339,8 @@ bool SoccerTeam::isPassSafeFromOpponent(Vector2D    from,
 		ToTargetNormalized.Perp(),
 		from);
 
+	/// 如果对手在踢球者后面，那么被认为可以传球
+	/// 这是基于这样的假设，球将被踢出的速度远大于对手的最大速度
 	//if opponent is behind the kicker then pass is considered okay(this is 
 	//based on the assumption that the ball is going to be kicked with a 
 	//velocity greater than the opponent's max velocity)
@@ -329,10 +349,14 @@ bool SoccerTeam::isPassSafeFromOpponent(Vector2D    from,
 		return true;
 	}
 
+	/// 如果对手到目标的距离更远
+	/// 那么我们需要考虑对手可以接球队员先到达该位置
 	//if the opponent is further away than the target we need to consider if
 	//the opponent can reach the position before the receiver.
 	if (Vec2DDistanceSq(from, target) < Vec2DDistanceSq(opp->Pos(), from))
 	{
+		/// 此条件语句放在这里是因为有事调用这个函数是，没有对接球者的引用
+		/// 例如，你可能像知道球是否可以赶在对手之前到达场上的某个位置
 		if (receiver)
 		{
 			if ( Vec2DDistanceSq(target, opp->Pos())  > 
@@ -354,6 +378,7 @@ bool SoccerTeam::isPassSafeFromOpponent(Vector2D    from,
 		} 
 	}
 
+	/// 计算球多久到达与对手正交的位置
 	//calculate how long it takes the ball to cover the distance to the 
 	//position orthogonal to the opponents position
 	double TimeForBall = 
@@ -361,11 +386,13 @@ bool SoccerTeam::isPassSafeFromOpponent(Vector2D    from,
 		Vector2D(LocalPosOpp.x, 0),
 		PassingForce);
 
+	/// 现在计算在这段时间中对手能跑多远
 	//now calculate how far the opponent can run in this time
 	double reach = opp->MaxSpeed() * TimeForBall +
 		Pitch()->Ball()->BRadius()+
 		opp->BRadius();
 
+	/// 如果到对手Y位置的距离小于他的跑动范围加上球半径和对手半径，那么求可以被截掉
 	//if the distance to the opponent's y position is less than his running
 	//range plus the radius of the ball and the opponents radius then the
 	//ball can be intercepted
@@ -416,15 +443,19 @@ bool SoccerTeam::CanShoot(Vector2D  BallPos,
 						  double     power, 
 						  Vector2D& ShotTarget)const
 {
+
+	/// 这个方法要测试的随机选取的射门目标的数量
 	//the number of randomly created shot targets this method will test 
 	int NumAttempts = GetInstObj(CGameSetup).NumAttemptsToFindValidStrike;
 
 	while (NumAttempts--)
 	{
+		/// 沿着对方的球门选这个一个随机位置（确保考虑了球的半径）
 		//choose a random position along the opponent's goal mouth. (making
 		//sure the ball's radius is taken into account)
 		ShotTarget = OpponentsGoal()->Center();
 
+		/// 射门位置的Y值应该在两个球门柱之间（要考虑球的直径）
 		//the y value of the shot position should lay somewhere between two
 		//goalposts (taking into consideration the ball diameter)
 		int MinYVal = (int)(OpponentsGoal()->LeftPost().y + Pitch()->Ball()->BRadius());
@@ -432,12 +463,14 @@ bool SoccerTeam::CanShoot(Vector2D  BallPos,
 
 		ShotTarget.y = (double)RandInt(MinYVal, MaxYVal);
 
+		/// 确保踢球力足够使球越过球门线
 		//make sure striking the ball with the given power is enough to drive
 		//the ball over the goal line.
 		double time = Pitch()->Ball()->TimeToCoverDistance(BallPos,
 			ShotTarget,
 			power);
 
+		/// 如果是这样，测试这次射门是否会被任何对手截掉
 		//if it is, this shot is then tested to see if any of the opponents
 		//can intercept it.
 		if (time >= 0)
