@@ -239,13 +239,14 @@ void SupportAttacker::Enter(FieldPlayer* player)
 
 void SupportAttacker::Execute(FieldPlayer* player)                                     
 {
+	/// 如果自己球队丢失对球的控制权，球员回到起始区域
 	//if his team loses control go back home
 	if (!player->Team()->InControl())
 	{
 		player->GetFSM()->ChangeState(ReturnToHomeRegion::Instance()); return;
 	} 
 
-
+	/// 如果最佳接应点改变了，那么改变操控目标
 	//if the best supporting spot changes, change the steering target
 	if (player->Team()->GetSupportSpot() != player->Steering()->Target())
 	{    
@@ -254,6 +255,7 @@ void SupportAttacker::Execute(FieldPlayer* player)
 		player->Steering()->ArriveOn();
 	}
 
+	/// 如果这么球员可以射门，切进攻队员可以把球传给他，那么把球传给该队员
 	//if this player has a shot at the goal AND the attacker can pass
 	//the ball to him the attacker should pass the ball to this player
 	if( player->Team()->CanShoot(player->Pos(),
@@ -262,18 +264,20 @@ void SupportAttacker::Execute(FieldPlayer* player)
 		player->Team()->RequestPass(player);
 	}
 
-
+	/// 如果这名队员在接应点，且他的球队仍控制球，他应该停在那儿，转向面对着球
 	//if this player is located at the support spot and his team still have
 	//possession, he should remain still and turn to face the ball
 	if (player->AtTarget())
 	{
 		player->Steering()->ArriveOff();
 
+		/// 队员跟踪球
 		//the player should keep his eyes on the ball!
 		player->TrackBall();
 
 		player->SetVelocity(Vector2D(0,0));
 
+		/// 如果没有收到其他队员的威胁，那么请求传球
 		//if not threatened by another player request a pass
 		if (!player->isThreatened())
 		{
@@ -455,9 +459,11 @@ KickBall* KickBall::Instance()
 
 void KickBall::Enter(FieldPlayer* player)
 {
+	/// 使球队直到该队员正在控制球
 	//let the team know this player is controlling
 	player->Team()->SetControllingPlayer(player);
 
+	/// 该队员每秒只能惊喜有限次数的踢球
 	//the player can only make so many kick attempts per second.
 	if (!player->isReadyForNextKick()) 
 	{
@@ -472,11 +478,14 @@ void KickBall::Enter(FieldPlayer* player)
 
 void KickBall::Execute(FieldPlayer* player)
 { 
+	/// 计算指向球的向量与球员自己的朝向向量的点积
 	//calculate the dot product of the vector pointing to the ball
 	//and the player's heading
 	Vector2D ToBall = player->Ball()->Pos() - player->Pos();
 	double   dot    = player->Heading().Dot(Vec2DNormalize(ToBall)); 
 
+	/// 如果守门员控制了球，或者球还在该队员的后面，
+	/// 或者已经分配了接球队员，就不能踢球，所以只是继续追球
 	//cannot kick the ball if the goalkeeper is in possession or if it is 
 	//behind the player or if there is already an assigned receiver. So just
 	//continue chasing the ball
@@ -495,14 +504,17 @@ void KickBall::Execute(FieldPlayer* player)
 
 	/* Attempt a shot at the goal */
 
+	/// 计算指向球的向量与球员自己的朝向向量的点积
 	//if a shot is possible, this vector will hold the position along the 
 	//opponent's goal line the player should aim for.
 	Vector2D    BallTarget;
 
+	/// 计算指向球的向量与球员自己的朝向向量的点积
 	//the dot product is used to adjust the shooting force. The more
 	//directly the ball is ahead, the more forceful the kick
 	double power = GetInstObj(CGameSetup).MaxShootingForce * dot;
 
+	/// 如果确认该队员可以在这个位置射门，或者无论如何他都改该踢一下球，那该队员则试图射门
 	//if it is determined that the player could score a goal from this position
 	//OR if he should just kick the ball anyway, the player will attempt
 	//to make the shot
@@ -515,11 +527,14 @@ void KickBall::Execute(FieldPlayer* player)
 		// debug_con << "Player " << player->ID() << " attempts a shot at " << BallTarget << "";
 #endif
 
+		/// 给射门增加一些干扰，我们不想让队员踢得太准，
+		/// 通过改变PlayerKickingAccuracy值可以调整干扰数值
 		//add some noise to the kick. We don't want players who are 
 		//too accurate! The amount of noise can be adjusted by altering
 		//GetInstObj(CGameSetup).PlayerKickingAccuracy
 		BallTarget = AddNoiseToKick(player->Ball()->Pos(), BallTarget);
 
+		///这是踢球的方向
 		//this is the direction the ball will be kicked in
 		Vector2D KickDirection = BallTarget - player->Ball()->Pos();
 
@@ -536,11 +551,13 @@ void KickBall::Execute(FieldPlayer* player)
 
 	/* Attempt a pass to a player */
 
+	/// 找到接球队员，那么receiver将指向他
 	//if a receiver is found this will point to it
 	PlayerBase* receiver = NULL;
 
 	power = GetInstObj(CGameSetup).MaxPassingForce * dot;
 
+	/// 测试是否有任何潜在的候选人可以接球
 	//test if there are any potential candidates available to receive a pass
 	if (player->isThreatened()  &&
 		player->Team()->FindPass(player,
@@ -549,6 +566,7 @@ void KickBall::Execute(FieldPlayer* player)
 		power,
 		GetInstObj(CGameSetup).MinPassDist))
 	{     
+		/// 给踢球增加一些干扰
 		//add some noise to the kick
 		BallTarget = AddNoiseToKick(player->Ball()->Pos(), BallTarget);
 
@@ -562,6 +580,7 @@ void KickBall::Execute(FieldPlayer* player)
 #endif
 
 
+		/// 让接球队员知道要传球
 		//let the receiver know a pass is coming 
 		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 			player->GetID(),
@@ -570,6 +589,7 @@ void KickBall::Execute(FieldPlayer* player)
 			&BallTarget);                            
 
 
+		/// 该队员应该等在他的当前位置，除非另有指示
 		//the player should wait at his current position unless instruced
 		//otherwise  
 		player->GetFSM()->ChangeState(Wait::Instance());
@@ -579,6 +599,7 @@ void KickBall::Execute(FieldPlayer* player)
 		return;
 	}
 
+	/// 不能射门和传球，只能带球到前场
 	//cannot shoot or pass, so dribble the ball upfield
 	else
 	{   
@@ -601,6 +622,7 @@ Dribble* Dribble::Instance()
 
 void Dribble::Enter(FieldPlayer* player)
 {
+	/// 玩家正在控球
 	//let the team know this player is controlling
 	player->Team()->SetControllingPlayer(player);
 
@@ -611,17 +633,24 @@ void Dribble::Enter(FieldPlayer* player)
 
 void Dribble::Execute(FieldPlayer* player)
 {
+
 	double dot = player->Team()->HomeGoal()->Facing().Dot(player->Heading());
 
+
+	/// 如果球在队员和自己方球们之间，他们需要通过多次轻踢和小转弯
 	//if the ball is between the player and the home goal, it needs to swivel
 	// the ball around by doing multiple small kicks and turns until the player 
 	//is facing in the correct direction
 	if (dot < 0)
 	{
+		
+		/// 队员的朝向稍微转移下（PI/4），然后在那个方向踢球
 		//the player's heading is going to be rotated by a small amount (Pi/4) 
 		//and then the ball will be kicked in that direction
 		Vector2D direction = player->Heading();
 
+		/// 计算队员的朝向和球门的朝向之间角度的正负号(+/-)
+		/// 使得队员可以转到正确方向
 		//calculate the sign (+/-) of the angle between the player heading and the 
 		//facing direction of the goal so that the player rotates around in the 
 		//correct direction
@@ -630,6 +659,7 @@ void Dribble::Execute(FieldPlayer* player)
 
 		Vec2DRotateAroundOrigin(direction, angle);
 
+		/// 当队员正在实体控制球，且同时转弯时，这个值起到很好的作用
 		//this value works well whjen the player is attempting to control the
 		//ball and turn at the same time
 		const double KickingForce = 0.8;
@@ -637,6 +667,7 @@ void Dribble::Execute(FieldPlayer* player)
 		player->Ball()->Kick(direction, KickingForce);
 	}
 
+	/// 踢球
 	//kick the ball down the field
 	else
 	{
@@ -644,6 +675,7 @@ void Dribble::Execute(FieldPlayer* player)
 			GetInstObj(CGameSetup).MaxDribbleForce);  
 	}
 
+	/// 改队员已经踢球了，所以他必须改变状态去追球
 	//the player has kicked the ball so he must now change state to follow it
 	player->GetFSM()->ChangeState(ChaseBall::Instance());
 
@@ -664,9 +696,11 @@ ReceiveBall* ReceiveBall::Instance()
 
 void ReceiveBall::Enter(FieldPlayer* player)
 {
+	/// 让球员知道，这个队员正在接球
 	//let the team know this player is receiving the ball
 	player->Team()->SetReceiver(player);
 
+	/// 该队员现在也是控球队员
 	//this player is also now the controlling player
 	player->Team()->SetControllingPlayer(player);
 
@@ -678,6 +712,10 @@ void ReceiveBall::Enter(FieldPlayer* player)
 	//player is close to the receiving player, and whether or not the receiving
 	//player is in the opponents 'hot region' (the third of the pitch closest
 	//to the opponent's goal
+	/// 有2类控球行为，1.用arrive指导接球队员到达传球队员发送的消息中制定的位置，2.
+	/// 2.用Pursuit行为来追逐球
+	/// 这个语句依据ChanceOfUsingArriveTypeReceiveBehavior的可能性选择其一，判断是否有对方队员靠近接球队员
+	/// 是否接球队员在对方的热区（所有队员中离对方球门第三近的）
 	const double PassThreatRadius = 70.0;
 
 	if (( player->InHotRegion() ||
@@ -702,6 +740,7 @@ void ReceiveBall::Enter(FieldPlayer* player)
 
 void ReceiveBall::Execute(FieldPlayer* player)
 {
+	/// 如果他离球足够近或者他的球队市区球的控制权，那么他应该状态去追求
 	//if the ball comes close enough to the player or if his team lose control
 	//he should change state to chase the ball
 	if (player->BallWithinReceivingRange() || !player->Team()->InControl())
@@ -711,11 +750,13 @@ void ReceiveBall::Execute(FieldPlayer* player)
 		return;
 	}  
 
+	/// 如果Pursuit操控行为被用来追球，那么该队员的目标必须随着球的位置不断的更新
 	if (player->Steering()->PursuitIsOn())
 	{
 		player->Steering()->SetTarget(player->Ball()->Pos());
 	}
 
+	/// 如果改队员达到了操控目标的位置，那么它应该等在哪儿，并转向面对着球
 	//if the player has 'arrived' at the steering target he should wait and
 	//turn to face the ball
 	if (player->AtTarget())

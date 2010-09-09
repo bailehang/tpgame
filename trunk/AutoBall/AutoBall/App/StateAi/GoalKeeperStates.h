@@ -29,7 +29,7 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-
+/// 守球门
 class TendGoal: public State<GoalKeeper>
 {
 private:
@@ -50,6 +50,7 @@ public:
 	bool OnMessage(GoalKeeper*, const Telegram&){return false;}
 };
 
+/// 截球
 //------------------------------------------------------------------------
 class InterceptBall: public State<GoalKeeper>
 {
@@ -71,6 +72,7 @@ public:
 	bool OnMessage(GoalKeeper*, const Telegram&){return false;}
 };
 
+/// 回到起始位置
 //------------------------------------------------------------------------
 class ReturnHome: public State<GoalKeeper>
 {
@@ -92,6 +94,7 @@ public:
 	bool OnMessage(GoalKeeper*, const Telegram&){return false;}
 };
 
+/// 把球传回到赛场中
 //------------------------------------------------------------------------
 class PutBallBackInPlay: public State<GoalKeeper>
 {

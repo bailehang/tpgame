@@ -7,7 +7,6 @@
 class SoccerTeam;
 class SoccerPitch;
 class SoccerBall;
-class SteeringBehaviors;
 class Region;
 class Regulator;
 template < class T>
