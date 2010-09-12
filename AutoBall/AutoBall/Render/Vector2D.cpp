@@ -3,7 +3,7 @@
 
 void  Vector2D::Zero()
 {
-	x = y = z = 0;
+	x = y = 0;
 }
 
 bool  Vector2D::IsZero() const

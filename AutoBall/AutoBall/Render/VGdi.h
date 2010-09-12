@@ -26,7 +26,7 @@ const  COLORREF  colors[ SNumber ] =
 	RGB(255,0,170),
 	RGB(133,90,0),
 	RGB(255,255,255),  
-	RGB(0, 64, 64),         //dark green
+	RGB(0, 72, 0),          //dark green
 	RGB(0, 255, 255),       //light blue
 	RGB(200, 200, 200),     //light grey
 	RGB(255, 230, 230)      //light pink

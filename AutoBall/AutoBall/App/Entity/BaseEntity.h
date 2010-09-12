@@ -21,7 +21,7 @@ public:
 
 	virtual   void  Render() = 0 ;
 
-	virtual	  bool  HandleEvent(const Telegram& e ){ return false;}
+	virtual	  bool  HandleMessage(const Telegram& e ){ return false;}
 
 	virtual	  void  Write(std::ostream&  os)const{}
 	virtual	  void  Read (std::ifstream& is){}

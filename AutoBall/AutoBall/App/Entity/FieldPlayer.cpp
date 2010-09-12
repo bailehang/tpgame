@@ -145,8 +145,14 @@ void FieldPlayer::Render()
 	GetInstObj(CGDI).TextColor(CGDI::grey);
 
 	//set appropriate team color
-	if (Team()->Color() == SoccerTeam::blue){GetInstObj(CGDI).BluePen();}
-	else{GetInstObj(CGDI).RedPen();}
+	if (Team()->Color() == SoccerTeam::blue)
+	{
+		GetInstObj(CGDI).BluePen();
+	}
+	else
+	{
+		GetInstObj(CGDI).RedPen();
+	}
 
 
 
@@ -155,14 +161,21 @@ void FieldPlayer::Render()
 		Pos(),
 		Heading(),
 		Side(),
-		Scale());
-	GetInstObj(CGDI).ClosedShape(m_vecPlayerVBTrans);  
+		Scale());  
+	GetInstObj(CGDI).ClosedShape(m_vecPlayerVBTrans); /**/ 
 
 	//and 'is 'ead
 	GetInstObj(CGDI).BrownBrush();
-	if (GetInstObj(CGameSetup).bHighlightIfThreatened && (Team()->ControllingPlayer() == this) && isThreatened()) GetInstObj(CGDI).YellowBrush();
-	GetInstObj(CGDI).Circle(Pos(), 6);
+	if (GetInstObj(CGameSetup).bHighlightIfThreatened && 
+		(Team()->ControllingPlayer() == this) && 
+		isThreatened() ) 
+		GetInstObj(CGDI).YellowBrush();
 
+	GetInstObj(CGDI).Circle(Pos(), 5);
+	/*
+	GetInstObj(CGDI).TextColor(255, 0, 0);
+	GetInstObj(CGDI).TextAtPos(Pos().x-3, Pos().y-5, ttos(GetID()) );
+	*/
 
 	//render the state
 	if (GetInstObj(CGameSetup).bStates)
@@ -172,11 +185,13 @@ void FieldPlayer::Render()
 	}
 
 	//show IDs
+	
 	if (GetInstObj(CGameSetup).bIDs)
 	{
 		GetInstObj(CGDI).TextColor(0, 170, 0);
 		GetInstObj(CGDI).TextAtPos(Pos().x-20, Pos().y-20, ttos(GetID()));
 	}
+	
 
 
 	if (GetInstObj(CGameSetup).bViewTargets)
@@ -184,5 +199,5 @@ void FieldPlayer::Render()
 		GetInstObj(CGDI).RedBrush();
 		GetInstObj(CGDI).Circle(Steering()->Target(), 3);
 		GetInstObj(CGDI).TextAtPos(Steering()->Target(), ttos(GetID()));
-	}   
+	}  /**/ 
 }

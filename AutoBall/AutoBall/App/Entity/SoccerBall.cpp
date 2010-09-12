@@ -117,7 +117,7 @@ Vector2D SoccerBall::FuturePosition(double time)const
 //------------------------------------------------------------------------
 void SoccerBall::Render()
 {
-	GetInstObj(CGDI).BlackBrush();
+	GetInstObj(CGDI).GreyBrush();
 
 	GetInstObj(CGDI).Circle(m_vPosition, m_dBoundingRadius);
 
