@@ -86,7 +86,6 @@ private:
 public:
 
 	double    x , y;   /// x,y坐标
-	double    z ;	   /// 代表方向
 };
 
 inline Vector2D Vec2DNormalize(const Vector2D &v)

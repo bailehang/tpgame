@@ -118,10 +118,8 @@ void SoccerPitch::Update()
 	m_pBall->Update();
 
 	//update the teams
-	m_pBlueTeam->Update();
-
 	m_pRedTeam->Update();
-	
+	m_pBlueTeam->Update();
 
 	//if a goal has been detected reset the pitch ready for kickoff
 	if (m_pBlueGoal->Scored(m_pBall) || m_pRedGoal->Scored(m_pBall))

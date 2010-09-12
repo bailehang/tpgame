@@ -183,7 +183,7 @@ void ChaseBall::Enter(FieldPlayer* player)
 
 void ChaseBall::Execute(FieldPlayer* player)                                     
 {
-	/// 如果球在他能踢到 ，那么该队员改变状态为KickBall
+	/// 如果球在他能踢到 ，那么该队员改变状态为KickBall		  BallWithinReceivingRange
 	//if the ball is within kicking range the player changes state to KickBall.
 	if (player->BallWithinKickingRange())
 	{

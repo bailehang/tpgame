@@ -28,7 +28,7 @@ MessageDispatcher* MessageDispatcher::Instance()
 //------------------------------------------------------------------------
 void MessageDispatcher::Discharge(CBaseEntity* pReceiver, const Telegram& telegram)
 {
-	if (!pReceiver->HandleEvent(telegram))
+	if (!pReceiver->HandleMessage(telegram))
 	{
 		//telegram could not be handled
 #ifdef SHOW_MESSAGING_INFO

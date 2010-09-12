@@ -105,6 +105,18 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		MessageBox(NULL, "CreateWindowEx Failed!", "Error!", 0);
 	}
 
+	/*
+	HWND hwndButton  = CreateWindowEx(0,_T("Button"),_T("¿ªÊ¼"),WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 
+					50,    
+					10,  
+					30,        
+					30,      
+					hWnd,      
+					NULL,      
+					(HINSTANCE) GetWindowLong(hWnd, GWL_HINSTANCE), 
+					NULL); 
+
+	*/
 	g_hWndDC=GetDC(hWnd);
 
 	//start the timer

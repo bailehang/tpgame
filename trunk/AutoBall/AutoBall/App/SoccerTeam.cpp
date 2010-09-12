@@ -120,6 +120,10 @@ void SoccerTeam::CalculateClosestPlayerToBall()
 		//calculate the dist. Use the squared value to avoid sqrt
 		double dist = Vec2DDistanceSq((*it)->Pos(), Pitch()->Ball()->Pos());
 
+		if( dist <110 )
+		{
+			 (*it)->SetDistSqToBall(dist);
+		}
 		//keep a record of this value for each player
 		(*it)->SetDistSqToBall(dist);
 
