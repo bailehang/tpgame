@@ -12,6 +12,17 @@
 #include "../Telegram.h"
 #include "../../Config.h"	
 
+#include <fstream>
+#include <iostream>
+#include <stdio.h>
+using namespace std;
+
+#define PutFileLog(str)\
+	{\
+		freopen("log.txt","ab+",stdout);\
+		std::cout << str << std::endl;\
+	}
+
 #define PLAYER_STATE_INFO_ON
 
 
@@ -107,7 +118,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 			FieldPlayer* receiver = static_cast<FieldPlayer*>(telegram.ExtraInfo);
 
 #ifdef PLAYER_STATE_INFO_ON
-			// debug_con << "Player " << player->ID() << " received request from " <<
+			// debug_con << "Player " << player->GetID() << " received request from " <<
 			//              receiver->ID() << " to make pass" << "";
 #endif
 
@@ -119,7 +130,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 				!player->BallWithinKickingRange() )
 			{
 #ifdef PLAYER_STATE_INFO_ON
-				//debug_con << "Player " << player->ID() << " cannot make requested pass <cannot kick ball>" << "";
+				//debug_con << "Player " << player->GetID() << " cannot make requested pass <cannot kick ball>" << "";
 #endif
 
 				return true;
@@ -131,7 +142,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 
 
 #ifdef PLAYER_STATE_INFO_ON
-			//debug_con << "Player " << player->ID() << " Passed ball to requesting player" << "";
+			//debug_con << "Player " << player->GetID() << " Passed ball to requesting player" << "";
 #endif
 
 			///通知接球队员，开始传球
@@ -174,10 +185,17 @@ ChaseBall* ChaseBall::Instance()
 
 void ChaseBall::Enter(FieldPlayer* player)
 {
+	if( player->GetID() == 9 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter ChaseBall ");
+		PutFileLog(str);
+	}
+
 	player->Steering()->SeekOn();
 
 #ifdef PLAYER_STATE_INFO_ON
-	// debug_con << "Player " << player->ID() << " enters chase state" << "";
+	// debug_con << "Player " << player->GetID() << " enters chase state" << "";
 #endif
 }
 
@@ -228,12 +246,18 @@ SupportAttacker* SupportAttacker::Instance()
 
 void SupportAttacker::Enter(FieldPlayer* player)
 {
+	if( player->GetID() == 9 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter SupportAttacker ");
+		PutFileLog(str);
+	}
 	player->Steering()->ArriveOn();
 
 	player->Steering()->SetTarget(player->Team()->GetSupportSpot());
 
 #ifdef PLAYER_STATE_INFO_ON
-	//  debug_con << "Player " << player->ID() << " enters support state" << "";
+	//  debug_con << "Player " << player->GetID() << " enters support state" << "";
 #endif
 }
 
@@ -311,6 +335,12 @@ ReturnToHomeRegion* ReturnToHomeRegion::Instance()
 
 void ReturnToHomeRegion::Enter(FieldPlayer* player)
 {
+	if( player->GetID() == 9 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter ReturnToHomeRegion ");
+		PutFileLog(str);
+	}
 	player->Steering()->ArriveOn();
 
 	if (!player->HomeRegion()->Inside(player->Steering()->Target(), Region::halfsize))
@@ -319,7 +349,7 @@ void ReturnToHomeRegion::Enter(FieldPlayer* player)
 	}
 
 #ifdef PLAYER_STATE_INFO_ON
-	//  debug_con << "Player " << player->ID() << " enters ReturnToHome state" << "";
+	//  debug_con << "Player " << player->GetID() << " enters ReturnToHome state" << "";
 #endif
 }
 
@@ -377,8 +407,14 @@ Wait* Wait::Instance()
 
 void Wait::Enter(FieldPlayer* player)
 {
+	if( player->GetID() == 9 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter Wait ");
+		PutFileLog(str);
+	}
 #ifdef PLAYER_STATE_INFO_ON
-	//  debug_con << "Player " << player->ID() << " enters wait state" << "";
+	//  debug_con << "Player " << player->GetID() << " enters wait state" << "";
 #endif
 
 	//if the game is not on make sure the target is the center of the player's
@@ -459,6 +495,13 @@ KickBall* KickBall::Instance()
 
 void KickBall::Enter(FieldPlayer* player)
 {
+	if( player->GetID() == 9 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter KickBall ");
+		PutFileLog(str);
+	}
+
 	/// 使球队直到该队员正在控制球
 	//let the team know this player is controlling
 	player->Team()->SetControllingPlayer(player);
@@ -472,7 +515,7 @@ void KickBall::Enter(FieldPlayer* player)
 
 
 #ifdef PLAYER_STATE_INFO_ON
-	//  debug_con << "Player " << player->ID() << " enters kick state" << "";
+	//  debug_con << "Player " << player->GetID() << " enters kick state" << "";
 #endif
 }
 
@@ -524,7 +567,7 @@ void KickBall::Execute(FieldPlayer* player)
 		(RandFloat() < GetInstObj(CGameSetup).ChancePlayerAttemptsPotShot))
 	{
 #ifdef PLAYER_STATE_INFO_ON
-		// debug_con << "Player " << player->ID() << " attempts a shot at " << BallTarget << "";
+		// debug_con << "Player " << player->GetID() << " attempts a shot at " << BallTarget << "";
 #endif
 
 		/// 给射门增加一些干扰，我们不想让队员踢得太准，
@@ -575,7 +618,7 @@ void KickBall::Execute(FieldPlayer* player)
 		player->Ball()->Kick(KickDirection, power);
 
 #ifdef PLAYER_STATE_INFO_ON
-		//    debug_con << "Player " << player->ID() << " passes the ball with force " << power << "  to player " 
+		//    debug_con << "Player " << player->GetID() << " passes the ball with force " << power << "  to player " 
 		//             << receiver->ID() << "  Target is " << BallTarget << "";
 #endif
 
@@ -622,12 +665,20 @@ Dribble* Dribble::Instance()
 
 void Dribble::Enter(FieldPlayer* player)
 {
+
+	if( player->GetID() == 9 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter Dribble ");
+		PutFileLog(str);
+	}
+
 	/// 玩家正在控球
 	//let the team know this player is controlling
 	player->Team()->SetControllingPlayer(player);
 
 #ifdef PLAYER_STATE_INFO_ON
-	//  debug_con << "Player " << player->ID() << " enters dribble state" << "";
+	//  debug_con << "Player " << player->GetID() << " enters dribble state" << "";
 #endif
 }
 
@@ -696,6 +747,13 @@ ReceiveBall* ReceiveBall::Instance()
 
 void ReceiveBall::Enter(FieldPlayer* player)
 {
+	if( player->GetID() == 9 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter ReceiveBall ");
+		PutFileLog(str);
+	}
+
 	/// 让球员知道，这个队员正在接球
 	//let the team know this player is receiving the ball
 	player->Team()->SetReceiver(player);
@@ -725,7 +783,7 @@ void ReceiveBall::Enter(FieldPlayer* player)
 		player->Steering()->ArriveOn();
 
 #ifdef PLAYER_STATE_INFO_ON
-		//    debug_con << "Player " << player->ID() << " enters receive state (Using Arrive)" << "";
+		//    debug_con << "Player " << player->GetID() << " enters receive state (Using Arrive)" << "";
 #endif
 	}
 	else
@@ -733,7 +791,7 @@ void ReceiveBall::Enter(FieldPlayer* player)
 		player->Steering()->PursuitOn();
 
 #ifdef PLAYER_STATE_INFO_ON
-		//    debug_con << "Player " << player->ID() << " enters receive state (Using Pursuit)" << "";
+		//    debug_con << "Player " << player->GetID() << " enters receive state (Using Pursuit)" << "";
 #endif
 	}
 }

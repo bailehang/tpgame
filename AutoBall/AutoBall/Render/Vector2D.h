@@ -1,5 +1,5 @@
 /**
- * brief  关于2维向量的一个封装类
+ * @brief  关于2维向量的一个封装类
  *
  *
  */
@@ -80,8 +80,6 @@ public:
 	friend Vector2D operator + (const Vector2D& a , const Vector2D& b );
 
 	friend Vector2D operator - (const Vector2D& a , const Vector2D& b );
-
-private:
 
 public:
 
