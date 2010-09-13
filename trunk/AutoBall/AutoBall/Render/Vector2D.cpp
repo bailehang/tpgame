@@ -45,10 +45,10 @@ double  Vector2D::Dot(const Vector2D& v2)const
 
 int    Vector2D::Sign(const Vector2D &v2) const
 {
-	if ( x*v2.x > y*v2.y)
-		return 1;
-	else
+	if ( y*v2.x > x*v2.y)
 		return -1;
+	else
+		return 1;
 }
 
 Vector2D Vector2D::Perp() const
