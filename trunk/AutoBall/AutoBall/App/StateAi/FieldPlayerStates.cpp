@@ -12,16 +12,6 @@
 #include "../Telegram.h"
 #include "../../Config.h"	
 
-#include <fstream>
-#include <iostream>
-#include <stdio.h>
-using namespace std;
-
-#define PutFileLog(str)\
-	{\
-		freopen("log.txt","ab+",stdout);\
-		std::cout << str << std::endl;\
-	}
 
 #define PLAYER_STATE_INFO_ON
 
@@ -188,7 +178,7 @@ void ChaseBall::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter ChaseBall ");
+	    sprintf_s(str,"Player Enter ChaseBall x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 
@@ -249,7 +239,7 @@ void SupportAttacker::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter SupportAttacker ");
+	    sprintf_s(str,"Player Enter SupportAttacker x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 	player->Steering()->ArriveOn();
@@ -338,7 +328,7 @@ void ReturnToHomeRegion::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter ReturnToHomeRegion ");
+	    sprintf_s(str,"Player Enter ReturnToHomeRegion x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 	player->Steering()->ArriveOn();
@@ -410,7 +400,7 @@ void Wait::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter Wait ");
+	    sprintf_s(str,"Player Enter Wait x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 #ifdef PLAYER_STATE_INFO_ON
@@ -498,7 +488,7 @@ void KickBall::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter KickBall ");
+	    sprintf_s(str,"Player Enter KickBall x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 
@@ -669,7 +659,7 @@ void Dribble::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter Dribble ");
+	    sprintf_s(str,"Player Enter Dribble x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 
@@ -750,7 +740,7 @@ void ReceiveBall::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter ReceiveBall ");
+	    sprintf_s(str,"Player Enter ReceiveBall x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 

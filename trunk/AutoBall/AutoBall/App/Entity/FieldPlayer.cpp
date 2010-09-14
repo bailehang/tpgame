@@ -74,14 +74,6 @@ FieldPlayer::FieldPlayer(SoccerTeam* home_team,
 //------------------------------------------------------------------------
 void FieldPlayer::Update()
 { 
-	if( GetID() == 2 )
-    {
-	  char  str[256];
-	  sprintf_s(str,"Position x=%f,y=%f",m_vPosition.x,m_vPosition.y);
-	  char  p;
-	  p='1';
-    }
-
 	//run the logic for the current state
 	m_pStateMachine->Update();
 
@@ -128,6 +120,12 @@ void FieldPlayer::Update()
 	//update the position
 	m_vPosition += m_vVelocity;
 
+	if( GetID() == 9 )
+    {
+	  char  str[256];
+	  sprintf_s(str,"Position x=%f,y=%f",m_vPosition.x,m_vPosition.y);
+	  PutFileLog(str);
+    }
 	
 
 	//enforce a non-penetration constraint if desired

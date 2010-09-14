@@ -17,5 +17,19 @@
 #include <memory.h>
 #include <tchar.h>
 
+#include <fstream>
+#include <iostream>
+#include <stdio.h>
+using namespace std;
+#define PutFileLog(str)\
+	{\
+		freopen("log.txt","ab+",stdout);\
+		std::cout << str << std::endl;\
+	}
+#define PutLog(file,str)\
+	{\
+		freopen(file,"ab+",stdout);\
+		std::cout << str << std::endl;\
+	}
 
 // TODO: 在此处引用程序需要的其他头文件
