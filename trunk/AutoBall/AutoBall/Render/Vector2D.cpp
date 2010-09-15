@@ -25,6 +25,14 @@ void   Vector2D::Normalize()
 {
 	double nor = Length();
 
+	if ( nor > std::numeric_limits<double>::epsilon())
+	{
+		this->x /= nor;
+		this->y /= nor;
+	}
+
+	return;
+
 	if ( nor < tol )
 		nor = 1 ;
 

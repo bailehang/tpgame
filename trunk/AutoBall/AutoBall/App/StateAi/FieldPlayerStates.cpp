@@ -178,7 +178,13 @@ void ChaseBall::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter ChaseBall x=%f,y=%f",player->Pos().x,player->Pos().y);
+	    sprintf_s(str,"Player Enter 9 ChaseBall x=%f,y=%f",player->Pos().x,player->Pos().y);
+		PutFileLog(str);
+	}
+	if( player->GetID() == 2  )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter 2 ChaseBall x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 
@@ -239,7 +245,13 @@ void SupportAttacker::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter SupportAttacker x=%f,y=%f",player->Pos().x,player->Pos().y);
+	    sprintf_s(str,"Player Enter 9 SupportAttacker x=%f,y=%f",player->Pos().x,player->Pos().y);
+		PutFileLog(str);
+	}
+	if( player->GetID() == 2 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter 2 SupportAttacker x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 	player->Steering()->ArriveOn();
@@ -328,7 +340,13 @@ void ReturnToHomeRegion::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter ReturnToHomeRegion x=%f,y=%f",player->Pos().x,player->Pos().y);
+	    sprintf_s(str,"Player Enter 9 ReturnToHomeRegion x=%f,y=%f",player->Pos().x,player->Pos().y);
+		PutFileLog(str);
+	}
+	if( player->GetID() == 2 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter 2 ReturnToHomeRegion x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 	player->Steering()->ArriveOn();
@@ -400,7 +418,13 @@ void Wait::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter Wait x=%f,y=%f",player->Pos().x,player->Pos().y);
+	    sprintf_s(str,"Player Enter 9 Wait x=%f,y=%f",player->Pos().x,player->Pos().y);
+		PutFileLog(str);
+	}
+	if( player->GetID() == 2 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter 2 Wait x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 #ifdef PLAYER_STATE_INFO_ON
@@ -488,7 +512,13 @@ void KickBall::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter KickBall x=%f,y=%f",player->Pos().x,player->Pos().y);
+	    sprintf_s(str,"Player Enter 9 KickBall x=%f,y=%f",player->Pos().x,player->Pos().y);
+		PutFileLog(str);
+	}
+	if( player->GetID() == 2 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter 2 KickBall x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 
@@ -659,7 +689,13 @@ void Dribble::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter Dribble x=%f,y=%f",player->Pos().x,player->Pos().y);
+	    sprintf_s(str,"Player Enter 9 Dribble x=%f,y=%f",player->Pos().x,player->Pos().y);
+		PutFileLog(str);
+	}
+	if( player->GetID() == 2 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter 2 Dribble x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 
@@ -740,7 +776,13 @@ void ReceiveBall::Enter(FieldPlayer* player)
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter ReceiveBall x=%f,y=%f",player->Pos().x,player->Pos().y);
+	    sprintf_s(str,"Player Enter 9 ReceiveBall x=%f,y=%f",player->Pos().x,player->Pos().y);
+		PutFileLog(str);
+	}
+	if( player->GetID() == 2 )
+	{
+		char  str[256];
+	    sprintf_s(str,"Player Enter 2 ReceiveBall x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 

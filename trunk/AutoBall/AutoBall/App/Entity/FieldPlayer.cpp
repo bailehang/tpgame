@@ -122,9 +122,9 @@ void FieldPlayer::Update()
 
 	if( GetID() == 9 )
     {
-	  char  str[256];
-	  sprintf_s(str,"Position x=%f,y=%f",m_vPosition.x,m_vPosition.y);
-	  PutFileLog(str);
+	  //char  str[256];
+	  //sprintf_s(str,"Position x=%f,y=%f",m_vPosition.x,m_vPosition.y);
+	  //PutFileLog(str);
     }
 	
 
