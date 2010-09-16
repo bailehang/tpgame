@@ -62,6 +62,8 @@ private:
 	//closest to the ball. 
 	void CalculateClosestPlayerToBall();			///> 每一帧计算当前离球最近的球员
 
+	bool m_IsChase; 
+	bool m_IsThrowIn;
 
 public:
 
@@ -211,5 +213,11 @@ public:
 			return "Blue"; 
 		return "Red";
 	}
+
+	bool  IsChaseBall() const	   { return m_IsChase; }
+	void  SetChaseBall(bool chase) { m_IsChase = chase;}
+
+	bool  IsThrowIn() const	   { return m_IsThrowIn; }
+	void  SetThrowIn(bool throwin) { m_IsThrowIn = throwin;}
 
 };

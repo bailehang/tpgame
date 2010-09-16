@@ -45,7 +45,7 @@ public:
 	bool      HandleMessage(const Telegram& msg){return false;}
 
 	/// 收到一个方向力
-	void      Kick(Vector2D direction, double force);
+	void      Kick(Vector2D direction, double force,CMoveEntity* entity);
 
 	/// 
 	///	 给定一个踢球力和通过起点和终点的定义的移动距离
@@ -69,12 +69,14 @@ public:
 
 private:
 
+	/// 最后一次踢球的玩家
+	CMoveEntity				 *m_LastPlayer;
+
 	/// 记录球在上一次更新中的位置
 	Vector2D                  m_vOldPos;
 
 	/// 组成足球场边界的本地引用(用于碰撞检测)
 	const std::vector<Wall2D>& m_PitchBoundary;   
-
 };
 
 inline Vector2D AddNoiseToKick(Vector2D BallPos, Vector2D BallTarget)

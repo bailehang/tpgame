@@ -73,3 +73,24 @@ public:
 
 	bool OnMessage(SoccerTeam*, const Telegram&){return false;}
 };
+
+///±ﬂΩÁ«Ú
+class Throw_In : public State<SoccerTeam>
+{
+private:
+
+	Throw_In(){}
+
+public:
+
+	//this is a singleton
+	static Throw_In* Instance();
+
+	void Enter(SoccerTeam* team);
+
+	void Execute(SoccerTeam* team);
+
+	void Exit(SoccerTeam* team);
+
+	bool OnMessage(SoccerTeam*, const Telegram&){return false;}
+};

@@ -9,6 +9,7 @@
 #include "../Messageing/SoccerMessages.h"
 #include "../../Config.h"			   
 
+extern SoccerPitch* g_SoccerPitch;
 
 void ChangePlayerHomeRegions(SoccerTeam* team, const int NewRegions[TeamSize])
 {
@@ -156,7 +157,48 @@ void PrepareForKickOff::Execute(SoccerTeam* team)
 
 void PrepareForKickOff::Exit(SoccerTeam* team)
 {
-	team->Pitch()->SetGameOn();
+	g_SoccerPitch->m_pBlueTeam->SetChaseBall(true);
+	g_SoccerPitch->m_pRedTeam->SetChaseBall(true);
 }
 
+
+
+//************************************************************************ KICKOFF
+Throw_In* Throw_In::Instance()
+{
+	static Throw_In instance;
+
+	return &instance;
+}
+
+void Throw_In::Enter(SoccerTeam* team)
+{
+	/*
+	/// 重置关键队伍的指针
+	//reset key player pointers
+	team->SetControllingPlayer(NULL);
+	team->SetSupportingPlayer(NULL);
+	team->SetReceiver(NULL);
+	team->SetPlayerClosestToBall(NULL);
+
+	//send Msg_GoHome to each player.
+	team->ReturnAllFieldPlayersToHome();
+	*/
+	team->SetThrowIn(true);
+}
+
+void Throw_In::Execute(SoccerTeam* team)
+{
+	//if both teams in position, start the game
+	if ( !team->IsThrowIn() )
+	{
+		team->GetFSM()->ChangeState(Attacking::Instance());
+	}
+}
+
+void Throw_In::Exit(SoccerTeam* team)
+{
+	g_SoccerPitch->m_pBlueTeam->SetChaseBall(true);
+	g_SoccerPitch->m_pRedTeam->SetChaseBall(true);
+}
 
