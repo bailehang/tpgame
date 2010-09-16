@@ -28,6 +28,8 @@ GlobalPlayerState* GlobalPlayerState::Instance()
 
 void GlobalPlayerState::Execute(FieldPlayer* player)                                     
 {
+	if( !player->Team()->IsChaseBall() ) return;
+
 	/// 如果球员占有并接近球，那么降低他的最大速度
 	//if a player is in possession and close to the ball reduce his max speed
 	if((player->BallWithinReceivingRange()) && (player->isControllingPlayer()))
@@ -128,7 +130,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 
 			//make the pass   传球
 			player->Ball()->Kick(receiver->Pos() - player->Ball()->Pos(),
-				GetInstObj(CGameSetup).MaxPassingForce);
+				GetInstObj(CGameSetup).MaxPassingForce,player);
 
 
 #ifdef PLAYER_STATE_INFO_ON
@@ -175,6 +177,7 @@ ChaseBall* ChaseBall::Instance()
 
 void ChaseBall::Enter(FieldPlayer* player)
 {
+	if( !player->Team()->IsChaseBall() ) return;
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
@@ -265,6 +268,8 @@ void SupportAttacker::Enter(FieldPlayer* player)
 
 void SupportAttacker::Execute(FieldPlayer* player)                                     
 {
+	if( !player->Team()->IsChaseBall() ) return;
+
 	/// 如果自己球队丢失对球的控制权，球员回到起始区域
 	//if his team loses control go back home
 	if (!player->Team()->InControl())
@@ -363,6 +368,8 @@ void ReturnToHomeRegion::Enter(FieldPlayer* player)
 
 void ReturnToHomeRegion::Execute(FieldPlayer* player)
 {
+	if( !player->Team()->IsChaseBall() ) return;
+
 	if (player->Pitch()->GameOn())
 	{
 		//if the ball is nearer this player than any other team member  &&
@@ -442,6 +449,8 @@ void Wait::Enter(FieldPlayer* player)
 
 void Wait::Execute(FieldPlayer* player)
 {    
+	if( !player->Team()->IsChaseBall() ) return;
+
 	/// 如果队员被挤出位置，那么要回来原来位置
 	//if the player has been jostled out of position, get back in position  
 	if (!player->AtTarget())
@@ -541,6 +550,12 @@ void KickBall::Enter(FieldPlayer* player)
 
 void KickBall::Execute(FieldPlayer* player)
 { 
+	if( !player->Team()->IsChaseBall() ) 
+	{
+		player->GetFSM()->ChangeState(Wait::Instance());
+		return;
+	}
+
 	/// 计算指向球的向量与球员自己的朝向向量的点积
 	//calculate the dot product of the vector pointing to the ball
 	//and the player's heading
@@ -601,13 +616,14 @@ void KickBall::Execute(FieldPlayer* player)
 		//this is the direction the ball will be kicked in
 		Vector2D KickDirection = BallTarget - player->Ball()->Pos();
 
-		player->Ball()->Kick(KickDirection, power);
+		player->Ball()->Kick(KickDirection, power,player);
 
 		//change state   
 		player->GetFSM()->ChangeState(Wait::Instance());
 
 		player->FindSupport();
 
+		player->Team()->SetThrowIn(false);
 		return;
 	}
 
@@ -635,7 +651,9 @@ void KickBall::Execute(FieldPlayer* player)
 
 		Vector2D KickDirection = BallTarget - player->Ball()->Pos();
 
-		player->Ball()->Kick(KickDirection, power);
+		player->Ball()->Kick(KickDirection, power,player);
+
+		player->Team()->SetThrowIn(false);
 
 #ifdef PLAYER_STATE_INFO_ON
 		//    debug_con << "Player " << player->GetID() << " passes the ball with force " << power << "  to player " 
@@ -686,6 +704,8 @@ Dribble* Dribble::Instance()
 void Dribble::Enter(FieldPlayer* player)
 {
 
+	if( !player->Team()->IsChaseBall() ) return;
+
 	if( player->GetID() == 9 )
 	{
 		char  str[256];
@@ -710,6 +730,8 @@ void Dribble::Enter(FieldPlayer* player)
 
 void Dribble::Execute(FieldPlayer* player)
 {
+
+	if( !player->Team()->IsChaseBall() ) return;
 
 	double dot = player->Team()->HomeGoal()->Facing().Dot(player->Heading());
 
@@ -741,7 +763,8 @@ void Dribble::Execute(FieldPlayer* player)
 		//ball and turn at the same time
 		const double KickingForce = 0.8;
 
-		player->Ball()->Kick(direction, KickingForce);
+		player->Ball()->Kick(direction, KickingForce,player);
+		player->Team()->SetThrowIn(false);
 	}
 
 	/// 踢球
@@ -749,7 +772,8 @@ void Dribble::Execute(FieldPlayer* player)
 	else
 	{
 		player->Ball()->Kick(player->Team()->HomeGoal()->Facing(),
-			GetInstObj(CGameSetup).MaxDribbleForce);  
+			GetInstObj(CGameSetup).MaxDribbleForce,player); 
+		player->Team()->SetThrowIn(false);
 	}
 
 	/// 改队员已经踢球了，所以他必须改变状态去追球
@@ -830,6 +854,8 @@ void ReceiveBall::Enter(FieldPlayer* player)
 
 void ReceiveBall::Execute(FieldPlayer* player)
 {
+	if( !player->Team()->IsChaseBall() ) return;
+
 	/// 如果他离球足够近或者他的球队市区球的控制权，那么他应该状态去追求
 	//if the ball comes close enough to the player or if his team lose control
 	//he should change state to chase the ball

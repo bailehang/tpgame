@@ -60,6 +60,8 @@ SoccerTeam::SoccerTeam(Goal*        home_goal,
 	m_pSupportSpotCalc = new SupportSpotCalculator(GetInstObj(CGameSetup).NumSupportSpotsX,
 		GetInstObj(CGameSetup).NumSupportSpotsY,
 		this);
+
+	m_IsChase = true;
 }
 
 //----------------------- dtor -------------------------------------------

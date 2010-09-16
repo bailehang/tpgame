@@ -266,7 +266,7 @@ void PutBallBackInPlay::Execute(GoalKeeper* keeper)
 	{     
 		//make the pass   
 		keeper->Ball()->Kick(Vec2DNormalize(BallTarget - keeper->Ball()->Pos()),
-			GetInstObj(CGameSetup).MaxPassingForce);
+			GetInstObj(CGameSetup).MaxPassingForce,keeper);
 
 		/// 守门员不在控球
 		//goalkeeper no longer has ball 

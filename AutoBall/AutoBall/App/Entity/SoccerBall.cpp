@@ -1,12 +1,21 @@
 #include "Stdafx.h"
 #include "SoccerBall.h"
+#include "PlayerBase.h"
+#include "../SoccerTeam.h"
+#include "../SoccerPitch.h"
+#include "../StateAi/StateMachine.h"
+#include "../StateAi/State.h"
+#include "../StateAi/TeamStates.h"
 
+
+extern SoccerPitch* g_SoccerPitch;
+//g_SoccerPitch->m_pBlueTeam
 //-------------------------- Kick ----------------------------------------
 //                                                                        
 //  applys a force to the ball in the direction of heading. Truncates
 //  the new velocity to make sure it doesn't exceed the max allowable.
 //------------------------------------------------------------------------
-void SoccerBall::Kick(Vector2D direction, double force)
+void SoccerBall::Kick(Vector2D direction, double force,CMoveEntity* entity)
 {  
 	//ensure direction is normalized
 	direction.Normalize();
@@ -16,6 +25,8 @@ void SoccerBall::Kick(Vector2D direction, double force)
 
 	//update the velocity
 	m_vVelocity = acceleration;
+	m_LastPlayer= entity;
+
 }
 
 //----------------------------- Update -----------------------------------
@@ -145,6 +156,10 @@ void SoccerBall::TestCollisionWithWalls(const std::vector<Wall2D>& walls)
 
 	double DistToIntersection = MaxFloat;
 
+	/// µÈ´ý±ß½çÇò
+	if( m_vVelocity.Length() <= 0 )
+		return ;
+
 	//iterate through each wall and calculate if the ball intersects.
 	//If it does then store the index into the closest intersecting wall
 	for (unsigned int w=0; w<walls.size(); ++w)
@@ -205,7 +220,23 @@ void SoccerBall::TestCollisionWithWalls(const std::vector<Wall2D>& walls)
 
 	if ( (idxClosest >= 0 ) && VelNormal.Dot(walls[idxClosest].Normal()) < 0)
 	{
-		m_vVelocity.Reflect(walls[idxClosest].Normal());   
+		m_vVelocity = Vector2D(0,0);
+		PlayerBase* Player = (PlayerBase*)m_LastPlayer;
+
+		if( Player->Team()->Color() == SoccerTeam::blue )
+		{
+			g_SoccerPitch->m_pBlueTeam->GetFSM()->ChangeState( Throw_In::Instance() );
+			g_SoccerPitch->m_pRedTeam->SetChaseBall(false);
+			
+		}
+		else
+		{
+			g_SoccerPitch->m_pRedTeam->GetFSM()->ChangeState( Throw_In::Instance() );
+			g_SoccerPitch->m_pBlueTeam->SetChaseBall(false);
+
+		}
+
+		//m_vVelocity.Reflect(walls[idxClosest].Normal());   
 	}
 }
 
