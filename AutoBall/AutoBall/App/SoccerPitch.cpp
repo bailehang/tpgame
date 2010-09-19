@@ -21,8 +21,8 @@
 #include "../Render/Vector2D.h"
 #include "../Render/Geometry.h"
 
-const int NumRegionsHorizontal = 6; 
-const int NumRegionsVertical   = 3;
+const int NumRegionsHorizontal = 12; 
+const int NumRegionsVertical   = 4;
 
 //------------------------------- ctor -----------------------------------
 //------------------------------------------------------------------------

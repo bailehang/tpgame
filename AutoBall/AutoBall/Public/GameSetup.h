@@ -64,6 +64,9 @@ public:
 	double GoalKeeperInterceptRangeSq;
 	double BallWithinReceivingRange;
 	double BallWithinReceivingRangeSq;
+	double FollowMinDistenRange;
+	double FollowMaxDistenRange;
+
 	bool  bStates;
 	bool  bIDs;
 	bool  bSupportSpots;

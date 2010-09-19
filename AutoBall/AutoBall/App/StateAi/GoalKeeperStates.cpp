@@ -73,25 +73,19 @@ TendGoal* TendGoal::Instance()
 
 void TendGoal::Enter(GoalKeeper* keeper)
 {
-	//turn interpose on激活
+	//激活
 	keeper->Steering()->InterposeOn(GetInstObj(CGameSetup).GoalKeeperTendingDistance);
 
 	/// interpose将使智能体处在球和目标之间，该调用设置目标
-	//interpose will position the agent between the ball position and a target
-	//position situated along the goal mouth. This call sets the target
 	keeper->Steering()->SetTarget(keeper->GetRearInterposeTarget());
 }
 
 void TendGoal::Execute(GoalKeeper* keeper)
 {
 	/// 随着球的位置的改变，后方的插入目标位置也将改变，所以必须在每个更新步骤更新
-	//the rear interpose target will change as the ball's position changes
-	//so it must be updated each update-step 
 	keeper->Steering()->SetTarget(keeper->GetRearInterposeTarget());
 
 	/// 如果球进入范围，守门员抓住他，然后改变状态把球传回到赛场中
-	//if the ball comes in range the keeper traps it and then changes state
-	//to put the ball back in play
 	if (keeper->BallWithinKeeperRange())
 	{
 		keeper->Ball()->Trap();

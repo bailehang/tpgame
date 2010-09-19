@@ -451,15 +451,18 @@ void Wait::Execute(FieldPlayer* player)
 {    
 	if( !player->Team()->IsChaseBall() ) return;
 
+	if( player->GetID() == 11 )
+	{
+		char p ='1';
+		p = '0';
+	}
 	/// 如果队员被挤出位置，那么要回来原来位置
-	//if the player has been jostled out of position, get back in position  
 	if (!player->AtTarget())
 	{
 		player->Steering()->ArriveOn();
 
 		return;
 	}
-
 	else
 	{
 		player->Steering()->ArriveOff();
@@ -467,14 +470,14 @@ void Wait::Execute(FieldPlayer* player)
 		player->SetVelocity(Vector2D(0,0));
 
 		///该队员盯球
-		//the player should keep his eyes on the ball!
 		player->TrackBall();
 	}
 
-	/// 如果该队员的球正在控制着球，改队员不是进攻队员，冰球该队员比进攻队员更靠近前场
+	///
+	/// 如果该队员的球正在控制着球，改队员不是进攻队员，
+	/// 并球该队员比进攻队员更靠近前场
 	/// 那么他应该请求传球
-	//if this player's team is controlling AND this player is not the attacker
-	//AND is further up the field than the attacker he should request a pass.
+	/// 
 	if ( player->Team()->InControl()    &&
 		(!player->isControllingPlayer()) &&
 		player->isAheadOfAttacker() )
@@ -487,9 +490,6 @@ void Wait::Execute(FieldPlayer* player)
 	if (player->Pitch()->GameOn())
 	{
 		/// 如果该队员是球队中离球最近的，球队也没有分配接球队员，同时守门员没有拿着球，那么去追球
-		//if the ball is nearer this player than any other team member  AND
-		//there is not an assigned receiver AND neither goalkeeper has
-		//the ball, go chase it
 		if (player->isClosestTeamMemberToBall() &&
 			player->Team()->Receiver() == NULL  &&
 			!player->Pitch()->GoalKeeperHasBall())
@@ -498,13 +498,65 @@ void Wait::Execute(FieldPlayer* player)
 
 			return;
 		}
+
+		/// 如果太远需要归位
+		if( player->Team()->InControl() || ( !player->IsSelfRegin() && player->FollowReturn() ) )
+		{
+			player->Steering()->SetTarget(player->HomeRegion()->Center());
+			player->GetFSM()->ChangeState(ReturnToHomeRegion::Instance());
+		}
+
+
+		/// 否则跟随球		  && player->Role() == FieldPlayer::defender
+		if ( !player->Team()->InControl() && player->FollowTarget()  )
+		{
+			 player->Steering()->SetTarget(player->Ball()->Pos());
+			 player->GetFSM()->ChangeState(FollowBall::Instance());
+		}
+
 	} 
 }
 
 void Wait::Exit(FieldPlayer* player){}
 
 
+FollowBall* FollowBall::Instance()
+{
+	static FollowBall instance;
 
+	return &instance;
+}
+
+
+
+void FollowBall::Enter(FieldPlayer* player)
+{
+
+}
+
+void FollowBall::Execute(FieldPlayer* player)
+{
+	if( !player->Team()->IsChaseBall() ) return;
+
+	if (player->Pitch()->GameOn())
+	{
+		/// 如果太远需要归位
+		if( player->Team()->InControl() ||  player->FollowReturn() )
+		{
+			player->Steering()->SetTarget(player->HomeRegion()->Center());
+			player->GetFSM()->ChangeState(ReturnToHomeRegion::Instance());
+		}
+		
+		/// 不是最近队员，是防御者，不是控球队员，需要进行跟踪球进行防御	 &&
+		///	 player->Role() == FieldPlayer::defender 
+		if (!player->isClosestTeamMemberToBall() &&
+			!player->Team()->InControl()  )
+		{
+			player->Steering()->SetTarget(player->Ball()->Pos());
+			return;
+		}
+	}
+}
 
 //************************************************************************ KICK BALL
 

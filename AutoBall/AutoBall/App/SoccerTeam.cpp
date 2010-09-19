@@ -601,161 +601,201 @@ void SoccerTeam::Render()const
 
 }
 
-//------------------------- CreatePlayers --------------------------------
-//
-//  creates the players
-//------------------------------------------------------------------------
 void SoccerTeam::CreatePlayers()
 {
-	if (Color() == blue)
-	{
-		//goalkeeper
-		m_Players.push_back(new GoalKeeper(this,
-			1,
-			TendGoal::Instance(),
-			Vector2D(0,1),
-			Vector2D(0.0, 0.0),
-			GetInstObj(CGameSetup).PlayerMass,
-			GetInstObj(CGameSetup).PlayerMaxForce,
-			GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
-			GetInstObj(CGameSetup).PlayerMaxTurnRate,
-			GetInstObj(CGameSetup).PlayerScale));
+  if (Color() == blue)
+  {
+    //goalkeeper
+    m_Players.push_back(new GoalKeeper(this,
+                               1,
+                               TendGoal::Instance(),
+                               Vector2D(0,1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale));
+ 
+	m_Players.push_back(new FieldPlayer(this,
+                               22,
+                               Wait::Instance(),
+                               Vector2D(0,1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                               PlayerBase::attacker));
 
-		//create the players
-		m_Players.push_back(new FieldPlayer(this,
-			6,
-			Wait::Instance(),
-			Vector2D(0,1),
-			Vector2D(0.0, 0.0),
-			GetInstObj(CGameSetup).PlayerMass,
-			GetInstObj(CGameSetup).PlayerMaxForce,
-			GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
-			GetInstObj(CGameSetup).PlayerMaxTurnRate,
-			GetInstObj(CGameSetup).PlayerScale,
-			PlayerBase::attacker));
-
-
-
-		m_Players.push_back(new FieldPlayer(this,
-			8,
-			Wait::Instance(),
-			Vector2D(0,1),
-			Vector2D(0.0, 0.0),
-			GetInstObj(CGameSetup).PlayerMass,
-			GetInstObj(CGameSetup).PlayerMaxForce,
-			GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
-			GetInstObj(CGameSetup).PlayerMaxTurnRate,
-			GetInstObj(CGameSetup).PlayerScale,
-			PlayerBase::attacker));
+    //create the players
+    m_Players.push_back(new FieldPlayer(this,
+                               19,
+                               Wait::Instance(),
+                               Vector2D(0,1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                               PlayerBase::attacker));
 
 
 
+        m_Players.push_back(new FieldPlayer(this,
+                               16,
+                               Wait::Instance(),
+                               Vector2D(0,1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                               PlayerBase::attacker));
+ 
 
-
-		m_Players.push_back(new FieldPlayer(this,
-			3,
-			Wait::Instance(),
-			Vector2D(0,1),
-			Vector2D(0.0, 0.0),
-			GetInstObj(CGameSetup).PlayerMass,
-			GetInstObj(CGameSetup).PlayerMaxForce,
-			GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
-			GetInstObj(CGameSetup).PlayerMaxTurnRate,
-			GetInstObj(CGameSetup).PlayerScale,
-			PlayerBase::defender));
-
-
-		m_Players.push_back(new FieldPlayer(this,
-			5,
-			Wait::Instance(),
-			Vector2D(0,1),
-			Vector2D(0.0, 0.0),
-			GetInstObj(CGameSetup).PlayerMass,
-			GetInstObj(CGameSetup).PlayerMaxForce,
-			GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
-			GetInstObj(CGameSetup).PlayerMaxTurnRate,
-			GetInstObj(CGameSetup).PlayerScale,
-			PlayerBase::defender));
-
-	}
-
-	else
-	{
-
-		//goalkeeper
-		m_Players.push_back(new GoalKeeper(this,
-			16,
-			TendGoal::Instance(),
-			Vector2D(0,-1),
-			Vector2D(0.0, 0.0),
-			GetInstObj(CGameSetup).PlayerMass,
-			GetInstObj(CGameSetup).PlayerMaxForce,
-			GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
-			GetInstObj(CGameSetup).PlayerMaxTurnRate,
-			GetInstObj(CGameSetup).PlayerScale));
-
-
-		//create the players
-		m_Players.push_back(new FieldPlayer(this,
-			9,
-			Wait::Instance(),
-			Vector2D(0,-1),
-			Vector2D(0.0, 0.0),
-			GetInstObj(CGameSetup).PlayerMass,
-			GetInstObj(CGameSetup).PlayerMaxForce,
-			GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
-			GetInstObj(CGameSetup).PlayerMaxTurnRate,
-			GetInstObj(CGameSetup).PlayerScale,
-			PlayerBase::attacker));
+        m_Players.push_back(new FieldPlayer(this,
+                               11,
+                               Wait::Instance(),
+                               Vector2D(0,1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                              PlayerBase::defender));
 
 		m_Players.push_back(new FieldPlayer(this,
-			11,
-			Wait::Instance(),
-			Vector2D(0,-1),
-			Vector2D(0.0, 0.0),
-			GetInstObj(CGameSetup).PlayerMass,
-			GetInstObj(CGameSetup).PlayerMaxForce,
-			GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
-			GetInstObj(CGameSetup).PlayerMaxTurnRate,
-			GetInstObj(CGameSetup).PlayerScale,
-			PlayerBase::attacker));
-
-
+                               8,
+                               Wait::Instance(),
+                               Vector2D(0,1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                               PlayerBase::defender));
 
 		m_Players.push_back(new FieldPlayer(this,
-			12,
-			Wait::Instance(),
-			Vector2D(0,-1),
-			Vector2D(0.0, 0.0),
-			GetInstObj(CGameSetup).PlayerMass,
-			GetInstObj(CGameSetup).PlayerMaxForce,
-			GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
-			GetInstObj(CGameSetup).PlayerMaxTurnRate,
-			GetInstObj(CGameSetup).PlayerScale,
-			PlayerBase::defender));
+                               6,
+                               Wait::Instance(),
+                               Vector2D(0,1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                               PlayerBase::defender));
 
 
-		m_Players.push_back(new FieldPlayer(this,
-			14,
-			Wait::Instance(),
-			Vector2D(0,-1),
-			Vector2D(0.0, 0.0),
-			GetInstObj(CGameSetup).PlayerMass,
-			GetInstObj(CGameSetup).PlayerMaxForce,
-			GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
-			GetInstObj(CGameSetup).PlayerMaxTurnRate,
-			GetInstObj(CGameSetup).PlayerScale,
-			PlayerBase::defender));
+  }
 
-	}
+  else
+  {
 
-	//register the players with the entity manager
-	std::vector<PlayerBase*>::iterator it = m_Players.begin();
+     //goalkeeper
+    m_Players.push_back(new GoalKeeper(this,
+                               45,
+                               TendGoal::Instance(),
+                               Vector2D(0,-1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale));
 
-	for (it; it != m_Players.end(); ++it)
-	{
-	     GetInstObj(EntityManager).RegEntity(*it);
-	}
+
+    //create the players
+    m_Players.push_back(new FieldPlayer(this,
+                               25,
+                               Wait::Instance(),
+                               Vector2D(0,-1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                               PlayerBase::attacker));
+
+	//create the players
+    m_Players.push_back(new FieldPlayer(this,
+                               28,
+                               Wait::Instance(),
+                               Vector2D(0,-1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                               PlayerBase::attacker));
+
+    m_Players.push_back(new FieldPlayer(this,
+                               31,
+                               Wait::Instance(),
+                               Vector2D(0,-1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                               PlayerBase::attacker));
+
+
+    m_Players.push_back(new FieldPlayer(this,
+                               32,
+                               Wait::Instance(),
+                               Vector2D(0,-1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                               PlayerBase::defender));
+
+	 m_Players.push_back(new FieldPlayer(this,
+                               35,
+                               Wait::Instance(),
+                               Vector2D(0,-1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                               PlayerBase::defender));
+
+	  m_Players.push_back(new FieldPlayer(this,
+                               41,
+                               Wait::Instance(),
+                               Vector2D(0,-1),
+                               Vector2D(0.0, 0.0),
+                               GetInstObj(CGameSetup).PlayerMass,
+                               GetInstObj(CGameSetup).PlayerMaxForce,
+                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               GetInstObj(CGameSetup).PlayerMaxTurnRate,
+                               GetInstObj(CGameSetup).PlayerScale,
+                               PlayerBase::defender));
+                      
+  }
+
+  //register the players with the entity manager
+  std::vector<PlayerBase*>::iterator it = m_Players.begin();
+
+  for (it; it != m_Players.end(); ++it)
+  {
+    GetInstObj(EntityManager).RegEntity(*it);
+  }
 }
 
 
