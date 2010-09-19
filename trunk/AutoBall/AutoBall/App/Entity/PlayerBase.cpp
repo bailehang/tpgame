@@ -264,6 +264,23 @@ bool PlayerBase::AtTarget()const
 	return (Vec2DDistanceSq(Pos(), Steering()->Target()) < GetInstObj(CGameSetup).PlayerInTargetRangeSq);
 }
 
+bool PlayerBase::FollowTarget() const
+{
+	long len = GetInstObj(CGameSetup).FollowMinDistenRange;
+	return (Vec2DDistanceSq(Pos(), Ball()->Pos() ) < len*len );
+}
+
+bool PlayerBase::FollowReturn() const
+{
+	long len = GetInstObj(CGameSetup).FollowMaxDistenRange;
+	return (Vec2DDistanceSq(Pos(), Ball()->Pos() ) > len*len );
+}
+
+bool PlayerBase::IsSelfRegin() const
+{
+	return Vec2DDistanceSq(Pos(), HomeRegion()->Center() ) < 10;
+}
+
 bool PlayerBase::isClosestTeamMemberToBall()const
 {
 	return Team()->PlayerClosestToBall() == this;

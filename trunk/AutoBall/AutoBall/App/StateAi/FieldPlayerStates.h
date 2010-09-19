@@ -107,7 +107,6 @@ public:
 };
 
 /// µÈ´ý
-//------------------------------------------------------------------------
 class Wait: public State<FieldPlayer>
 {
 private:
@@ -128,8 +127,30 @@ public:
 	bool OnMessage(FieldPlayer*, const Telegram&){return false;}
 };
 
+
+/// ¸ú×ÙÇò£¬·ÀÓù
+class FollowBall :public State<FieldPlayer>
+{
+private:
+
+	FollowBall() { }
+
+public:
+
+	//this is a singleton
+	static FollowBall* Instance();
+
+	void Enter(FieldPlayer* player);
+
+	void Execute(FieldPlayer* player);
+
+	void Exit(FieldPlayer* player){}
+
+	bool OnMessage(FieldPlayer*, const Telegram&){return false;}
+
+};
+
 /// ÌßÇò
-//------------------------------------------------------------------------
 class KickBall: public State<FieldPlayer>
 {
 private:

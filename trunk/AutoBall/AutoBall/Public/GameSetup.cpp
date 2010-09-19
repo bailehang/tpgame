@@ -55,6 +55,8 @@ CGameSetup::CGameSetup()
 			 >> str >>  GoalKeeperTendingDistance
 			 >> str >>  GoalKeeperInterceptRange
 			 >> str >>  BallWithinReceivingRange
+			 >> str >>  FollowMinDistenRange
+			 >> str >>	FollowMaxDistenRange
 			 >> str >>  bStates
 			 >> str >>  bIDs
 			 >> str >>  bSupportSpots

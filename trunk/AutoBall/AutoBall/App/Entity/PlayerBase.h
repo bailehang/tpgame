@@ -67,6 +67,12 @@ public:
 	//returns true if the player is located at his steering target
 	bool        AtTarget()const;
 
+	bool		FollowTarget()const;
+
+	bool		FollowReturn()const;
+
+	bool        IsSelfRegin()const;
+
 	//returns true if the player is the closest player in his team to
 	//the ball
 	bool        isClosestTeamMemberToBall()const;
