@@ -273,7 +273,7 @@ bool PlayerBase::FollowTarget() const
 bool PlayerBase::FollowReturn() const
 {
 	long len = GetInstObj(CGameSetup).FollowMaxDistenRange;
-	return (Vec2DDistanceSq(Pos(), Ball()->Pos() ) > len*len );
+	return (Vec2DDistanceSq(Pos(), HomeRegion()->Center() ) > len*len );
 }
 
 bool PlayerBase::IsSelfRegin() const

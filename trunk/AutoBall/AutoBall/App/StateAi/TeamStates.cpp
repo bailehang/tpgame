@@ -173,17 +173,6 @@ Throw_In* Throw_In::Instance()
 
 void Throw_In::Enter(SoccerTeam* team)
 {
-	/*
-	/// 重置关键队伍的指针
-	//reset key player pointers
-	team->SetControllingPlayer(NULL);
-	team->SetSupportingPlayer(NULL);
-	team->SetReceiver(NULL);
-	team->SetPlayerClosestToBall(NULL);
-
-	//send Msg_GoHome to each player.
-	team->ReturnAllFieldPlayersToHome();
-	*/
 	team->SetThrowIn(true);
 }
 
@@ -200,5 +189,7 @@ void Throw_In::Exit(SoccerTeam* team)
 {
 	g_SoccerPitch->m_pBlueTeam->SetChaseBall(true);
 	g_SoccerPitch->m_pRedTeam->SetChaseBall(true);
+
+	team->SetThrowIn(false);
 }
 

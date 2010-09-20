@@ -225,15 +225,14 @@ void SoccerBall::TestCollisionWithWalls(const std::vector<Wall2D>& walls)
 
 		if( Player->Team()->Color() == SoccerTeam::blue )
 		{
-			g_SoccerPitch->m_pBlueTeam->GetFSM()->ChangeState( Throw_In::Instance() );
-			g_SoccerPitch->m_pRedTeam->SetChaseBall(false);
-			
+			/// ¾²Ö¹blue½Ó´¥Çò
+			g_SoccerPitch->m_pRedTeam->GetFSM()->ChangeState( Throw_In::Instance() );
+			g_SoccerPitch->m_pBlueTeam->SetChaseBall(false);
 		}
 		else
 		{
-			g_SoccerPitch->m_pRedTeam->GetFSM()->ChangeState( Throw_In::Instance() );
-			g_SoccerPitch->m_pBlueTeam->SetChaseBall(false);
-
+			g_SoccerPitch->m_pBlueTeam->GetFSM()->ChangeState( Throw_In::Instance() );
+			g_SoccerPitch->m_pRedTeam->SetChaseBall(false);
 		}
 
 		//m_vVelocity.Reflect(walls[idxClosest].Normal());   

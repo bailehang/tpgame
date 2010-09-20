@@ -500,7 +500,7 @@ void Wait::Execute(FieldPlayer* player)
 		}
 
 		/// 如果太远需要归位
-		if( player->Team()->InControl() || ( !player->IsSelfRegin() && player->FollowReturn() ) )
+		if( !player->IsSelfRegin() && (player->Team()->InControl() ||  player->FollowReturn() ) )
 		{
 			player->Steering()->SetTarget(player->HomeRegion()->Center());
 			player->GetFSM()->ChangeState(ReturnToHomeRegion::Instance());
@@ -531,7 +531,7 @@ FollowBall* FollowBall::Instance()
 
 void FollowBall::Enter(FieldPlayer* player)
 {
-
+	player->Steering()->SeekOn();
 }
 
 void FollowBall::Execute(FieldPlayer* player)
@@ -555,7 +555,31 @@ void FollowBall::Execute(FieldPlayer* player)
 			player->Steering()->SetTarget(player->Ball()->Pos());
 			return;
 		}
+
+		/// 如果是最近的，且现在是边界球，应该去发球
+		if (player->isClosestTeamMemberToBall() &&
+			player->Team()->IsThrowIn() )
+		{
+			player->GetFSM()->ChangeState(ChaseBall::Instance());
+
+			return;
+		}
+
+		/// 如果该队员是球队中离球最近的，球队也没有分配接球队员，同时守门员没有拿着球，那么去追球
+		if (player->isClosestTeamMemberToBall() &&
+			player->Team()->Receiver() == NULL  &&
+			!player->Pitch()->GoalKeeperHasBall())
+		{
+			player->GetFSM()->ChangeState(ChaseBall::Instance());
+
+			return;
+		}
 	}
+}
+
+void FollowBall::Exit(FieldPlayer *player)
+{
+	player->Steering()->SeekOff();
 }
 
 //************************************************************************ KICK BALL
