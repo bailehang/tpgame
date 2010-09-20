@@ -144,7 +144,7 @@ public:
 
 	void Execute(FieldPlayer* player);
 
-	void Exit(FieldPlayer* player){}
+	void Exit(FieldPlayer* player);
 
 	bool OnMessage(FieldPlayer*, const Telegram&){return false;}
 
