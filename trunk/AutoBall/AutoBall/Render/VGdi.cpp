@@ -33,6 +33,7 @@ CGDI::CGDI()
 	m_thickgreenPen = CreatePen(PS_SOLID, 2, colors[green]);
 	m_thickbluePen = CreatePen(PS_SOLID, 2, colors[blue]);
 
+	m_whiteBrush=CreateSolidBrush(colors[white]);
 	m_redBrush = CreateSolidBrush(colors[green]);
 	m_greenBrush   = CreateSolidBrush(colors[red]);
 	m_blueBrush  = CreateSolidBrush(colors[blue]);

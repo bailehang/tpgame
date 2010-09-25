@@ -44,9 +44,10 @@ public:
 	virtual void Render(bool RenderNormals = false)const
 	{
 		GetInstObj(CGDI).Line(m_vA, m_vB);
+		GetInstObj(CGDI).Line(m_vA-Vector2D(1,1), m_vB-Vector2D(1,1));
 
 		//render the normals if rqd
-		if (RenderNormals)
+		if (true)
 		{
 			int MidX = (int)((m_vA.x+m_vB.x)/2);
 			int MidY = (int)((m_vA.y+m_vB.y)/2);

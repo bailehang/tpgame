@@ -34,7 +34,7 @@ SoccerPitch::SoccerPitch(int cx, int cy):m_cxClient(cx),
 	m_bGameOn(true)
 {
 	//define the playing area
-	m_pPlayingArea = new Region(20, 20, cx-20, cy-20);
+	m_pPlayingArea = new Region(60, 30, cx-60, cy-30);
 
 	//create the regions  
 	CreateRegions(PlayingArea()->Width() / (double)NumRegionsHorizontal,
@@ -174,19 +174,33 @@ bool SoccerPitch::Render()
 	}
 
 	//render the goals
-	GetInstObj(CGDI).HollowBrush();
+	//GetInstObj(CGDI).HollowBrush();
 	GetInstObj(CGDI).RedPen();
-	GetInstObj(CGDI).Rect(m_pPlayingArea->Left(), (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2, m_pPlayingArea->Left()+40, m_cyClient - (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2);
+	GetInstObj(CGDI).HatchRBrush();
+	GetInstObj(CGDI).Rect(m_pPlayingArea->Left()-40, (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2, m_pPlayingArea->Left(), m_cyClient - (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2);
+	GetInstObj(CGDI).Rect(m_pPlayingArea->Left()-39, (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2+1, m_pPlayingArea->Left()-1, m_cyClient - (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2-1);	
+	GetInstObj(CGDI).HatchXBrush();
+	GetInstObj(CGDI).Rect(m_pPlayingArea->Left(), (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2-100, m_pPlayingArea->Left()+100, m_cyClient - (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2+100);
+	GetInstObj(CGDI).Rect(m_pPlayingArea->Left()+1, (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2-99, m_pPlayingArea->Left()+99, m_cyClient - (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2+99);
+
 
 	GetInstObj(CGDI).BluePen();
-	GetInstObj(CGDI).Rect(m_pPlayingArea->Right(), (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2, m_pPlayingArea->Right()-40, m_cyClient - (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2);
+	GetInstObj(CGDI).HatchLBrush();
+	GetInstObj(CGDI).Rect(m_pPlayingArea->Right(), (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2, m_pPlayingArea->Right()+40, m_cyClient - (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2);
+	GetInstObj(CGDI).Rect(m_pPlayingArea->Right()+1, (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2+1, m_pPlayingArea->Right()+39, m_cyClient - (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2-1);
+
+	GetInstObj(CGDI).HatchXBrush();
+	GetInstObj(CGDI).Rect(m_pPlayingArea->Right()-100, (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2-100, m_pPlayingArea->Right(), m_cyClient - (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2+100);
+	GetInstObj(CGDI).Rect(m_pPlayingArea->Right()-99, (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2-99, m_pPlayingArea->Right()-1, m_cyClient - (m_cyClient-GetInstObj(CGameSetup).GoalWidth)/2+99);
 
 	//render the pitch markings
+	GetInstObj(CGDI).ClearBrush();
+
 	GetInstObj(CGDI).WhitePen();
 	GetInstObj(CGDI).Circle(m_pPlayingArea->Center(), m_pPlayingArea->Width() * 0.125);
 	GetInstObj(CGDI).Line(m_pPlayingArea->Center().x, m_pPlayingArea->Top(), m_pPlayingArea->Center().x, m_pPlayingArea->Bottom());
 	GetInstObj(CGDI).WhiteBrush();
-	GetInstObj(CGDI).Circle(m_pPlayingArea->Center(), 2.0);
+	GetInstObj(CGDI).Circle(m_pPlayingArea->Center(), 3.0);
 
 
 	//the ball
@@ -207,10 +221,10 @@ bool SoccerPitch::Render()
 
 	//show the score
 	GetInstObj(CGDI).TextColor(CGDI::red);
-	GetInstObj(CGDI).TextAtPos((m_cxClient/2)-50, m_cyClient-18, "Red: " + ttos(m_pBlueGoal->NumGoalsScored()));
+	GetInstObj(CGDI).TextAtPos((m_cxClient/2)-80, 10, "红队得分: " + ttos(m_pBlueGoal->NumGoalsScored()));
 
 	GetInstObj(CGDI).TextColor(CGDI::blue);
-	GetInstObj(CGDI).TextAtPos((m_cxClient/2)+10, m_cyClient-18, "Blue: " + ttos(m_pRedGoal->NumGoalsScored()));
+	GetInstObj(CGDI).TextAtPos((m_cxClient/2)+50, 10, "蓝队得分: " + ttos(m_pRedGoal->NumGoalsScored()));
 
 	return true;  
 }

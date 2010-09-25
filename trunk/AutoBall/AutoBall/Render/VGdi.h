@@ -99,6 +99,7 @@ private:
 	HBRUSH  m_orangeBrush;
 	HBRUSH  m_lightblueBrush;
 	HBRUSH  m_darkgreenBrush;
+	HBRUSH  m_whiteBrush;
 
 	HDC     m_hdc;
 	//
@@ -146,6 +147,7 @@ public:
 	void  LightBlueBrush() {if(m_hdc)SelectObject(m_hdc, m_lightblueBrush);}
 	void  DarkGreenBrush() {if(m_hdc)SelectObject(m_hdc, m_darkgreenBrush);}
 	void  OrangeBrush()  {if(m_hdc)SelectObject(m_hdc, m_orangeBrush);}
+	//void  WhiteBrush()   {if(m_hdc)SelectObject(m_hdc, GetStockObject(WHITE_BRUSH));} 
 
 
 	///  all menthods 
@@ -350,5 +352,36 @@ public:
 		case light_grey: LightGreyPen(); return;
 		case light_pink: LightPinkPen(); return;
 		}
+	}
+
+	void  HatchRBrush()
+	{
+		m_whiteBrush = CreateHatchBrush(HS_FDIAGONAL, RGB(255, 255, 255)); 
+		SelectObject(m_hdc,m_whiteBrush);
+	}
+
+	void  HatchLBrush()
+	{
+		m_whiteBrush = CreateHatchBrush(HS_BDIAGONAL, RGB(255, 255, 255)); 
+		SelectObject(m_hdc,m_whiteBrush);
+	}
+
+	void  HatchXBrush()
+	{
+		m_whiteBrush = CreateHatchBrush(HS_DIAGCROSS, RGB(255, 255, 255)); 
+		SelectObject(m_hdc,m_whiteBrush);
+	}
+
+	void  ClearBrush()
+	{
+		DeleteObject(m_whiteBrush);
+		//m_whiteBrush = CreateSolidBrush(RGB(255, 255, 255)); 
+		//SelectObject(m_hdc,m_whiteBrush);
+		/*//DeleteObject(m_whitePen);
+		
+		m_whiteBrush=CreateSolidBrush(colors[white]);*/
+		SelectObject(m_hdc,GetStockObject(NULL_BRUSH)); //ע�⣺ѡ�ÿջ�ˢ
+
+		
 	}
 };
