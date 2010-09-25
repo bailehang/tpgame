@@ -40,7 +40,6 @@ private:
 	Vector2D   m_vFacing;				   ///> 球门的朝向向量
 	Vector2D   m_vCenter;				   ///> 球门线的中间位置
 
-	//each time Scored() detects a goal this is incremented
 	int        m_iNumGoalsScored;		  ///> 进球数量
 
 };
