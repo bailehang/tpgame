@@ -5,7 +5,7 @@
 
 #pragma once 
 
-#include "MainSocket.h"
+#include "socket/MySocket.h"
 
 #include <list>
 #include <vector>
@@ -62,7 +62,7 @@ private:
 	HOSTENT*  m_HostTent;
     SOCKADDR_IN  m_SockAddr;
 
-	CMainSocket  m_MainSocket;
+	CMySocket  m_MainSocket;
 	
 
 };
