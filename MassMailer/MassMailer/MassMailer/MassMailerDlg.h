@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "App/socket/MySocket.h"
 
 // CMassMailerDlg ¶Ô»°¿ò
 class CMassMailerDlg : public CDialog
@@ -30,4 +31,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButton1();
+
+private:
+	CMySocket  m_MainSocket;
 };

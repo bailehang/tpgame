@@ -285,35 +285,27 @@
 				Name="Proxy"
 				>
 				<File
-					RelativePath=".\App\AsynSocket.cpp"
+					RelativePath=".\App\socket\AsyncProxySocket.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\App\AsynSocket.h"
+					RelativePath=".\App\socket\AsyncProxySocket.h"
 					>
 				</File>
 				<File
-					RelativePath=".\App\Base64Coding.cpp"
+					RelativePath=".\App\socket\CBase64Coding.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\App\Base64Coding.h"
+					RelativePath=".\App\socket\CBase64Coding.hpp"
 					>
 				</File>
 				<File
-					RelativePath=".\App\MainSocket.cpp"
+					RelativePath=".\App\socket\MySocket.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\App\MainSocket.h"
-					>
-				</File>
-				<File
-					RelativePath=".\App\ProxySocket.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\App\ProxySocket.h"
+					RelativePath=".\App\socket\MySocket.h"
 					>
 				</File>
 			</Filter>

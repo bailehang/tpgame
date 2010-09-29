@@ -38,6 +38,7 @@ bool  CSendMail::Connect(CString Ip,CString Port,CString type,bool Proxy)
 	   }
 	   else if ( type == "SOCKS 5")
 	   {
+		   /*
 		   char reply[255];
 		   unsigned char sommand[10];
 		   memset(sommand,0,10);
@@ -49,6 +50,7 @@ bool  CSendMail::Connect(CString Ip,CString Port,CString type,bool Proxy)
 		   sommand[3]=3; //2=user/pass, 0=no logon
 		   int len=4;	 //length of request
 		   int res=m_MainSocket.Send(sommand,len);
+		   */
 		   /*if (res==SOCKET_ERROR || res<len)
 		   {
 			   if (GetLastError()!=WSAEWOULDBLOCK || res<len)
