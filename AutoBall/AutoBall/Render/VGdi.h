@@ -174,6 +174,14 @@ public:
 		m_hdc = NULL;
 	}
 
+	void  DrawBground(HDC hdc,HBITMAP bamp)
+	{
+		SelectObject(m_hdc,bamp);
+
+		BitBlt(hdc,0,0,1050,680,m_hdc,0,0,SRCCOPY);
+
+	}
+
 	void  TextAtPos(int x,int y,const std::string &s)
 	{
 		TextOut(m_hdc, x, y, s.c_str(), (int)s.size());

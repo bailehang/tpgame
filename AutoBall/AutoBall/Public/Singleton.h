@@ -14,7 +14,7 @@ public:
 		return obj;
 	}
 private:
-	CSingleton(){}
+	CSingleton() {}
 	~CSingleton(){}
 	CSingleton(const CSingleton&);
 	CSingleton &operator = (const CSingleton&);          

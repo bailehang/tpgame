@@ -160,9 +160,11 @@ void SoccerPitch::CreateRegions(double width, double height)
 bool SoccerPitch::Render()
 {
 	//draw the grass
-	GetInstObj(CGDI).DarkGreenPen();
-	GetInstObj(CGDI).DarkGreenBrush();
-	GetInstObj(CGDI).Rect(0,0,m_cxClient, m_cyClient);
+
+	//GetInstObj(CGDI).DarkGreenPen();
+	//GetInstObj(CGDI).DarkGreenBrush();
+	//GetInstObj(CGDI).Rect(0,0,100, 100);
+
 
 	//render regions
 	if (GetInstObj(CGameSetup).bRegions)
