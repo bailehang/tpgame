@@ -25,17 +25,8 @@ SoccerPitch* g_SoccerPitch;
 //create a timer
 PrecisionTimer timer(GetInstObj(CGameSetup).FrameRate);
 
-//used when a user clicks on a menu item to ensure the option is 'checked'
-//correctly
-void CheckAllMenuItemsAppropriately(HWND hwnd)
-{
-// 	CheckMenuItemAppropriately(hwnd, IDM_SHOW_REGIONS, GetInstObj(CGameSetup).bRegions);
-// 	CheckMenuItemAppropriately(hwnd, IDM_SHOW_STATES, GetInstObj(CGameSetup).bStates);
-// 	CheckMenuItemAppropriately(hwnd, IDM_SHOW_IDS, GetInstObj(CGameSetup).bIDs);
-// 	CheckMenuItemAppropriately(hwnd, IDM_AIDS_SUPPORTSPOTS, GetInstObj(CGameSetup).bSupportSpots);
-// 	CheckMenuItemAppropriately(hwnd, ID_AIDS_SHOWTARGETS, GetInstObj(CGameSetup).bViewTargets);
-// 	CheckMenuItemAppropriately(hwnd, IDM_AIDS_HIGHLITE, GetInstObj(CGameSetup).bHighlightIfThreatened);
-}
+HBITMAP		bgmp;//位图句柄
+HDC			mdc;
 
 // 全局变量:
 HINSTANCE hInst;								// 当前实例
@@ -44,7 +35,8 @@ TCHAR szWindowClass[MAX_LOADSTRING];			// 主窗口类名
 
 // 此代码模块中包含的函数的前向声明:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
-BOOL				InitInstance(HINSTANCE, int);
+BOOL				InitInstance(HWND hWnd,int nCmdShow);
+void				MyPaint(HDC hdcc);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 HDC			g_hWndDC;	 //窗口DC 
@@ -105,6 +97,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		MessageBox(NULL, "CreateWindowEx Failed!", "Error!", 0);
 	}
 
+	// Perform application initialization:
+	InitInstance (hWnd,nCmdShow);
 	/*
 	HWND hwndButton  = CreateWindowEx(0,_T("Button"),_T("开始"),WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 
 					50,    
@@ -211,22 +205,59 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //        在此函数中，我们在全局变量中保存实例句柄并
 //        创建和显示主程序窗口。
 //
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+
+void MyPaint(HDC hdc)
 {
-   HWND hWnd;
+	//查看本机的操作系统版本
+	SelectObject(mdc,bgmp);
+	BitBlt(hdc,0,0,1050,680,mdc,0,0,SRCCOPY);
+}
 
-   hInst = hInstance; // 将实例句柄存储在全局变量中
-
-   hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
-
-   if (!hWnd)
-   {
-      return FALSE;
-   }
-
+BOOL InitInstance(HWND hWnd,int nCmdShow)
+{
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
+
+   HDC  hdc_ = GetDC(hWnd);
+   mdc  = CreateCompatibleDC(hdc_);
+
+   SelectObject(mdc,bgmp);
+
+   bgmp = (HBITMAP)LoadImage(NULL,"background.bmp",IMAGE_BITMAP,1050,680,LR_LOADFROMFILE);
+
+   SelectObject(mdc,bgmp);
+   //GetObject(bgmp,sizeof(BITMAP),&bm1);
+
+   //BitBlt(hdc_,0,0,1050,680,mdc,0,0,SRCCOPY);
+
+   /*
+   px2 = new unsigned char [bm1.bmHeight * bm1.bmWidthBytes];
+   GetBitmapBits(bgmp,bm1.bmHeight*bm1.bmWidthBytes,px2);
+
+   int xend,yend;
+   int x,y,i;
+   int rgb_b;
+
+   int pxbytes = bm1.bmBitsPixel / 8;
+   xend = xa +298;
+   yend = ya +329;
+
+   for (y =ya;y<yend;y++)
+   {
+	   for (x=xa;x<xend;x++)
+	   {
+		   rgb_b = y * bm1.bmBitsPixel + x * pxbytes;
+
+		   px1[rgb_b]   = px1[rgb_b] * 0.5;
+		   px1[rgb_b+1] = px1[rgb_b+1] * 0.5;
+		   px1[rgb_b+2] = px1[rgb_b+2] * 0.5;
+	   }
+   }
+
+
+   */
+   ReleaseDC(hWnd,hdc_);
+   DeleteDC(hdc_);
 
    return TRUE;
 }
@@ -293,8 +324,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			ReleaseDC(hwnd, hdc); 
 
 			g_SoccerPitch = new SoccerPitch(cxClient, cyClient); 
-
-			CheckAllMenuItemsAppropriately(hwnd);
 
 		}
 
@@ -408,23 +437,25 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 	case WM_PAINT:
-		{
+		{	
 
 			PAINTSTRUCT ps;
 
 			BeginPaint (hwnd, &ps);
 
 			GetInstObj(CGDI).StartDrawing(hdcBackBuffer);
+			
+			MyPaint(hdcBackBuffer);
+			//GetInstObj(CGDI).DrawBground(hdcBackBuffer,bgmp);
 
 			g_SoccerPitch->Render();
 
 			GetInstObj(CGDI).StopDrawing(hdcBackBuffer);
 
-
-
 			//now blit backbuffer to front
 			BitBlt(ps.hdc, 0, 0, cxClient, cyClient, hdcBackBuffer, 0, 0, SRCCOPY); 
 
+			//MyPaint(ps.hdc);
 			EndPaint (hwnd, &ps);
 
 		}
