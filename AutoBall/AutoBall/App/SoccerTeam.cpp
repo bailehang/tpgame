@@ -604,7 +604,7 @@ void SoccerTeam::CreatePlayers()
     //goalkeeper
     m_Players.push_back(new GoalKeeper(this,
                                1,
-                               TendGoal::Instance(),
+							   TendGoal::Instance(),
                                Vector2D(0,1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -615,7 +615,7 @@ void SoccerTeam::CreatePlayers()
  
 	m_Players.push_back(new FieldPlayer(this,
                                22,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -628,7 +628,7 @@ void SoccerTeam::CreatePlayers()
     //create the players
     m_Players.push_back(new FieldPlayer(this,
                                19,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -642,7 +642,7 @@ void SoccerTeam::CreatePlayers()
 
         m_Players.push_back(new FieldPlayer(this,
                                16,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -655,7 +655,7 @@ void SoccerTeam::CreatePlayers()
 
         m_Players.push_back(new FieldPlayer(this,
                                11,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -667,7 +667,7 @@ void SoccerTeam::CreatePlayers()
 
 		m_Players.push_back(new FieldPlayer(this,
                                8,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -679,7 +679,7 @@ void SoccerTeam::CreatePlayers()
 
 		m_Players.push_back(new FieldPlayer(this,
                                6,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -711,7 +711,7 @@ void SoccerTeam::CreatePlayers()
     //create the players
     m_Players.push_back(new FieldPlayer(this,
                                25,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,-1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -724,7 +724,7 @@ void SoccerTeam::CreatePlayers()
 	//create the players
     m_Players.push_back(new FieldPlayer(this,
                                28,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,-1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -736,7 +736,7 @@ void SoccerTeam::CreatePlayers()
 
     m_Players.push_back(new FieldPlayer(this,
                                31,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,-1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -749,7 +749,7 @@ void SoccerTeam::CreatePlayers()
 
     m_Players.push_back(new FieldPlayer(this,
                                32,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,-1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -761,7 +761,7 @@ void SoccerTeam::CreatePlayers()
 
 	 m_Players.push_back(new FieldPlayer(this,
                                35,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,-1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -773,7 +773,7 @@ void SoccerTeam::CreatePlayers()
 
 	  m_Players.push_back(new FieldPlayer(this,
                                41,
-                               Wait::Instance(),
+                               &GetInstObj(Wait),
                                Vector2D(0,-1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -830,8 +830,8 @@ void SoccerTeam::UpdateTargetsOfWaitingPlayers()const
 			//cast to a field player
 			FieldPlayer* plyr = static_cast<FieldPlayer*>(*it);
 
-			if ( plyr->GetFSM()->isInState(*Wait::Instance()) ||
-				plyr->GetFSM()->isInState(*ReturnToHomeRegion::Instance()) )
+			if ( plyr->GetFSM()->isInState(*&GetInstObj(Wait)) ||
+				plyr->GetFSM()->isInState(GetInstObj(ReturnToHomeRegion)) )
 			{
 				plyr->Steering()->SetTarget(plyr->HomeRegion()->Center());
 			}

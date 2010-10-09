@@ -18,32 +18,24 @@
 
 //************************************************************************ Global state
 
-GlobalPlayerState* GlobalPlayerState::Instance()
-{
-	static GlobalPlayerState instance;
-
-	return &instance;
-}
-
+EmptyFun(void,GlobalPlayerState,Enter,FieldPlayer);
+EmptyFun(void,GlobalPlayerState,Exit,FieldPlayer);
 
 void GlobalPlayerState::Execute(FieldPlayer* player)                                     
 {
 	if( !player->Team()->IsChaseBall() ) return;
 
 	/// 如果球员占有并接近球，那么降低他的最大速度
-	//if a player is in possession and close to the ball reduce his max speed
 	if((player->BallWithinReceivingRange()) && (player->isControllingPlayer()))
 	{
 		player->SetMaxSpeed(GetInstObj(CGameSetup).PlayerMaxSpeedWithBall);
 	}
-
 	else
 	{
 		player->SetMaxSpeed(GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall);
 	}
 
 }
-
 
 bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 {
@@ -55,7 +47,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 			player->Steering()->SetTarget(*(static_cast<Vector2D*>(telegram.ExtraInfo)));
 
 			//change state 
-			player->GetFSM()->ChangeState(ReceiveBall::Instance());
+			player->GetFSM()->ChangeState(&GetInstObj(ReceiveBall));
 
 			return true;
 		}
@@ -65,7 +57,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 	case Msg_SupportAttacker:
 		{
 			//如果已经在接应，立即返回
-			if (player->GetFSM()->isInState(*SupportAttacker::Instance()))
+			if (player->GetFSM()->isInState(GetInstObj(SupportAttacker)))
 			{
 				return true;
 			}
@@ -75,7 +67,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 			player->Steering()->SetTarget(player->Team()->GetSupportSpot());
 
 			//change the state
-			player->GetFSM()->ChangeState(SupportAttacker::Instance());
+			player->GetFSM()->ChangeState(&GetInstObj(SupportAttacker));
 
 			return true;
 		}
@@ -85,7 +77,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 	case Msg_Wait:
 		{
 			//change the state
-			player->GetFSM()->ChangeState(Wait::Instance());
+			player->GetFSM()->ChangeState(&GetInstObj(Wait));
 
 			return true;
 		}
@@ -96,7 +88,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 		{
 			player->SetDefaultHomeRegion();
 
-			player->GetFSM()->ChangeState(ReturnToHomeRegion::Instance());
+			player->GetFSM()->ChangeState(&GetInstObj(ReturnToHomeRegion));
 
 			return true;
 		}
@@ -148,7 +140,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 
 
 			//change state   
-			player->GetFSM()->ChangeState(Wait::Instance());
+			player->GetFSM()->ChangeState(&GetInstObj(Wait));
 
 			player->FindSupport();
 
@@ -162,18 +154,7 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 	return false;
 }
 
-
-
-
-//***************************************************************************** CHASEBALL
-
-ChaseBall* ChaseBall::Instance()
-{
-	static ChaseBall instance;
-
-	return &instance;
-}
-
+EmptyMsg(bool,ChaseBall,OnMessage,FieldPlayer);
 
 void ChaseBall::Enter(FieldPlayer* player)
 {
@@ -204,7 +185,7 @@ void ChaseBall::Execute(FieldPlayer* player)
 	//if the ball is within kicking range the player changes state to KickBall.
 	if (player->BallWithinKickingRange())
 	{
-		player->GetFSM()->ChangeState(KickBall::Instance());
+		player->GetFSM()->ChangeState(&GetInstObj(KickBall));
 
 		return;
 	}
@@ -222,24 +203,13 @@ void ChaseBall::Execute(FieldPlayer* player)
 	/// 如果该队员不是离球最近，那么他应该回到自己的初始位置，等待下一次
 	//if the player is not closest to the ball anymore, he should return back
 	//to his home region and wait for another opportunity
-	player->GetFSM()->ChangeState(ReturnToHomeRegion::Instance());
+	player->GetFSM()->ChangeState(&GetInstObj(ReturnToHomeRegion));
 }
 
 
 void ChaseBall::Exit(FieldPlayer* player)
 {
 	player->Steering()->SeekOff();
-}
-
-
-
-//*****************************************************************************SUPPORT ATTACKING PLAYER
-
-SupportAttacker* SupportAttacker::Instance()
-{
-	static SupportAttacker instance;
-
-	return &instance;
 }
 
 
@@ -266,6 +236,8 @@ void SupportAttacker::Enter(FieldPlayer* player)
 #endif
 }
 
+EmptyMsg(bool,SupportAttacker,OnMessage,FieldPlayer);
+
 void SupportAttacker::Execute(FieldPlayer* player)                                     
 {
 	if( !player->Team()->IsChaseBall() ) return;
@@ -274,7 +246,7 @@ void SupportAttacker::Execute(FieldPlayer* player)
 	//if his team loses control go back home
 	if (!player->Team()->InControl())
 	{
-		player->GetFSM()->ChangeState(ReturnToHomeRegion::Instance()); return;
+		player->GetFSM()->ChangeState(&GetInstObj(ReturnToHomeRegion)); return;
 	} 
 
 	/// 如果最佳接应点改变了，那么改变操控目标
@@ -330,16 +302,6 @@ void SupportAttacker::Exit(FieldPlayer* player)
 
 
 
-//************************************************************************ RETURN TO HOME REGION
-
-ReturnToHomeRegion* ReturnToHomeRegion::Instance()
-{
-	static ReturnToHomeRegion instance;
-
-	return &instance;
-}
-
-
 void ReturnToHomeRegion::Enter(FieldPlayer* player)
 {
 	if( player->GetID() == 9 )
@@ -366,6 +328,9 @@ void ReturnToHomeRegion::Enter(FieldPlayer* player)
 #endif
 }
 
+
+EmptyMsg(bool,ReturnToHomeRegion,OnMessage,FieldPlayer);
+
 void ReturnToHomeRegion::Execute(FieldPlayer* player)
 {
 	if( !player->Team()->IsChaseBall() ) return;
@@ -379,7 +344,7 @@ void ReturnToHomeRegion::Execute(FieldPlayer* player)
 			(player->Team()->Receiver() == NULL) &&
 			!player->Pitch()->GoalKeeperHasBall())
 		{
-			player->GetFSM()->ChangeState(ChaseBall::Instance());
+			player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
 
 			return;
 		}
@@ -392,13 +357,13 @@ void ReturnToHomeRegion::Execute(FieldPlayer* player)
 		Region::halfsize))
 	{
 		player->Steering()->SetTarget(player->Pos());
-		player->GetFSM()->ChangeState(Wait::Instance());
+		player->GetFSM()->ChangeState(&GetInstObj(Wait));
 	}
 	//if game is not on the player must return much closer to the center of his
 	//home region
 	else if(!player->Pitch()->GameOn() && player->AtTarget())
 	{
-		player->GetFSM()->ChangeState(Wait::Instance());
+		player->GetFSM()->ChangeState(&GetInstObj(Wait));
 	}
 }
 
@@ -408,17 +373,8 @@ void ReturnToHomeRegion::Exit(FieldPlayer* player)
 }
 
 
-
-
-//***************************************************************************** WAIT
-
-Wait* Wait::Instance()
-{
-	static Wait instance;
-
-	return &instance;
-}
-
+EmptyMsg(bool,Wait,OnMessage,FieldPlayer);
+EmptyFun(void,Wait,Exit,FieldPlayer);
 
 void Wait::Enter(FieldPlayer* player)
 {
@@ -494,7 +450,7 @@ void Wait::Execute(FieldPlayer* player)
 			player->Team()->Receiver() == NULL  &&
 			!player->Pitch()->GoalKeeperHasBall())
 		{
-			player->GetFSM()->ChangeState(ChaseBall::Instance());
+			player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
 
 			return;
 		}
@@ -503,7 +459,7 @@ void Wait::Execute(FieldPlayer* player)
 		if( !player->IsSelfRegin() && (player->Team()->InControl() ||  player->FollowReturn() ) )
 		{
 			player->Steering()->SetTarget(player->HomeRegion()->Center());
-			player->GetFSM()->ChangeState(ReturnToHomeRegion::Instance());
+			player->GetFSM()->ChangeState(&GetInstObj(ReturnToHomeRegion));
 		}
 
 
@@ -511,23 +467,14 @@ void Wait::Execute(FieldPlayer* player)
 		if ( !player->Team()->InControl() && player->FollowTarget()  )
 		{
 			 player->Steering()->SetTarget(player->Ball()->Pos());
-			 player->GetFSM()->ChangeState(FollowBall::Instance());
+			 player->GetFSM()->ChangeState(&GetInstObj(FollowBall));
 		}
 
 	} 
 }
 
-void Wait::Exit(FieldPlayer* player){}
 
-
-FollowBall* FollowBall::Instance()
-{
-	static FollowBall instance;
-
-	return &instance;
-}
-
-
+EmptyMsg(bool,FollowBall,OnMessage,FieldPlayer);
 
 void FollowBall::Enter(FieldPlayer* player)
 {
@@ -544,7 +491,7 @@ void FollowBall::Execute(FieldPlayer* player)
 		if( player->Team()->InControl() ||  player->FollowReturn() )
 		{
 			player->Steering()->SetTarget(player->HomeRegion()->Center());
-			player->GetFSM()->ChangeState(ReturnToHomeRegion::Instance());
+			player->GetFSM()->ChangeState(&GetInstObj(ReturnToHomeRegion));
 		}
 		
 		/// 不是最近队员，是防御者，不是控球队员，需要进行跟踪球进行防御	 &&
@@ -560,7 +507,7 @@ void FollowBall::Execute(FieldPlayer* player)
 		if (player->isClosestTeamMemberToBall() &&
 			player->Team()->IsThrowIn() )
 		{
-			player->GetFSM()->ChangeState(ChaseBall::Instance());
+			player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
 
 			return;
 		}
@@ -570,7 +517,7 @@ void FollowBall::Execute(FieldPlayer* player)
 			player->Team()->Receiver() == NULL  &&
 			!player->Pitch()->GoalKeeperHasBall())
 		{
-			player->GetFSM()->ChangeState(ChaseBall::Instance());
+			player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
 
 			return;
 		}
@@ -582,15 +529,8 @@ void FollowBall::Exit(FieldPlayer *player)
 	player->Steering()->SeekOff();
 }
 
-//************************************************************************ KICK BALL
 
-KickBall* KickBall::Instance()
-{
-	static KickBall instance;
-
-	return &instance;
-}
-
+EmptyMsg(bool,KickBall,OnMessage,FieldPlayer);
 
 void KickBall::Enter(FieldPlayer* player)
 {
@@ -615,7 +555,7 @@ void KickBall::Enter(FieldPlayer* player)
 	//the player can only make so many kick attempts per second.
 	if (!player->isReadyForNextKick()) 
 	{
-		player->GetFSM()->ChangeState(ChaseBall::Instance());
+		player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
 	}
 
 
@@ -624,11 +564,13 @@ void KickBall::Enter(FieldPlayer* player)
 #endif
 }
 
+EmptyFun(void,KickBall,Exit,FieldPlayer);
+
 void KickBall::Execute(FieldPlayer* player)
 { 
 	if( !player->Team()->IsChaseBall() ) 
 	{
-		player->GetFSM()->ChangeState(Wait::Instance());
+		player->GetFSM()->ChangeState(&GetInstObj(Wait));
 		return;
 	}
 
@@ -651,7 +593,7 @@ void KickBall::Execute(FieldPlayer* player)
 		//    debug_con << "Goaly has ball / ball behind player" << "";
 #endif
 
-		player->GetFSM()->ChangeState(ChaseBall::Instance());
+		player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
 
 		return;
 	}
@@ -695,7 +637,7 @@ void KickBall::Execute(FieldPlayer* player)
 		player->Ball()->Kick(KickDirection, power,player);
 
 		//change state   
-		player->GetFSM()->ChangeState(Wait::Instance());
+		player->GetFSM()->ChangeState(&GetInstObj(Wait));
 
 		player->FindSupport();
 
@@ -749,7 +691,7 @@ void KickBall::Execute(FieldPlayer* player)
 		/// 该队员应该等在他的当前位置，除非另有指示
 		//the player should wait at his current position unless instruced
 		//otherwise  
-		player->GetFSM()->ChangeState(Wait::Instance());
+		player->GetFSM()->ChangeState(&GetInstObj(Wait));
 
 		player->FindSupport();
 
@@ -762,20 +704,12 @@ void KickBall::Execute(FieldPlayer* player)
 	{   
 		player->FindSupport();
 
-		player->GetFSM()->ChangeState(Dribble::Instance());
+		player->GetFSM()->ChangeState(&GetInstObj(Dribble));
 	}   
 }
 
-
-//*************************************************************************** DRIBBLE
-
-Dribble* Dribble::Instance()
-{
-	static Dribble instance;
-
-	return &instance;
-}
-
+EmptyFun(void,Dribble,Exit,FieldPlayer);
+EmptyMsg(bool,Dribble,OnMessage,FieldPlayer);
 
 void Dribble::Enter(FieldPlayer* player)
 {
@@ -796,7 +730,6 @@ void Dribble::Enter(FieldPlayer* player)
 	}
 
 	/// 玩家正在控球
-	//let the team know this player is controlling
 	player->Team()->SetControllingPlayer(player);
 
 #ifdef PLAYER_STATE_INFO_ON
@@ -813,30 +746,20 @@ void Dribble::Execute(FieldPlayer* player)
 
 
 	/// 如果球在队员和自己方球们之间，他们需要通过多次轻踢和小转弯
-	//if the ball is between the player and the home goal, it needs to swivel
-	// the ball around by doing multiple small kicks and turns until the player 
-	//is facing in the correct direction
 	if (dot < 0)
 	{
 		
 		/// 队员的朝向稍微转移下（PI/4），然后在那个方向踢球
-		//the player's heading is going to be rotated by a small amount (Pi/4) 
-		//and then the ball will be kicked in that direction
 		Vector2D direction = player->Heading();
 
 		/// 计算队员的朝向和球门的朝向之间角度的正负号(+/-)
 		/// 使得队员可以转到正确方向
-		//calculate the sign (+/-) of the angle between the player heading and the 
-		//facing direction of the goal so that the player rotates around in the 
-		//correct direction
 		double angle = QuarterPi * -1 *
 			player->Team()->HomeGoal()->Facing().Sign(player->Heading());
 
 		Vec2DRotateAroundOrigin(direction, angle);
 
 		/// 当队员正在实体控制球，且同时转弯时，这个值起到很好的作用
-		//this value works well whjen the player is attempting to control the
-		//ball and turn at the same time
 		const double KickingForce = 0.8;
 
 		player->Ball()->Kick(direction, KickingForce,player);
@@ -854,22 +777,13 @@ void Dribble::Execute(FieldPlayer* player)
 
 	/// 改队员已经踢球了，所以他必须改变状态去追球
 	//the player has kicked the ball so he must now change state to follow it
-	player->GetFSM()->ChangeState(ChaseBall::Instance());
+	player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
 
 	return;  
 }
 
 
-
-//************************************************************************     RECEIVEBALL
-
-ReceiveBall* ReceiveBall::Instance()
-{
-	static ReceiveBall instance;
-
-	return &instance;
-}
-
+EmptyMsg(bool,ReceiveBall,OnMessage,FieldPlayer);
 
 void ReceiveBall::Enter(FieldPlayer* player)
 {
@@ -937,7 +851,7 @@ void ReceiveBall::Execute(FieldPlayer* player)
 	//he should change state to chase the ball
 	if (player->BallWithinReceivingRange() || !player->Team()->InControl())
 	{
-		player->GetFSM()->ChangeState(ChaseBall::Instance());
+		player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
 
 		return;
 	}  

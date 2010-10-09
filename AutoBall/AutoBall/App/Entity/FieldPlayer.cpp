@@ -57,7 +57,7 @@ FieldPlayer::FieldPlayer(SoccerTeam* home_team,
 	{    
 		m_pStateMachine->SetCurrentState(start_state);
 		m_pStateMachine->SetPreviousState(start_state);
-		m_pStateMachine->SetGlobalState(GlobalPlayerState::Instance());
+		m_pStateMachine->SetGlobalState(&GetInstObj(GlobalPlayerState));
 
 		m_pStateMachine->CurrentState()->Enter(this);
 	}    
