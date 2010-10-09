@@ -17,14 +17,6 @@ class  State;
 /// ×ãÇòÔË¶¯Ô±
 class FieldPlayer : public PlayerBase
 {
-private:
-
-	//an instance of the state machine class
-	StateMachine<FieldPlayer>*  m_pStateMachine;
-
-	//limits the number of kicks a player may take per second
-	Regulator*                  m_pKickLimiter;
-
 
 public:
 
@@ -52,5 +44,14 @@ public:
 	StateMachine<FieldPlayer>* GetFSM()const{return m_pStateMachine;}
 
 	bool        isReadyForNextKick()const{return m_pKickLimiter->isReady();}
+
+private:
+
+	//an instance of the state machine class
+	StateMachine<FieldPlayer>*  m_pStateMachine;
+
+	//limits the number of kicks a player may take per second
+	Regulator*                  m_pKickLimiter;
+
 
 };

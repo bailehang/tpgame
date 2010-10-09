@@ -61,10 +61,6 @@ protected:
 
 	double		  m_dBoundingRadius;///> 边界比例
 	static int    m_iNextValidID;	///> 下一个有效的ID
-
-
-	//enum {default_entity_type = -1};
-
 private:
 
 	long	      m_id;				///> 实体id
