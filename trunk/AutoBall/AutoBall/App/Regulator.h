@@ -17,11 +17,9 @@ class Regulator
 {
 private:
 
-	//the time period between updates 
 	/// 2次更新间隔
 	double m_dUpdatePeriod;
 
-	//the next time the regulator allows code flow
 	/// 下一次更新时间
 	DWORD m_dwNextUpdateTime;
 

@@ -34,7 +34,6 @@ public:
 
 	~FieldPlayer();
 
-	//call this to update the player's position and orientation
 	void        Update();   
 
 	void        Render();
@@ -42,15 +41,16 @@ public:
 	bool        HandleMessage(const Telegram& msg);
 
 	StateMachine<FieldPlayer>* GetFSM()const{return m_pStateMachine;}
-
+								 
+	/// 当处于kick的时候，下次带球的踢球准备时间是否已经到达
 	bool        isReadyForNextKick()const{return m_pKickLimiter->isReady();}
 
 private:
 
-	//an instance of the state machine class
+	/// 状态机
 	StateMachine<FieldPlayer>*  m_pStateMachine;
 
-	//limits the number of kicks a player may take per second
+	/// 限制有限次数的踢球次数
 	Regulator*                  m_pKickLimiter;
 
 

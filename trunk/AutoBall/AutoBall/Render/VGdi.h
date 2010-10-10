@@ -235,8 +235,6 @@ public:
 		LineTo(m_hdc, (int)x, (int)y);
 	}
 
-
-
 	void PolyLine(const std::vector<Vector2D>& points)
 	{
 		//make sure we have at least 2 points
@@ -383,13 +381,6 @@ public:
 	void  ClearBrush()
 	{
 		DeleteObject(m_whiteBrush);
-		//m_whiteBrush = CreateSolidBrush(RGB(255, 255, 255)); 
-		//SelectObject(m_hdc,m_whiteBrush);
-		/*//DeleteObject(m_whitePen);
-		
-		m_whiteBrush=CreateSolidBrush(colors[white]);*/
 		SelectObject(m_hdc,GetStockObject(NULL_BRUSH)); //ע�⣺ѡ�ÿջ�ˢ
-
-		
 	}
 };

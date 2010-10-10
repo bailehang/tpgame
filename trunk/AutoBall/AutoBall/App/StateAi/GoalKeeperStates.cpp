@@ -1,8 +1,8 @@
 #include "Stdafx.h"
-#include "StateMachine.h"
+#include "State.h"
+#include "StateMachine.h"	 
 #include "../Entity/PlayerBase.h"
-#include "../Entity/GoalKeeper.h"
-#include "GoalKeeperStates.h"		  
+#include "../Entity/GoalKeeper.h"		  
 #include "../Goal.h"
 #include "../SoccerTeam.h"
 #include "../SoccerPitch.h"
@@ -16,16 +16,9 @@
 //#define GOALY_STATE_INFO_ON
 
 
-//--------------------------- GlobalKeeperState -------------------------------
-//-----------------------------------------------------------------------------
-
-GlobalKeeperState* GlobalKeeperState::Instance()
-{
-	static GlobalKeeperState instance;
-
-	return &instance;
-}
-
+EmptyFun(void,GlobalKeeperState,Enter,GoalKeeper);
+EmptyFun(void,GlobalKeeperState,Execute,GoalKeeper);
+EmptyFun(void,GlobalKeeperState,Exit,GoalKeeper);
 
 bool GlobalKeeperState::OnMessage(GoalKeeper* keeper, const Telegram& telegram)
 {
@@ -35,14 +28,14 @@ bool GlobalKeeperState::OnMessage(GoalKeeper* keeper, const Telegram& telegram)
 		{
 			keeper->SetDefaultHomeRegion();
 
-			keeper->GetFSM()->ChangeState(ReturnHome::Instance());
+			keeper->GetFSM()->ChangeState(&GetInstObj(ReturnHome));
 		}
 
 		break;
 
 	case Msg_ReceiveBall:
 		{
-			keeper->GetFSM()->ChangeState(InterceptBall::Instance());
+			keeper->GetFSM()->ChangeState(&GetInstObj(InterceptBall));
 		}
 
 		break;
@@ -63,13 +56,8 @@ bool GlobalKeeperState::OnMessage(GoalKeeper* keeper, const Telegram& telegram)
 //  goalmouth to attempt to intercept it. (see next state)
 //------------------------------------------------------------------------
 
-TendGoal* TendGoal::Instance()
-{
-	static TendGoal instance;
 
-	return &instance;
-}
-
+EmptyMsg(bool,TendGoal,OnMessage,GoalKeeper);
 
 void TendGoal::Enter(GoalKeeper* keeper)
 {
@@ -92,7 +80,7 @@ void TendGoal::Execute(GoalKeeper* keeper)
 
 		keeper->Pitch()->SetGoalKeeperHasBall(true);
 
-		keeper->GetFSM()->ChangeState(PutBallBackInPlay::Instance());
+		keeper->GetFSM()->ChangeState(&GetInstObj(PutBallBackInPlay));
 
 		return;
 	}
@@ -102,7 +90,7 @@ void TendGoal::Execute(GoalKeeper* keeper)
 	//position to try and intercept it.
 	if (keeper->BallWithinRangeForIntercept() && !keeper->Team()->InControl())
 	{
-		keeper->GetFSM()->ChangeState(InterceptBall::Instance());
+		keeper->GetFSM()->ChangeState(&GetInstObj(InterceptBall));
 	}
 
 	/// 如果守门员离球门线太远了，而且没有对方队员的威胁，他应该移回球门
@@ -110,7 +98,7 @@ void TendGoal::Execute(GoalKeeper* keeper)
 	//is no threat from the opponents he should move back towards it
 	if (keeper->TooFarFromGoalMouth() && keeper->Team()->InControl())
 	{
-		keeper->GetFSM()->ChangeState(ReturnHome::Instance());
+		keeper->GetFSM()->ChangeState(&GetInstObj(ReturnHome));
 
 		return;
 	}
@@ -129,13 +117,7 @@ void TendGoal::Exit(GoalKeeper* keeper)
 //  the goal region before changing state back to TendGoal
 //------------------------------------------------------------------------
 
-ReturnHome* ReturnHome::Instance()
-{
-	static ReturnHome instance;
-
-	return &instance;
-}
-
+EmptyMsg(bool,ReturnHome,OnMessage,GoalKeeper);
 
 void ReturnHome::Enter(GoalKeeper* keeper)
 {
@@ -151,7 +133,7 @@ void ReturnHome::Execute(GoalKeeper* keeper)
 	//change state to tend goal
 	if (keeper->InHomeRegion() || !keeper->Team()->InControl())
 	{
-		keeper->GetFSM()->ChangeState(TendGoal::Instance());
+		keeper->GetFSM()->ChangeState(&GetInstObj(TendGoal));
 	}
 }
 
@@ -169,13 +151,7 @@ void ReturnHome::Exit(GoalKeeper* keeper)
 //  within his home region.
 //------------------------------------------------------------------------
 
-InterceptBall* InterceptBall::Instance()
-{
-	static InterceptBall instance;
-
-	return &instance;
-}
-
+EmptyMsg(bool,InterceptBall,OnMessage,GoalKeeper);
 
 void InterceptBall::Enter(GoalKeeper* keeper)
 {
@@ -195,7 +171,7 @@ void InterceptBall::Execute(GoalKeeper* keeper)
 	//he should keep trying to intercept it.
 	if (keeper->TooFarFromGoalMouth() && !keeper->isClosestPlayerOnPitchToBall())
 	{
-		keeper->GetFSM()->ChangeState(ReturnHome::Instance());
+		keeper->GetFSM()->ChangeState(&GetInstObj(ReturnHome));
 
 		return;
 	}
@@ -209,7 +185,7 @@ void InterceptBall::Execute(GoalKeeper* keeper)
 
 		keeper->Pitch()->SetGoalKeeperHasBall(true);
 
-		keeper->GetFSM()->ChangeState(PutBallBackInPlay::Instance());
+		keeper->GetFSM()->ChangeState(&GetInstObj(PutBallBackInPlay));
 
 		return;
 	}
@@ -221,17 +197,8 @@ void InterceptBall::Exit(GoalKeeper* keeper)
 }
 
 
-
-//--------------------------- PutBallBackInPlay --------------------------
-//
-//------------------------------------------------------------------------
-
-PutBallBackInPlay* PutBallBackInPlay::Instance()
-{
-	static PutBallBackInPlay instance;
-
-	return &instance;
-}
+EmptyFun(void,PutBallBackInPlay,Exit,GoalKeeper);
+EmptyMsg(bool,PutBallBackInPlay,OnMessage,GoalKeeper);
 
 void PutBallBackInPlay::Enter(GoalKeeper* keeper)
 {
@@ -276,7 +243,7 @@ void PutBallBackInPlay::Execute(GoalKeeper* keeper)
 
 		/// 回到守门状态
 		//go back to tending the goal   
-		keeper->GetFSM()->ChangeState(TendGoal::Instance());
+		keeper->GetFSM()->ChangeState(&GetInstObj(TendGoal));
 
 		return;
 	}  

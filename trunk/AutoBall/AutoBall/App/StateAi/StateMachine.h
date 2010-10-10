@@ -11,7 +11,6 @@
 template <class entity_type>
 class StateMachine
 {
-
 public:
 
 	StateMachine(entity_type* owner):m_pOwner(owner),
@@ -20,7 +19,7 @@ public:
 		m_pGlobalState(NULL)
 	{}
 
-	virtual ~StateMachine(){}
+	~StateMachine() { }
 
 	//use these methods to initialize the FSM
 	void SetCurrentState(State<entity_type>* s){m_pCurrentState = s;}

@@ -7,13 +7,10 @@
 #include "../Public/GameSetup.h"
 #include "SupportSpotCalculator.h"
 
-//#include "debug/DebugConsole.h"
 
-//------------------------------- dtor ----------------------------------------
-//-----------------------------------------------------------------------------
 SupportSpotCalculator::~SupportSpotCalculator()
 {
-	delete m_pRegulator;
+	SAFE_DELETE( m_pRegulator );
 }
 
 

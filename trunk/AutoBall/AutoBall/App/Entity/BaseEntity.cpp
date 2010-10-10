@@ -7,7 +7,7 @@ CBaseEntity::CBaseEntity(long id)
 {
 	SetEntityType( default_entity_type );
 	
-	assert( id >= m_iNextValidID &&" <BaseEntity::ID>: invalid ID");
+	assert( id >= m_iNextValidID && "BaseEntity::ID is invalid ID");
 
 	m_id = id ;
 	m_dBoundingRadius=0.0;

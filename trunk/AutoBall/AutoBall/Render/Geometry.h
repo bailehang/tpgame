@@ -1,13 +1,8 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 //------------------------------------------------------------------------
-//
 //Name:   geometry.h 
-//
 //Desc:   useful 2D geometry functions
-//
-//Author: Mat Buckland (fup@ai-junkie.com)
-//
 //------------------------------------------------------------------------
 #include "utils.h"
 #include "Vector2D.h"

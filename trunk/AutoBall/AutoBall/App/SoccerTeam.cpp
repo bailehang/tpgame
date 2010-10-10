@@ -11,9 +11,6 @@
 #include "Entity/FieldPlayer.h"
 #include "Entity/EntityManager.h"
 #include "StateAi/StateMachine.h"
-#include "StateAi/TeamStates.h"
-#include "StateAi/GoalKeeperStates.h"
-#include "StateAi/FieldPlayerStates.h"
 #include "Messageing/MessageDispatcher.h"
 #include "Messageing/SoccerMessages.h"
 #include "../Public/Singleton.h"
@@ -41,8 +38,8 @@ SoccerTeam::SoccerTeam(Goal*        home_goal,
 	//setup the state machine
 	m_pStateMachine = new StateMachine<SoccerTeam>(this);
 
-	m_pStateMachine->SetCurrentState(Defending::Instance());
-	m_pStateMachine->SetPreviousState(Defending::Instance());
+	m_pStateMachine->SetCurrentState(&GetInstObj(Defending));
+	m_pStateMachine->SetPreviousState(&GetInstObj(Defending));
 	m_pStateMachine->SetGlobalState(NULL);
 
 	//create the players and goalkeeper
@@ -74,10 +71,10 @@ SoccerTeam::~SoccerTeam()
 	std::vector<PlayerBase*>::iterator it = m_Players.begin();
 	for (it; it != m_Players.end(); ++it)
 	{
-		delete *it;
+		SAFE_DELETE( *it );
 	}
 
-	delete m_pSupportSpotCalc;
+	SAFE_DELETE( m_pSupportSpotCalc );
 }
 
 //-------------------------- update --------------------------------------
@@ -604,7 +601,7 @@ void SoccerTeam::CreatePlayers()
     //goalkeeper
     m_Players.push_back(new GoalKeeper(this,
                                1,
-							   TendGoal::Instance(),
+							   &GetInstObj(TendGoal),
                                Vector2D(0,1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
@@ -698,7 +695,7 @@ void SoccerTeam::CreatePlayers()
      //goalkeeper
     m_Players.push_back(new GoalKeeper(this,
                                45,
-                               TendGoal::Instance(),
+                               &GetInstObj(TendGoal),
                                Vector2D(0,-1),
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,

@@ -18,7 +18,8 @@
 //------------------------------------------------------------------------
 PlayerBase::~PlayerBase()
 {
-	delete m_pSteering;
+	SAFE_DELETE( m_pSteering );
+
 }
 
 //----------------------------- ctor -------------------------------------
@@ -53,9 +54,9 @@ CMoveEntity(home_team->Pitch()->GetRegionFromIndex(home_region)->Center(),
 	//setup the vertex buffers and calculate the bounding radius
 	const int NumPlayerVerts = 4;
 	const Vector2D player[NumPlayerVerts] = {Vector2D(-3, 8),
-		Vector2D(3,10),
-		Vector2D(3,-10),
-		Vector2D(-3,-8)};
+											 Vector2D(3,10),
+											 Vector2D(3,-10),
+											 Vector2D(-3,-8)};
 
 	for (int vtx=0; vtx<NumPlayerVerts; ++vtx)
 	{

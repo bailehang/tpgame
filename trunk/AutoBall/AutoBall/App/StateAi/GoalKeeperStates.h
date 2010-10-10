@@ -4,114 +4,21 @@
 #include <string>
 #include "State.h"
 
-class GoalKeeper;
-class SoccerPitch;
 
-/// 守门员状态
-class GlobalKeeperState: public State<GoalKeeper>
-{
-private:
 
-	GlobalKeeperState(){}
 
-public:
+/// 全局队员状态
+CREATESTATE(GlobalKeeperState,Telegram,GoalKeeper);
 
-	//this is a singleton
-	static GlobalKeeperState* Instance();
-
-	void Enter(GoalKeeper* keeper){}
-
-	void Execute(GoalKeeper* keeper){}
-
-	void Exit(GoalKeeper* keeper){}
-
-	bool OnMessage(GoalKeeper*, const Telegram&);
-};
-
-//-----------------------------------------------------------------------------
 /// 守球门
-class TendGoal: public State<GoalKeeper>
-{
-private:
-
-	TendGoal(){}
-
-public:
-
-	//this is a singleton
-	static TendGoal* Instance();
-
-	void Enter(GoalKeeper* keeper);
-
-	void Execute(GoalKeeper* keeper);
-
-	void Exit(GoalKeeper* keeper);
-
-	bool OnMessage(GoalKeeper*, const Telegram&){return false;}
-};
+CREATESTATE(TendGoal,Telegram,GoalKeeper);
 
 /// 截球
-//------------------------------------------------------------------------
-class InterceptBall: public State<GoalKeeper>
-{
-private:
+CREATESTATE(InterceptBall,Telegram,GoalKeeper);
 
-	InterceptBall(){}
+/// 归位
+CREATESTATE(ReturnHome,Telegram,GoalKeeper);
 
-public:
+/// 球传回到赛场
+CREATESTATE(PutBallBackInPlay,Telegram,GoalKeeper);
 
-	//this is a singleton
-	static InterceptBall* Instance();
-
-	void Enter(GoalKeeper* keeper);
-
-	void Execute(GoalKeeper* keeper);
-
-	void Exit(GoalKeeper* keeper);
-
-	bool OnMessage(GoalKeeper*, const Telegram&){return false;}
-};
-
-/// 回到起始位置
-//------------------------------------------------------------------------
-class ReturnHome: public State<GoalKeeper>
-{
-private:
-
-	ReturnHome(){}
-
-public:
-
-	//this is a singleton
-	static ReturnHome* Instance();
-
-	void Enter(GoalKeeper* keeper);
-
-	void Execute(GoalKeeper* keeper);
-
-	void Exit(GoalKeeper* keeper);
-
-	bool OnMessage(GoalKeeper*, const Telegram&){return false;}
-};
-
-/// 把球传回到赛场中
-//------------------------------------------------------------------------
-class PutBallBackInPlay: public State<GoalKeeper>
-{
-private:
-
-	PutBallBackInPlay(){}
-
-public:
-
-	//this is a singleton
-	static PutBallBackInPlay* Instance();
-
-	void Enter(GoalKeeper* keeper);
-
-	void Execute(GoalKeeper* keeper);
-
-	void Exit(GoalKeeper* keeper){}
-
-	bool OnMessage(GoalKeeper*, const Telegram&){return false;}
-};

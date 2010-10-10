@@ -259,7 +259,7 @@ inline void DeleteSTLContainer(container& c)
 {
 	for (container::iterator it = c.begin(); it!=c.end(); ++it)
 	{
-		delete *it;
+		SAFE_DELETE( *it );
 		*it = NULL;
 	}
 }
@@ -269,7 +269,7 @@ inline void DeleteSTLMap(map& m)
 {
 	for (map::iterator it = m.begin(); it!=m.end(); ++it)
 	{
-		delete it->second;
+		SAFE_DELETE( it->second );
 		it->second = NULL;
 	}
 }

@@ -1,8 +1,8 @@
 #include "Stdafx.h"
+#include "State.h"
 #include "StateMachine.h"
 #include "../Entity/PlayerBase.h"
-#include "../Entity/FieldPlayer.h"
-#include "FieldPlayerStates.h"		  
+#include "../Entity/FieldPlayer.h"	  
 #include "../Goal.h"
 #include "../SoccerTeam.h"
 #include "../SoccerPitch.h"
@@ -14,9 +14,6 @@
 
 
 #define PLAYER_STATE_INFO_ON
-
-
-//************************************************************************ Global state
 
 EmptyFun(void,GlobalPlayerState,Enter,FieldPlayer);
 EmptyFun(void,GlobalPlayerState,Exit,FieldPlayer);
@@ -107,9 +104,6 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 #endif
 
 			/// 如果球不在球员可触及的范围，或请求队员不具备射门的条件，改队员不能传球给请求队员
-			//if the ball is not within kicking range or their is already a 
-			//receiving player, this player cannot pass the ball to the player
-			//making the request.
 			if (player->Team()->Receiver() != NULL ||
 				!player->BallWithinKickingRange() )
 			{
@@ -130,7 +124,6 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
 #endif
 
 			///通知接球队员，开始传球
-			//let the receiver know a pass is coming 
 			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 				player->GetID(),
 				receiver->GetID(),
@@ -182,7 +175,6 @@ void ChaseBall::Enter(FieldPlayer* player)
 void ChaseBall::Execute(FieldPlayer* player)                                     
 {
 	/// 如果球在他能踢到 ，那么该队员改变状态为KickBall		  BallWithinReceivingRange
-	//if the ball is within kicking range the player changes state to KickBall.
 	if (player->BallWithinKickingRange())
 	{
 		player->GetFSM()->ChangeState(&GetInstObj(KickBall));
@@ -191,8 +183,6 @@ void ChaseBall::Execute(FieldPlayer* player)
 	}
 	
 	/// 如果改球队员离球最近，继续追球
-	//if the player is the closest player to the ball then he should keep
-	//chasing it
 	if (player->isClosestTeamMemberToBall())
 	{
 		player->Steering()->SetTarget(player->Ball()->Pos());
@@ -201,8 +191,6 @@ void ChaseBall::Execute(FieldPlayer* player)
 	}
 
 	/// 如果该队员不是离球最近，那么他应该回到自己的初始位置，等待下一次
-	//if the player is not closest to the ball anymore, he should return back
-	//to his home region and wait for another opportunity
 	player->GetFSM()->ChangeState(&GetInstObj(ReturnToHomeRegion));
 }
 
@@ -243,14 +231,12 @@ void SupportAttacker::Execute(FieldPlayer* player)
 	if( !player->Team()->IsChaseBall() ) return;
 
 	/// 如果自己球队丢失对球的控制权，球员回到起始区域
-	//if his team loses control go back home
 	if (!player->Team()->InControl())
 	{
 		player->GetFSM()->ChangeState(&GetInstObj(ReturnToHomeRegion)); return;
 	} 
 
 	/// 如果最佳接应点改变了，那么改变操控目标
-	//if the best supporting spot changes, change the steering target
 	if (player->Team()->GetSupportSpot() != player->Steering()->Target())
 	{    
 		player->Steering()->SetTarget(player->Team()->GetSupportSpot());
@@ -259,8 +245,6 @@ void SupportAttacker::Execute(FieldPlayer* player)
 	}
 
 	/// 如果这么球员可以射门，切进攻队员可以把球传给他，那么把球传给该队员
-	//if this player has a shot at the goal AND the attacker can pass
-	//the ball to him the attacker should pass the ball to this player
 	if( player->Team()->CanShoot(player->Pos(),
 		GetInstObj(CGameSetup).MaxShootingForce))
 	{
@@ -268,20 +252,16 @@ void SupportAttacker::Execute(FieldPlayer* player)
 	}
 
 	/// 如果这名队员在接应点，且他的球队仍控制球，他应该停在那儿，转向面对着球
-	//if this player is located at the support spot and his team still have
-	//possession, he should remain still and turn to face the ball
 	if (player->AtTarget())
 	{
 		player->Steering()->ArriveOff();
 
 		/// 队员跟踪球
-		//the player should keep his eyes on the ball!
 		player->TrackBall();
 
 		player->SetVelocity(Vector2D(0,0));
 
 		/// 如果没有收到其他队员的威胁，那么请求传球
-		//if not threatened by another player request a pass
 		if (!player->isThreatened())
 		{
 			player->Team()->RequestPass(player);
@@ -292,8 +272,6 @@ void SupportAttacker::Execute(FieldPlayer* player)
 
 void SupportAttacker::Exit(FieldPlayer* player)
 {
-	//set supporting player to null so that the team knows it has to 
-	//determine a new one.
 	player->Team()->SetSupportingPlayer(NULL);
 
 	player->Steering()->ArriveOff();
@@ -548,11 +526,9 @@ void KickBall::Enter(FieldPlayer* player)
 	}
 
 	/// 使球队直到该队员正在控制球
-	//let the team know this player is controlling
 	player->Team()->SetControllingPlayer(player);
 
 	/// 该队员每秒只能惊喜有限次数的踢球
-	//the player can only make so many kick attempts per second.
 	if (!player->isReadyForNextKick()) 
 	{
 		player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
@@ -582,9 +558,6 @@ void KickBall::Execute(FieldPlayer* player)
 
 	/// 如果守门员控制了球，或者球还在该队员的后面，
 	/// 或者已经分配了接球队员，就不能踢球，所以只是继续追球
-	//cannot kick the ball if the goalkeeper is in possession or if it is 
-	//behind the player or if there is already an assigned receiver. So just
-	//continue chasing the ball
 	if (player->Team()->Receiver() != NULL   ||
 		player->Pitch()->GoalKeeperHasBall() ||
 		(dot < 0) ) 
@@ -601,19 +574,12 @@ void KickBall::Execute(FieldPlayer* player)
 	/* Attempt a shot at the goal */
 
 	/// 计算指向球的向量与球员自己的朝向向量的点积
-	//if a shot is possible, this vector will hold the position along the 
-	//opponent's goal line the player should aim for.
 	Vector2D    BallTarget;
 
 	/// 计算指向球的向量与球员自己的朝向向量的点积
-	//the dot product is used to adjust the shooting force. The more
-	//directly the ball is ahead, the more forceful the kick
 	double power = GetInstObj(CGameSetup).MaxShootingForce * dot;
 
 	/// 如果确认该队员可以在这个位置射门，或者无论如何他都改该踢一下球，那该队员则试图射门
-	//if it is determined that the player could score a goal from this position
-	//OR if he should just kick the ball anyway, the player will attempt
-	//to make the shot
 	if (player->Team()->CanShoot(player->Ball()->Pos(),
 		power,
 		BallTarget)                   || 
@@ -625,13 +591,9 @@ void KickBall::Execute(FieldPlayer* player)
 
 		/// 给射门增加一些干扰，我们不想让队员踢得太准，
 		/// 通过改变PlayerKickingAccuracy值可以调整干扰数值
-		//add some noise to the kick. We don't want players who are 
-		//too accurate! The amount of noise can be adjusted by altering
-		//GetInstObj(CGameSetup).PlayerKickingAccuracy
 		BallTarget = AddNoiseToKick(player->Ball()->Pos(), BallTarget);
 
 		///这是踢球的方向
-		//this is the direction the ball will be kicked in
 		Vector2D KickDirection = BallTarget - player->Ball()->Pos();
 
 		player->Ball()->Kick(KickDirection, power,player);
@@ -649,7 +611,6 @@ void KickBall::Execute(FieldPlayer* player)
 	/* Attempt a pass to a player */
 
 	/// 找到接球队员，那么receiver将指向他
-	//if a receiver is found this will point to it
 	PlayerBase* receiver = NULL;
 
 	power = GetInstObj(CGameSetup).MaxPassingForce * dot;
@@ -664,7 +625,6 @@ void KickBall::Execute(FieldPlayer* player)
 		GetInstObj(CGameSetup).MinPassDist))
 	{     
 		/// 给踢球增加一些干扰
-		//add some noise to the kick
 		BallTarget = AddNoiseToKick(player->Ball()->Pos(), BallTarget);
 
 		Vector2D KickDirection = BallTarget - player->Ball()->Pos();
@@ -680,7 +640,6 @@ void KickBall::Execute(FieldPlayer* player)
 
 
 		/// 让接球队员知道要传球
-		//let the receiver know a pass is coming 
 		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
 			player->GetID(),
 			receiver->GetID(),
@@ -689,8 +648,6 @@ void KickBall::Execute(FieldPlayer* player)
 
 
 		/// 该队员应该等在他的当前位置，除非另有指示
-		//the player should wait at his current position unless instruced
-		//otherwise  
 		player->GetFSM()->ChangeState(&GetInstObj(Wait));
 
 		player->FindSupport();
@@ -699,7 +656,6 @@ void KickBall::Execute(FieldPlayer* player)
 	}
 
 	/// 不能射门和传球，只能带球到前场
-	//cannot shoot or pass, so dribble the ball upfield
 	else
 	{   
 		player->FindSupport();
@@ -808,15 +764,7 @@ void ReceiveBall::Enter(FieldPlayer* player)
 	//this player is also now the controlling player
 	player->Team()->SetControllingPlayer(player);
 
-	//there are two types of receive behavior. One uses arrive to direct
-	//the receiver to the position sent by the passer in its telegram. The
-	//other uses the pursuit behavior to pursue the ball. 
-	//This statement selects between them dependent on the probability
-	//ChanceOfUsingArriveTypeReceiveBehavior, whether or not an opposing
-	//player is close to the receiving player, and whether or not the receiving
-	//player is in the opponents 'hot region' (the third of the pitch closest
-	//to the opponent's goal
-	/// 有2类控球行为，1.用arrive指导接球队员到达传球队员发送的消息中制定的位置，2.
+	/// 有2类控球行为，1.用arrive指导接球队员到达传球队员发送的消息中制定的位置。
 	/// 2.用Pursuit行为来追逐球
 	/// 这个语句依据ChanceOfUsingArriveTypeReceiveBehavior的可能性选择其一，判断是否有对方队员靠近接球队员
 	/// 是否接球队员在对方的热区（所有队员中离对方球门第三近的）

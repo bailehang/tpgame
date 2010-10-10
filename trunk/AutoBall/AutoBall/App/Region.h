@@ -1,15 +1,5 @@
 #ifndef REGION_H
 #define REGION_H
-//------------------------------------------------------------------------
-//
-//  Name:   Region.h
-//
-//  Desc:   Defines a rectangular region. A region has an identifying
-//          number, and four corners.
-//
-//  Author: Mat Buckland (fup@ai-junkie.com)
-//
-//------------------------------------------------------------------------
 
 #include <math.h>
 
@@ -22,23 +12,7 @@
 class Region
 {
 public:
-
 	enum region_modifier{halfsize, normal};
-
-protected:
-
-	/// 前后左右，坐标
-	double        m_dTop;
-	double        m_dLeft;
-	double        m_dRight;
-	double        m_dBottom;
-	/// 长宽
-	double        m_dWidth;
-	double        m_dHeight;
-	/// 
-	Vector2D     m_vCenter;
-
-	int          m_iID;
 
 public:
 
@@ -56,7 +30,6 @@ public:
 		m_dBottom(bottom),
 		m_iID(id)
 	{
-		//calculate center of region
 		m_vCenter = Vector2D( (left+right)*0.5, (top+bottom)*0.5 );
 
 		m_dWidth  = fabs(right-left);
@@ -67,13 +40,11 @@ public:
 
 	virtual inline void     Render(bool ShowID)const;
 
-	//returns true if the given position lays inside the region. The
-	//region modifier can be used to contract the region bounderies
+	/// 判断pos是否在当前矩形区域内
 	inline bool     Inside(Vector2D pos, region_modifier r)const;
 
-	//returns a vector representing a random location
-	//within the region
-	inline Vector2D GetRandomPosition()const;
+	/// 在当前矩形区域，返回一个随机位置信息
+	inline	   Vector2D GetRandomPosition()const;
 
 	//-------------------------------
 	double     Top()const{return m_dTop;}
@@ -87,6 +58,21 @@ public:
 
 	Vector2D  Center()const{return m_vCenter;}
 	int       ID()const{return m_iID;}
+
+	protected:
+
+	/// 前后左右，坐标
+	double        m_dTop;
+	double        m_dLeft;
+	double        m_dRight;
+	double        m_dBottom;
+	/// 长宽
+	double        m_dWidth;
+	double        m_dHeight;
+	/// 场景区域的中间位置
+	Vector2D     m_vCenter;
+    /// 矩形对应ID
+	int          m_iID;
 
 };
 

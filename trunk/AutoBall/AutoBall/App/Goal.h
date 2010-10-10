@@ -18,25 +18,21 @@ public:
 		m_vFacing(facing)
 	{  }
 
-	//Given the current ball position and the previous ball position,
-	//this method returns true if the ball has crossed the goal line 
-	//and increments m_iNumGoalsScored
+	/// 如果跨过球门口，改方法返回真
 	inline bool Scored(const SoccerBall*const ball);
 
-	//-----------------------------------------------------accessor methods
-	Vector2D Center()const{return m_vCenter;}
-	Vector2D Facing()const{return m_vFacing;}
-	Vector2D LeftPost()const{return m_vLeftPost;}
-	Vector2D RightPost()const{return m_vRightPost;}
+	Vector2D Center()const		{return m_vCenter;}
+	Vector2D Facing()const		{return m_vFacing;}
+	Vector2D LeftPost()const	{return m_vLeftPost;}
+	Vector2D RightPost()const	{return m_vRightPost;}
 
-	int      NumGoalsScored()const{return m_iNumGoalsScored;}
-	void     ResetGoalsScored(){m_iNumGoalsScored = 0;}
+	int    NumGoalsScored()const{return m_iNumGoalsScored;}
+	void   ResetGoalsScored()	{m_iNumGoalsScored = 0;}
 
 private:
 
 	Vector2D   m_vLeftPost;				   ///> 左右2根门柱
 	Vector2D   m_vRightPost;
-
 	Vector2D   m_vFacing;				   ///> 球门的朝向向量
 	Vector2D   m_vCenter;				   ///> 球门线的中间位置
 

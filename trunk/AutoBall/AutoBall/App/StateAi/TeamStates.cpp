@@ -1,7 +1,6 @@
-#include "Stdafx.h"
-#include "TeamStates.h"
-#include "StateMachine.h"
+#include "Stdafx.h"	  
 #include "State.h"
+#include "StateMachine.h"
 #include "../SoccerTeam.h"
 #include "../Entity/PlayerBase.h"
 #include "../SoccerPitch.h"
@@ -19,15 +18,7 @@ void ChangePlayerHomeRegions(SoccerTeam* team, const int NewRegions[TeamSize])
 	}
 }
 
-//************************************************************************ ATTACKING
-
-Attacking* Attacking::Instance()
-{
-	static Attacking instance;
-
-	return &instance;
-}
-
+EmptyMsg(bool,Attacking,OnMessage,SoccerTeam);
 
 void Attacking::Enter(SoccerTeam* team)
 {
@@ -63,7 +54,7 @@ void Attacking::Execute(SoccerTeam* team)
 	//if this team is no longer in control change states
 	if (!team->InControl())
 	{
-		team->GetFSM()->ChangeState(Defending::Instance()); return;
+		team->GetFSM()->ChangeState(&GetInstObj(Defending)); return;
 	}
 
 	/// 给接应队员计算最佳位置
@@ -79,14 +70,7 @@ void Attacking::Exit(SoccerTeam* team)
 
 
 
-//************************************************************************ DEFENDING
-
-Defending* Defending::Instance()
-{
-	static Defending instance;
-
-	return &instance;
-}
+EmptyMsg(bool,Defending,OnMessage,SoccerTeam);
 
 void Defending::Enter(SoccerTeam* team)
 {
@@ -118,7 +102,7 @@ void Defending::Execute(SoccerTeam* team)
 	//if in control change states
 	if (team->InControl())
 	{
-		team->GetFSM()->ChangeState(Attacking::Instance()); return;
+		team->GetFSM()->ChangeState(&GetInstObj(Attacking)); return;
 	}
 }
 
@@ -126,13 +110,7 @@ void Defending::Execute(SoccerTeam* team)
 void Defending::Exit(SoccerTeam* team){}
 
 
-//************************************************************************ KICKOFF
-PrepareForKickOff* PrepareForKickOff::Instance()
-{
-	static PrepareForKickOff instance;
-
-	return &instance;
-}
+EmptyMsg(bool,PrepareForKickOff,OnMessage,SoccerTeam);
 
 void PrepareForKickOff::Enter(SoccerTeam* team)
 {
@@ -152,7 +130,7 @@ void PrepareForKickOff::Execute(SoccerTeam* team)
 	//if both teams in position, start the game
 	if (team->AllPlayersAtHome() && team->Opponents()->AllPlayersAtHome())
 	{
-		team->GetFSM()->ChangeState(Defending::Instance());
+		team->GetFSM()->ChangeState(&GetInstObj(Defending));
 	}
 }
 
@@ -162,14 +140,7 @@ void PrepareForKickOff::Exit(SoccerTeam* team)
 }
 
 
-
-//************************************************************************ KICKOFF
-Throw_In* Throw_In::Instance()
-{
-	static Throw_In instance;
-
-	return &instance;
-}
+EmptyMsg(bool,Throw_In,OnMessage,SoccerTeam);
 
 void Throw_In::Enter(SoccerTeam* team)
 {
@@ -181,7 +152,7 @@ void Throw_In::Execute(SoccerTeam* team)
 	//if both teams in position, start the game
 	if ( !team->IsThrowIn() )
 	{
-		team->GetFSM()->ChangeState(Attacking::Instance());
+		team->GetFSM()->ChangeState(&GetInstObj(Attacking));
 	}
 }
 
