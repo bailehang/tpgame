@@ -13,6 +13,7 @@
 #include "Public/Singleton.h"
 #include "Render/Vector2D.h"
 #include "Render/VGdi.h"
+#include "Render/Utils.h"
 
 
 #define MAX_LOADSTRING 100
@@ -152,7 +153,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	}//end while
 
-	delete g_SoccerPitch;
+	SAFE_DELETE( g_SoccerPitch );
 
 	UnregisterClass( g_szWindowClassName, winclass.hInstance );
 
@@ -415,7 +416,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			case 'R':
 				{
-					delete g_SoccerPitch;
+					SAFE_DELETE( g_SoccerPitch );
 
 					g_SoccerPitch = new SoccerPitch(cxClient, cyClient);
 				}

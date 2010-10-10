@@ -29,7 +29,7 @@ bool Overlapped(const T* ob, const conT& conOb, double MinDistBetweenObstacles =
 	return false;
 }
 
-
+/*
 template <class T, class conT>
 void TagNeighbors(T* entity, conT& others, const double radius)
 {
@@ -56,7 +56,7 @@ void TagNeighbors(T* entity, conT& others, const double radius)
 
 	}//next entity
 }
-
+ */
 
 template <class T, class conT>
 void EnforceNonPenetrationContraint(T entity, const conT& others)

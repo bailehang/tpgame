@@ -2,6 +2,7 @@
 #pragma  once
 
 #include "../../Public/Common/Autolist.h"
+#include "../StateAi/StateMachine.h"
 #include "MoveEntity.h"
 
 class SoccerTeam;
@@ -11,8 +12,6 @@ class Region;
 class PlayerBase;
 template < class T>
 class  State;
-template < class T>
-class  StateMachine;
 
 /// 封装守门员类
 class  GoalKeeper : public PlayerBase
@@ -32,18 +31,17 @@ public:
 
 	~GoalKeeper() { SAFE_DELETE(m_pStateMachine); }
 
-	//these must be implemented
 	void        Update();
 	void        Render();
 	bool        HandleMessage(const Telegram& msg);
-	void		Write(std::ostream&  os){}
-	void		Read (std::ifstream& is){}
 
+	///  是否在拦截范围内
 	bool        BallWithinRangeForIntercept()const;
 
-	//returns true if the keeper has ventured too far away from the goalmouth
+	///  是否离球门太远
 	bool        TooFarFromGoalMouth()const;
 
+	///  得到最近的拦截点
 	Vector2D    GetRearInterposeTarget()const;
 
 	StateMachine<GoalKeeper>* GetFSM()const{return m_pStateMachine;}
@@ -54,8 +52,7 @@ public:
 
 private:
 	
-	StateMachine<GoalKeeper>*  m_pStateMachine;
-
-	Vector2D   m_vLookAt;
+	StateMachine<GoalKeeper>*  m_pStateMachine;/// 状态机
+	Vector2D				   m_vLookAt;	   /// 视野向量
 
 };

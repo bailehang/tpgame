@@ -63,10 +63,8 @@ public:
 	bool                 m_bGoalKeeperHasBall;///> 守门员是否控制了球
 	bool                 m_bGameOn;		///> 记录游戏是否进行中，或者球进了中断比赛
 
-	//set true to pause the motion
 	bool                 m_bPaused;	    ///> 游戏暂停
 
-	//local copy of client window dimensions
 	int                  m_cxClient;    ///> 客户端窗口的本地副本尺寸
 	int				   	 m_cyClient;  
 

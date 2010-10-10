@@ -5,7 +5,6 @@
 #include "../SoccerPitch.h"
 #include "../StateAi/StateMachine.h"
 #include "../StateAi/State.h"
-#include "../StateAi/TeamStates.h"
 
 
 extern SoccerPitch* g_SoccerPitch;
@@ -226,12 +225,12 @@ void SoccerBall::TestCollisionWithWalls(const std::vector<Wall2D>& walls)
 		if( Player->Team()->Color() == SoccerTeam::blue )
 		{
 			/// ¾²Ö¹blue½Ó´¥Çò
-			g_SoccerPitch->m_pRedTeam->GetFSM()->ChangeState( Throw_In::Instance() );
+			g_SoccerPitch->m_pRedTeam->GetFSM()->ChangeState( &GetInstObj(Throw_In) );
 			g_SoccerPitch->m_pBlueTeam->SetChaseBall(false);
 		}
 		else
 		{
-			g_SoccerPitch->m_pBlueTeam->GetFSM()->ChangeState( Throw_In::Instance() );
+			g_SoccerPitch->m_pBlueTeam->GetFSM()->ChangeState(&GetInstObj(Throw_In) );
 			g_SoccerPitch->m_pRedTeam->SetChaseBall(false);
 		}
 

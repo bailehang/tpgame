@@ -1,6 +1,5 @@
 /**
- *  @brief 这定义了一个电报。一份电报是一种数据结构，记录所需的信息发送邮件。
- *   邮件所使用的游戏代理，相互沟通。
+ *  @brief 这里封装一个用于状态之间的消息传递的数据结构
  */
 
 #ifndef TELEGRAM_H
@@ -12,14 +11,8 @@
 
 struct Telegram
 {
-	//the entity that sent this telegram
 	int          Sender;
-
-	//the entity that is to receive this telegram
 	int          Receiver;
-
-	//the message itself. These are all enumerated in the file
-	//"MessageTypes.h"
 	int          Msg;
 
 	//messages can be dispatched immediately or delayed for a specified amount
@@ -27,7 +20,6 @@ struct Telegram
 	//the message should be dispatched.
 	double       DispatchTime;
 
-	//any additional information that may accompany the message
 	void*        ExtraInfo;
 
 

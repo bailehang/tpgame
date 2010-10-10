@@ -11,9 +11,6 @@
 #include "Entity/FieldPlayer.h"
 #include "Entity/EntityManager.h"
 #include "StateAi/StateMachine.h"
-#include "StateAi/TeamStates.h"
-#include "StateAi/GoalKeeperStates.h"
-#include "StateAi/FieldPlayerStates.h"
 #include "Messageing/MessageDispatcher.h"
 #include "Messageing/SoccerMessages.h"
 #include "../Public/Singleton.h"
@@ -87,19 +84,19 @@ SoccerPitch::SoccerPitch(int cx, int cy):m_cxClient(cx),
 //------------------------------------------------------------------------
 SoccerPitch::~SoccerPitch()
 {
-	delete m_pBall;
+	SAFE_DELETE( m_pBall );
 
-	delete m_pRedTeam;
-	delete m_pBlueTeam;
+	SAFE_DELETE( m_pRedTeam );
+	SAFE_DELETE( m_pBlueTeam);
 
-	delete m_pRedGoal;
-	delete m_pBlueGoal;
+	SAFE_DELETE( m_pRedGoal );
+	SAFE_DELETE( m_pBlueGoal);
 
-	delete m_pPlayingArea;
+	SAFE_DELETE( m_pPlayingArea );
 
 	for (unsigned int i=0; i<m_Regions.size(); ++i)
 	{
-		delete m_Regions[i];
+		SAFE_DELETE( m_Regions[i] );
 	}
 }
 
@@ -130,8 +127,8 @@ void SoccerPitch::Update()
 		m_pBall->PlaceAtPosition(Vector2D((double)m_cxClient/2.0, (double)m_cyClient/2.0));
 
 		//get the teams ready for kickoff
-		m_pRedTeam->GetFSM()->ChangeState(PrepareForKickOff::Instance());
-		m_pBlueTeam->GetFSM()->ChangeState(PrepareForKickOff::Instance());
+		m_pRedTeam->GetFSM()->ChangeState(&GetInstObj(PrepareForKickOff));
+		m_pBlueTeam->GetFSM()->ChangeState(&GetInstObj(PrepareForKickOff));
 	}
 }
 

@@ -33,62 +33,58 @@ public:
 	virtual ~PlayerBase();
 
 
-	//returns true if there is an opponent within this player's 
-	//comfort zone
+	/// 玩家监控范围内是否有对方球员
 	bool        isThreatened()const;
 
-	//rotates the player to face the ball or the player's current target
+	/// 追球和追踪目标 
 	void        TrackBall();
 	void        TrackTarget();
 
-	//this messages the player that is closest to the supporting spot to
-	//change state to support the attacking player
+	/// 开始组织队伍，让离自身最近的玩家改变为接应状态，方便进行进攻
 	void        FindSupport()const;
 
-	//returns true if the ball can be grabbed by the goalkeeper
+	/// 判断球是否能被守门员捕获
 	bool        BallWithinKeeperRange()const;
 
-	//returns true if the ball is within kicking range
+	/// 判断当前对象是否能够踢到球，
 	bool        BallWithinKickingRange()const;
 
-	//returns true if a ball comes within range of a receiver
+	/// 判断当前对象是否能够接收到球
 	bool        BallWithinReceivingRange()const;
 
-	//returns true if the player is located within the boundaries 
-	//of his home region
+	/// 是否已经回到出身点
 	bool        InHomeRegion()const;
 
-	//returns true if this player is ahead of the attacker
+	/// 是否在当前进攻带球球员的前面
 	bool        isAheadOfAttacker()const;
 
-	//returns true if a player is located at the designated support spot
-	bool        AtSupportSpot()const;
-
-	//returns true if the player is located at his steering target
+	/// 是否到达接应点的范围
 	bool        AtTarget()const;
 
+	/// 跟踪目标
 	bool		FollowTarget()const;
 
+	/// 返回
 	bool		FollowReturn()const;
 
+	/// 是否已经在出生位置区域
 	bool        IsSelfRegin()const;
 
-	//returns true if the player is the closest player in his team to
-	//the ball
+	/// 是否是队伍离球最近的队员
 	bool        isClosestTeamMemberToBall()const;
 
 	//returns true if the point specified by 'position' is located in
 	//front of the player
+	/// 
 	bool        PositionInFrontOfPlayer(Vector2D position)const;
 
-	//returns true if the player is the closest player on the pitch to the ball
+	/// 是否是离球最近的球员
 	bool        isClosestPlayerOnPitchToBall()const;
 
-	//returns true if this player is the controlling player
+	/// 队伍是否是控制足球
 	bool        isControllingPlayer()const;
 
-	//returns true if the player is located in the designated 'hot region' --
-	//the area close to the opponent's goal
+	/// 是否在禁区
 	bool        InHotRegion()const;
 
 	player_role Role()const{return m_PlayerRole;}
@@ -96,8 +92,7 @@ public:
 	double      DistSqToBall()const{return m_dDistSqToBall;}
 	void        SetDistSqToBall(double val){m_dDistSqToBall = val;}
 
-	//calculate distance to opponent's/home goal. Used frequently by the passing
-	//methods
+	/// 离对方和自身球门的距离
 	double       DistToOppGoal()const;
 	double       DistToHomeGoal()const;
 
@@ -111,28 +106,13 @@ public:
 	SoccerTeam*const         Team()const{return m_pTeam;}
 
 protected:
-	player_role				m_PlayerRole;
-
-	//a pointer to this player's team
-	SoccerTeam*             m_pTeam;
-
-	//the steering behaviors
-	SteeringBehaviors*      m_pSteering;
-
-	//the region that this player is assigned to.
-	int                     m_iHomeRegion;
-
-	//the region this player moves to before kickoff
-	int                     m_iDefaultRegion;
-
-	//the distance to the ball (in squared-space). This value is queried 
-	//a lot so it's calculated once each time-step and stored here.
-	double                   m_dDistSqToBall;
-
-
-	//the vertex buffer
-	std::vector<Vector2D>   m_vecPlayerVB;
-	//the buffer for the transformed vertices
-	std::vector<Vector2D>   m_vecPlayerVBTrans;
+	player_role				m_PlayerRole;	 ///> 当前队员角色
+	SoccerTeam*             m_pTeam;		 ///> 当前队伍指针
+	SteeringBehaviors*      m_pSteering;	 ///> 操作行为指针
+	int                     m_iHomeRegion;	 ///> 队员出身区域
+	int                     m_iDefaultRegion;///> 开球前的区域 
+	double                  m_dDistSqToBall; ///> 离球的距离
+	std::vector<Vector2D>   m_vecPlayerVB;	 ///> 球员的外观矩形
+	std::vector<Vector2D>   m_vecPlayerVBTrans;///> 转换后的矩形
 
 };

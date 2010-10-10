@@ -12,8 +12,6 @@
 #include "../Messageing/SoccerMessages.h"
 #include "../StateAi/StateMachine.h"
 #include "../StateAi/State.h"
-#include "../StateAi/GoalKeeperStates.h"
-#include "../StateAi/FieldPlayerStates.h"
 #include "../../Render/Transformations.h"
 #include "../../Render/Vector2D.h"
 #include "../../Render/VGdi.h"
@@ -23,8 +21,8 @@
 
 FieldPlayer::~FieldPlayer()
 {
-	delete m_pKickLimiter;
-	delete m_pStateMachine;
+	SAFE_DELETE(m_pKickLimiter);
+	SAFE_DELETE(m_pStateMachine);
 }
 
 //----------------------------- ctor -------------------------------------

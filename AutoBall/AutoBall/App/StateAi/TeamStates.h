@@ -6,8 +6,18 @@
 #include "../Telegram.h"
 
 
-class SoccerTeam;
 
+					
+CREATESTATE(Attacking,Telegram,SoccerTeam);
+
+CREATESTATE(Defending,Telegram,SoccerTeam);
+
+CREATESTATE(PrepareForKickOff,Telegram,SoccerTeam);
+
+CREATESTATE(Throw_In,Telegram,SoccerTeam);
+
+
+/*
 /// ½ø¹¥×´Ì¬
 //------------------------------------------------------------------------
 class Attacking : public State<SoccerTeam>
@@ -93,4 +103,4 @@ public:
 	void Exit(SoccerTeam* team);
 
 	bool OnMessage(SoccerTeam*, const Telegram&){return false;}
-};
+};*/

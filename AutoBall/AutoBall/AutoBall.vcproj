@@ -368,15 +368,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\App\StateAi\FieldPlayerStates.h"
-					>
-				</File>
-				<File
 					RelativePath=".\App\StateAi\GoalKeeperStates.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\App\StateAi\GoalKeeperStates.h"
 					>
 				</File>
 				<File
@@ -389,10 +381,6 @@
 				</File>
 				<File
 					RelativePath=".\App\StateAi\TeamStates.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\App\StateAi\TeamStates.h"
 					>
 				</File>
 			</Filter>
@@ -469,10 +457,6 @@
 				</File>
 				<File
 					RelativePath=".\App\Messageing\MessageDispatcher.h"
-					>
-				</File>
-				<File
-					RelativePath=".\App\Messageing\SoccerMessages.cpp"
 					>
 				</File>
 				<File

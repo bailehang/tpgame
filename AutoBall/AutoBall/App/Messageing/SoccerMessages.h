@@ -12,8 +12,4 @@ enum MessageType
 	Msg_Wait
 };
 
-//converts an enumerated value to a string
-inline std::string MessageToString(int msg);
-
-
 #endif

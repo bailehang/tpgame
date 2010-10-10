@@ -11,19 +11,12 @@
 class  SoccerBall : public CMoveEntity
 {
 public:
-	SoccerBall(Vector2D      pos,            
-			   double        BallSize,
-			   double        mass,
-		std::vector<Wall2D>& PitchBoundary):m_PitchBoundary(PitchBoundary),
-		CMoveEntity(pos,
-			BallSize,
-			Vector2D(0,0),
-			-1.0,                
-			Vector2D(0,1),
-			mass,
-			Vector2D(1.0,1.0),  
-			0,                 
-			0)		
+	SoccerBall(Vector2D  pos,double  BallSize,double mass,
+			   std::vector<Wall2D>& PitchBoundary):
+			   m_PitchBoundary(PitchBoundary),
+			  CMoveEntity(pos,BallSize,Vector2D(0,0),
+				-1.0,Vector2D(0,1),
+				mass,Vector2D(1.0,1.0),0,0)		
 	{
 
 	}
@@ -35,10 +28,10 @@ public:
 	/// 碰撞检测,然后向相反方向移动
 	void TestCollisionWithWalls(const std::vector<Wall2D>& walls);
 
-	//implement base class Update
+	//Entity class Update
 	void      Update();
 
-	//implement base class Render
+	//Entity class Render
 	void      Render();
 
 	/// 足球不需要消息
@@ -52,17 +45,17 @@ public:
 	///	 改方法计算球经过这段距离要花多长时间
 	/// 
 	double    TimeToCoverDistance(Vector2D from,
-		Vector2D to,
-		double     force)const;
+								  Vector2D to,
+								  double     force)const;
 
 	/// 该方法计算在给定时间后球的位置
 	Vector2D FuturePosition(double time)const;
 
 	/// 这被用于队员和守门员用于停球，停球后表示控制了球
-	void      Trap(){m_vVelocity.Zero();}  
+	void      Trap()		{m_vVelocity.Zero();}  
 
 	/// 球的上一次更新中的位置
-	Vector2D  OldPos()const{return m_vOldPos;}
+	Vector2D  OldPos()const	{return m_vOldPos;}
 
 	/// 设置球的新位置，重置速度为0
 	void      PlaceAtPosition(Vector2D NewPos);
@@ -79,6 +72,7 @@ private:
 	const std::vector<Wall2D>& m_PitchBoundary;   
 };
 
+/// 给一个干扰力给踢球的队员
 inline Vector2D AddNoiseToKick(Vector2D BallPos, Vector2D BallTarget)
 {
 

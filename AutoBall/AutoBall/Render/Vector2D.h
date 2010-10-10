@@ -30,7 +30,7 @@ public:
 	/// 求模的大小
 	double Length() const ;
 
-	/// 
+	/// 长度
 	double LengthSq() const;
 
 	/// 格式化

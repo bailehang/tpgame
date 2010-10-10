@@ -11,7 +11,6 @@
 #include "../Messageing/SoccerMessages.h"
 #include "../StateAi/StateMachine.h"
 #include "../StateAi/State.h"
-#include "../StateAi/GoalKeeperStates.h"
 #include "../../Render/Transformations.h"
 #include "../../Render/Vector2D.h"
 #include "../../Render/VGdi.h"
@@ -45,7 +44,7 @@ GoalKeeper::GoalKeeper(SoccerTeam*        home_team,
 
 	m_pStateMachine->SetCurrentState(start_state);
 	m_pStateMachine->SetPreviousState(start_state);
-	m_pStateMachine->SetGlobalState(GlobalKeeperState::Instance());
+	m_pStateMachine->SetGlobalState(&GetInstObj(GlobalKeeperState));
 
 	m_pStateMachine->CurrentState()->Enter(this);        
 }
