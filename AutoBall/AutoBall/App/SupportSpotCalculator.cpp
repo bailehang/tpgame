@@ -14,8 +14,6 @@ SupportSpotCalculator::~SupportSpotCalculator()
 }
 
 
-//------------------------------- ctor ----------------------------------------
-//-----------------------------------------------------------------------------
 SupportSpotCalculator::SupportSpotCalculator(int           numX,
 											 int           numY,
 											 SoccerTeam*   team):m_pBestSupportingSpot(NULL),

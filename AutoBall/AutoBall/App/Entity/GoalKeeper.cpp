@@ -8,7 +8,6 @@
 #include "../Goal.h"
 #include "../SteeringBehaviors.h"			
 #include "../Messageing/MessageDispatcher.h"
-#include "../Messageing/SoccerMessages.h"
 #include "../StateAi/StateMachine.h"
 #include "../StateAi/State.h"
 #include "../../Render/Transformations.h"
@@ -125,7 +124,7 @@ Vector2D GoalKeeper::GetRearInterposeTarget()const
 //
 //  routes any messages appropriately
 //------------------------------------------------------------------------
-bool GoalKeeper::HandleMessage(const Telegram& msg)
+bool GoalKeeper::HandleMessage(const tagMessage& msg)
 {
 	return m_pStateMachine->HandleMessage(msg);
 }

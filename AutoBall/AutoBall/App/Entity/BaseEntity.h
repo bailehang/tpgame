@@ -8,9 +8,9 @@
 #include "../../Render/Geometry.h"
 #include "../../Render/Utils.h"
 #include "../../Public/BaseDef.h"
-#include "../Telegram.h"
+#include "../../Public/MsgImpl.h"
 
-struct Telegram;
+struct tagMessage;
 class  CBaseEntity
 {
 
@@ -19,10 +19,8 @@ public:
 	virtual	  ~CBaseEntity() {}
 
 	virtual   void  Update() = 0 ;
-
 	virtual   void  Render() = 0 ;
-
-	virtual	  bool  HandleMessage(const Telegram& e ){ return false;}
+	virtual	  bool  HandleMessage(const tagMessage& e ){ return false;}
 
 	static    int   GetNextValidId()		{ return m_iNextValidID; }
 	static    void  ResetNextValidId()		{ m_iNextValidID = 0 ;   }

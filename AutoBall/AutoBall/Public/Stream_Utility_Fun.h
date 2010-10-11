@@ -1,22 +1,10 @@
-#ifndef STREAM_UTILITY_FUNCTIONS
-#define STREAM_UTILITY_FUNCTIONS
-//-----------------------------------------------------------------------------
-//
-//  Name:   Stream_Utility_Functions.h
-//
-//  Author: Mat Buckland (www.ai-junkie.com)
-//
-//  Desc:   various useful functions that operate on or with streams
-//-----------------------------------------------------------------------------
+#pragma once 
+
 #include <sstream>
 #include <string>
 #include <iomanip>
 
 
-//------------------------------ ttos -----------------------------------------
-//
-//  convert a type to a string
-//-----------------------------------------------------------------------------
 template <class T>
 inline std::string ttos(const T& t, int precision = 2)
 {
@@ -27,28 +15,18 @@ inline std::string ttos(const T& t, int precision = 2)
 	return buffer.str();
 }
 
-//------------------------------ ttos -----------------------------------------
-//
-//  convert a bool to a string
-//-----------------------------------------------------------------------------
 inline std::string btos(bool b)
 {
 	if (b) return "true";
 	return "false";
 }
 
-//--------------------------- GetValueFromStream ------------------------------
-//
-//  grabs a value of the specified type from an input stream
-//-----------------------------------------------------------------------------
 template <typename T>
 inline T GetValueFromStream(std::ifstream& stream)
 {
 	T val;
 
 	stream >> val;
-
-	//make sure it was the correct type
 	if (!stream)
 	{
 		throw std::runtime_error("Attempting to retrieve wrong type from stream");
@@ -57,10 +35,6 @@ inline T GetValueFromStream(std::ifstream& stream)
 	return val;
 }
 
-//--------------------------- WriteBitsToStream ------------------------------------
-//
-// writes the value as a binary string of bits
-//-----------------------------------------------------------------------------
 template <typename T>
 void WriteBitsToStream(std::ostream& stream, const T& val)
 {
@@ -74,5 +48,3 @@ void WriteBitsToStream(std::ostream& stream, const T& val)
 		else stream << "0";
 	}
 }
-
-#endif

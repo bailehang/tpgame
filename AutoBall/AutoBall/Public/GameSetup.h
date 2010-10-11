@@ -13,9 +13,9 @@ public:
 
 public:
 
-	double GoalWidth;
-	int   NumSupportSpotsX;
-	int   NumSupportSpotsY;
+	double GoalWidth;	     /// «Ú√≈øÌ∂»
+	int    NumSupportSpotsX;
+	int    NumSupportSpotsY;
 
 	double Spot_PassSafeScore;
 	double Spot_CanScoreFromPositionScore;

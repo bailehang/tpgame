@@ -33,7 +33,7 @@ public:
 
 	void        Update();
 	void        Render();
-	bool        HandleMessage(const Telegram& msg);
+	bool        HandleMessage(const tagMessage& msg);
 
 	///  ÊÇ·ñÔÚÀ¹½Ø·¶Î§ÄÚ
 	bool        BallWithinRangeForIntercept()const;

@@ -38,7 +38,7 @@ public:
 
 	void        Render();
 
-	bool        HandleMessage(const Telegram& msg);
+	bool        HandleMessage(const tagMessage& msg);
 
 	StateMachine<FieldPlayer>* GetFSM()const{return m_pStateMachine;}
 								 

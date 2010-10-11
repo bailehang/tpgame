@@ -18,7 +18,7 @@ const double  MinDouble = (std::numeric_limits<double>::min)();
 const float   MaxFloat  = (std::numeric_limits<float>::max)();
 const float   MinFloat  = (std::numeric_limits<float>::min)();
 
-const double   Pi        = 3.14159;
+const double   Pi        = 3.1415926;
 const double   TwoPi     = Pi * 2;
 const double   HalfPi    = Pi / 2;
 const double   QuarterPi = Pi / 4;

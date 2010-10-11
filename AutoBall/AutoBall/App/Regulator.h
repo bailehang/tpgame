@@ -11,10 +11,19 @@
 #include "SoccerPitch.h"
 #include "SoccerTeam.h"
 
-/// 调整者
+
 class PlayerBase;
+
+/// 关于是否准备进行下一次踢球
 class Regulator
 {
+
+public:
+
+	Regulator(double NumUpdatesPerSecondRqd)  ;
+
+	bool isReady();
+
 private:
 
 	/// 2次更新间隔
@@ -22,10 +31,4 @@ private:
 
 	/// 下一次更新时间
 	DWORD m_dwNextUpdateTime;
-
-public:
-
-	Regulator(double NumUpdatesPerSecondRqd)  ;
-
-	bool isReady();
 };

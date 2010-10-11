@@ -1,7 +1,7 @@
 
 #pragma  once 
 
-#include "../Telegram.h"
+#include "../../Public/MsgImpl.h"
 
 class SoccerTeam;
 class GoalKeeper;
@@ -20,7 +20,7 @@ class FieldPlayer;
 	Ret Class::FunName(ENTITY* type) {}
 
 #define  EmptyMsg(Ret,Class,FunName,ENTITY)\
-	Ret Class::FunName(ENTITY* entity,const Telegram&) { return false;}
+	Ret Class::FunName(ENTITY* entity,const tagMessage&) { return false;}
 
 #define  CLASSFUNTION(CLASS,ENTITY,MSG)\
 	   EntityFun(void,Enter,ENTITY);\
@@ -53,61 +53,61 @@ public:
 
 	//this executes if the agent receives a message from the 
 	//message dispatcher
-	virtual bool OnMessage(entity_type*, const Telegram&)=0;
+	virtual bool OnMessage(entity_type*, const tagMessage&)=0;
 };
 
 
 /// 全局队员状态
-CREATESTATE(GlobalPlayerState,Telegram,FieldPlayer);
+CREATESTATE(GlobalPlayerState,tagMessage,FieldPlayer);
 
 /// 追求状态
-CREATESTATE(ChaseBall,Telegram,FieldPlayer);
+CREATESTATE(ChaseBall,tagMessage,FieldPlayer);
 
 /// 带球状态
-CREATESTATE(Dribble,Telegram,FieldPlayer);
+CREATESTATE(Dribble,tagMessage,FieldPlayer);
 
 /// 回到出生
-CREATESTATE(ReturnToHomeRegion,Telegram,FieldPlayer);
+CREATESTATE(ReturnToHomeRegion,tagMessage,FieldPlayer);
 
 /// 等待状态
-CREATESTATE(Wait,Telegram,FieldPlayer);
+CREATESTATE(Wait,tagMessage,FieldPlayer);
 
 /// 跟踪球
-CREATESTATE(FollowBall,Telegram,FieldPlayer);
+CREATESTATE(FollowBall,tagMessage,FieldPlayer);
 
 /// 踢球
-CREATESTATE(KickBall,Telegram,FieldPlayer);
+CREATESTATE(KickBall,tagMessage,FieldPlayer);
 
 ///	接球状态
-CREATESTATE(ReceiveBall,Telegram,FieldPlayer);
+CREATESTATE(ReceiveBall,tagMessage,FieldPlayer);
 
 ///	接应状态
-CREATESTATE(SupportAttacker,Telegram,FieldPlayer);
+CREATESTATE(SupportAttacker,tagMessage,FieldPlayer);
 
 /// 全局队员状态
-CREATESTATE(GlobalKeeperState,Telegram,GoalKeeper);
+CREATESTATE(GlobalKeeperState,tagMessage,GoalKeeper);
 
 /// 守球门
-CREATESTATE(TendGoal,Telegram,GoalKeeper);
+CREATESTATE(TendGoal,tagMessage,GoalKeeper);
 
 /// 截球
-CREATESTATE(InterceptBall,Telegram,GoalKeeper);
+CREATESTATE(InterceptBall,tagMessage,GoalKeeper);
 
 /// 归位
-CREATESTATE(ReturnHome,Telegram,GoalKeeper);
+CREATESTATE(ReturnHome,tagMessage,GoalKeeper);
 
 /// 球传回到赛场
-CREATESTATE(PutBallBackInPlay,Telegram,GoalKeeper);
+CREATESTATE(PutBallBackInPlay,tagMessage,GoalKeeper);
 
 /// 进攻状态
-CREATESTATE(Attacking,Telegram,SoccerTeam);
+CREATESTATE(Attacking,tagMessage,SoccerTeam);
 
 /// 防御状态
-CREATESTATE(Defending,Telegram,SoccerTeam);
+CREATESTATE(Defending,tagMessage,SoccerTeam);
 
 /// 准备开球
-CREATESTATE(PrepareForKickOff,Telegram,SoccerTeam);
+CREATESTATE(PrepareForKickOff,tagMessage,SoccerTeam);
 
 /// 边界球
-CREATESTATE(Throw_In,Telegram,SoccerTeam);
+CREATESTATE(Throw_In,tagMessage,SoccerTeam);
 
