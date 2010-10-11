@@ -46,7 +46,7 @@ public:
 	Vector2D  Target()const{return m_vTarget;}
 	void      SetTarget(const Vector2D t){m_vTarget = t;}
 
-	double     InterposeDistance()const{return m_dInterposeDist;}
+	double    InterposeDistance()const{return m_dInterposeDist;}
 	void      SetInterposeDistance(double d){m_dInterposeDist = d;}
 
 	bool      Tagged()const{return m_bTagged;}
@@ -54,18 +54,18 @@ public:
 	void      UnTag(){m_bTagged = false;}
 
 
-	void SeekOn(){m_iFlags |= seek;}
-	void ArriveOn(){m_iFlags |= arrive;}
-	void PursuitOn(){m_iFlags |= pursuit;}
-	void SeparationOn(){m_iFlags |= separation;}
-	void InterposeOn(double d){m_iFlags |= interpose; m_dInterposeDist = d;}
+	void      SeekOn(){m_iFlags |= seek;}
+	void	  ArriveOn(){m_iFlags |= arrive;}
+	void	  PursuitOn(){m_iFlags |= pursuit;}
+	void	  SeparationOn(){m_iFlags |= separation;}
+	void	  InterposeOn(double d){m_iFlags |= interpose; m_dInterposeDist = d;}
 
 
-	void SeekOff()  {if(On(seek))   m_iFlags ^=seek;}
-	void ArriveOff(){if(On(arrive)) m_iFlags ^=arrive;}
-	void PursuitOff(){if(On(pursuit)) m_iFlags ^=pursuit;}
-	void SeparationOff(){if(On(separation)) m_iFlags ^=separation;}
-	void InterposeOff(){if(On(interpose)) m_iFlags ^=interpose;}
+	void	  SeekOff()  {if(On(seek))   m_iFlags ^=seek;}
+	void	  ArriveOff(){if(On(arrive)) m_iFlags ^=arrive;}
+	void	  PursuitOff(){if(On(pursuit)) m_iFlags ^=pursuit;}
+	void	  SeparationOff(){if(On(separation)) m_iFlags ^=separation;}
+	void	  InterposeOff(){if(On(interpose)) m_iFlags ^=interpose;}
 
 
 	bool SeekIsOn(){return On(seek);}

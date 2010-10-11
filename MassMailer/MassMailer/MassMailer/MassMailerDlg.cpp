@@ -160,13 +160,17 @@ void CMassMailerDlg::OnBnClickedButton1()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
-	//CSendMail  send("123.125.50.112","25","tangpeng918","tangpeng");
-	//send.Connect("70.177.209.185","27977","SOCKS 5",true);
+	CSendMail  send("220.181.26.195","25","testproxy5090","tangpeng");
+	//send("123.125.50.112","25","tangpeng918","tangpeng");
 
+	send.Connect("190.152.13.58","80","HTTP",true);
+	//send.Connect("115.252.72.43","1080","SOCKS 4",true);
+
+	/*
 	m_MainSocket.Create();
 	//m_MainSocket.SetProxy(PROXYTYPE_SOCKS5,"70.186.182.14",27977);
 	m_MainSocket.SetProxy(PROXYTYPE_SOCKS4,"222.168.18.227",1080);
-	m_MainSocket.Connect("123.125.50.112",25);
+	m_MainSocket.Connect("123.125.50.112",25);	  */
 	//send.Connect("202.108.50.68","80","HTTP",true);
 
 	/**
@@ -176,10 +180,11 @@ void CMassMailerDlg::OnBnClickedButton1()
 	bool    IsHtml
 	 *
 	 */
-	//vector<string>  vec;
-	//vec.push_back("283899487@qq.com");
-	//vec.push_back("185123@qq.com");
-	//send.SendData("tangpeng918@126.com",vec,"expter","baby","happy!","happy birthday to you!",false);
+	vector<string>  vec;
+	vec.push_back("283899487@qq.com");
+	vec.push_back("185123@qq.com");
+	//send.SendData("tangpeng918@126.com",vec,"tangpeng918","baby","happy!","happy birthday to you!this is test!!",false);
+	send.SendData("testproxy5090@sohu.com",vec,"testproxy5090","baxxby bady!","happy bady!","XXXXXX!happy birthday to you!this is test!",false);
 
 
 }

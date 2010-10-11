@@ -14,15 +14,11 @@ MessageDispatcher* MessageDispatcher::Instance()
 	return &instance;
 }
 
-//----------------------------- Dispatch ---------------------------------
-//  
-//  see description in header
-//------------------------------------------------------------------------
+
 void MessageDispatcher::Discharge(CBaseEntity* pReceiver, const tagMessage& telegram)
 {
 	if (!pReceiver->HandleMessage(telegram))
 	{
-		//telegram could not be handled
 #ifdef SHOW_MESSAGING_INFO
 		debug_con << "Message not handled" << "";
 #endif
@@ -75,20 +71,14 @@ void MessageDispatcher::DispatchMsg(double       delay,
 
 void MessageDispatcher::DispatchDelayedMessages()
 { 
-	//first get current time
 	double CurrentTime = TickCounter->GetCurrentFrame(); 
 
-	//now peek at the queue to see if any telegrams need dispatching.
-	//remove all telegrams from the front of the queue that have gone
-	//past their sell by date
 	while( !PriorityQ.empty() &&
-		(PriorityQ.begin()->DispatchTime < CurrentTime) && 
-		(PriorityQ.begin()->DispatchTime > 0) )
+		   (PriorityQ.begin()->DispatchTime < CurrentTime) && 
+		   (PriorityQ.begin()->DispatchTime > 0) )
 	{
-		//read the telegram from the front of the queue
 		const tagMessage& telegram = *PriorityQ.begin();
 
-		//find the recipient
 		CBaseEntity* pReceiver = GetInstObj(EntityManager).FindEntity(telegram.Receiver);
 
 #ifdef SHOW_MESSAGING_INFO
@@ -96,10 +86,8 @@ void MessageDispatcher::DispatchDelayedMessages()
 			<< pReceiver->ID() << ". Msg is "<< telegram.Msg << "";
 #endif
 
-		//send the telegram to the recipient
 		Discharge(pReceiver, telegram);
 
-		//remove it from the queue
 		PriorityQ.erase(PriorityQ.begin());
 	}
 }

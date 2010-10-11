@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Regulator.h"
-#include <mmsystem.h>
 
-#pragma comment(lib,"winmm.lib")
 
 Regulator::Regulator(double NumUpdatesPerSecondRqd)
 {

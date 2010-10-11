@@ -281,19 +281,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Public\PrecisionTimer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Public\PrecisionTimer.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Public\Singleton.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Public\Stream_Utility_Fun.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Public\Timer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Public\Timer.h"
 				>
 			</File>
 			<Filter

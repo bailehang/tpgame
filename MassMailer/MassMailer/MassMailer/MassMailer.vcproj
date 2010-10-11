@@ -274,11 +274,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\App\ProxyList.h"
+				>
+			</File>
+			<File
+				RelativePath=".\App\SendAddr.h"
+				>
+			</File>
+			<File
 				RelativePath=".\App\SendMail.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\App\SendMail.h"
+				>
+			</File>
+			<File
+				RelativePath=".\App\Smtplist.h"
 				>
 			</File>
 			<Filter
@@ -323,6 +335,10 @@
 			</File>
 			<File
 				RelativePath=".\Public\BaseDef.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Public\Singleton.h"
 				>
 			</File>
 			<File

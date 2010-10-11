@@ -88,16 +88,16 @@ BEGIN
     DEFPUSHBUTTON   "确定",IDOK,113,41,50,14,WS_GROUP
 END
 
-IDD_MASSMAILER_DIALOG DIALOGEX 0, 0, 379, 258
+IDD_MASSMAILER_DIALOG DIALOGEX 0, 0, 247, 138
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "MassMailer"
+MENU IDR_MENU1
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "确定",IDOK,236,244,50,14
-    PUSHBUTTON      "取消",IDCANCEL,329,244,50,14
-    CONTROL         "",IDC_TREE1,"SysTreeView32",WS_BORDER | WS_HSCROLL | WS_TABSTOP,0,0,83,257
-    PUSHBUTTON      "Button1",IDC_BUTTON1,103,244,50,14
+    DEFPUSHBUTTON   "确定",IDOK,73,124,50,14
+    PUSHBUTTON      "取消",IDCANCEL,197,124,50,14
+    PUSHBUTTON      "开始",IDC_BUTTON1,0,99,54,39
 END
 
 
@@ -157,6 +157,17 @@ BEGIN
     END
 END
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    MENUITEM "重新载入配置信息",                    0
+END
 
 
 /////////////////////////////////////////////////////////////////////////////

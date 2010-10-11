@@ -8,7 +8,7 @@
 
 #include "Config.h"
 #include "App/SoccerPitch.h"
-#include "Public/PrecisionTimer.h"
+#include "Public/Timer.h"
 #include "Public/GameSetup.h"
 #include "Public/Singleton.h"
 #include "Render/Vector2D.h"
@@ -24,7 +24,7 @@ char*	g_szWindowClassName = "MyWindowClass";
 SoccerPitch* g_SoccerPitch;
 
 //create a timer
-PrecisionTimer timer(GetInstObj(CGameSetup).FrameRate);
+CTimer timer(GetInstObj(CGameSetup).FrameRate);
 
 HBITMAP		bgmp;//Î»Í¼¾ä±ú
 HDC			mdc;
@@ -286,14 +286,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 
-		//A WM_CREATE msg is sent when your application window is first
-		//created
+		
 	case WM_CREATE:
 		{
-			//to get get the size of the client window first we need  to create
-			//a RECT and then ask Windows to fill in our RECT structure with
-			//the client window size. Then we assign to cxClient and cyClient 
-			//accordingly
+			
 			RECT rect;
 
 			GetClientRect(hwnd, &rect);
@@ -304,9 +300,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			//seed random number generator
 			srand((unsigned) time(NULL));
 
-
-			//---------------create a surface to render to(backbuffer)
-
 			//get the DC for the front buffer
 			HDC hdc = GetDC(hwnd);
 
@@ -316,7 +309,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			hBitmap = CreateCompatibleBitmap(hdc,
 				cxClient,
 				cyClient);
-
 
 			//select the bitmap into the memory device context
 			hOldBitmap = (HBITMAP)SelectObject(hdcBackBuffer, hBitmap);
@@ -332,72 +324,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	case WM_COMMAND:
 		{
-			/*
-			switch(wParam)
-			{
-			case ID_AIDS_NOAIDS:
 
-				GetInstObj(CGameSetup).bStates        = 0;
-				GetInstObj(CGameSetup).bRegions       = 0;
-				GetInstObj(CGameSetup).bIDs           = 0;
-				GetInstObj(CGameSetup).bSupportSpots  = 0;
-				GetInstObj(CGameSetup).bViewTargets   = 0;
-
-				CheckAllMenuItemsAppropriately(hwnd);
-
-				break;
-
-			case IDM_SHOW_REGIONS:
-
-				GetInstObj(CGameSetup).bRegions = !GetInstObj(CGameSetup).bRegions;
-
-				CheckAllMenuItemsAppropriately(hwnd);
-
-				break;
-
-			case IDM_SHOW_STATES:
-
-				GetInstObj(CGameSetup).bStates = !GetInstObj(CGameSetup).bStates;
-
-				CheckAllMenuItemsAppropriately(hwnd);
-
-				break;
-
-			case IDM_SHOW_IDS:
-
-				GetInstObj(CGameSetup).bIDs = !GetInstObj(CGameSetup).bIDs;
-
-				CheckAllMenuItemsAppropriately(hwnd);
-
-				break;
-
-
-			case IDM_AIDS_SUPPORTSPOTS:
-
-				GetInstObj(CGameSetup).bSupportSpots = !GetInstObj(CGameSetup).bSupportSpots;
-
-				CheckAllMenuItemsAppropriately(hwnd);
-
-				break;
-
-			case ID_AIDS_SHOWTARGETS:
-
-				GetInstObj(CGameSetup).bViewTargets = !GetInstObj(CGameSetup).bViewTargets;
-
-				CheckAllMenuItemsAppropriately(hwnd);
-
-				break;
-
-			case IDM_AIDS_HIGHLITE:
-
-				GetInstObj(CGameSetup).bHighlightIfThreatened = !GetInstObj(CGameSetup).bHighlightIfThreatened; 
-
-				CheckAllMenuItemsAppropriately(hwnd);
-
-				break;
-				*/
-
-			//}//end switch
 		}
 
 		break;
@@ -537,3 +464,4 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return (INT_PTR)FALSE;
 }
+

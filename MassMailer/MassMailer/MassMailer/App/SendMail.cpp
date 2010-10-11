@@ -21,20 +21,50 @@ CSendMail::~CSendMail()
 
 bool  CSendMail::Connect(CString Ip,CString Port,CString type,bool Proxy)
 {
-	m_MainSocket.SetProxy(PROXYTYPE_SOCKS5,Ip,atol(Port),"","");
 
 	if( !CreateSocket() )
 		return false;
 
+	m_Proxy = Proxy;
 	if ( Proxy )
 	{
-	   //if( !m_Socket.Connect( Ip , atol(Port.GetBuffer()) ) )
-	   //   return false;
-		if( !m_MainSocket.Connect(m_ipServer,atol(m_Port) ) )
-			return false;
+	   if( !m_Socket.Connect( Ip , atol(Port.GetBuffer()) ) )
+	      return false;
 	   if ( type == "SOCKS 4")
 	   {
+			char buff[100]; 
+			memset(buff,0,100); 
+			struct sock4req1 *m_proxyreq; 
+			m_proxyreq = (struct sock4req1 *)buff; 
+			m_proxyreq->VN = 4; 
+			m_proxyreq->CD = 1; 
+			m_proxyreq->Port = ntohs(atol(m_Port)); 
+			m_proxyreq->IPAddr = inet_addr(m_ipServer.GetBuffer());
+			m_Socket.Send(buff,9);
 
+			struct sock4ans1 *m_proxyans; 
+			m_proxyans = (struct sock4ans1 *)buff; 
+			memset(buff,'#',100); 
+			m_Socket.Receive(buff,100);
+			if(m_proxyans->VN != 0 || m_proxyans->CD != 90) 
+			{ 
+				//m_sError = _T("通过Socks4代理"+ProxyIP+"连接主站不成功!"); 
+				//AfxMessageBox(m_sError);
+				m_Socket.Close(); 
+				return false; 
+			}
+
+			//m_Socket.Send("",0);
+			//if( !CheckResponse( "220" ) )
+			{
+				m_Socket.Close();
+				return FALSE;
+			}
+			if (!CheckAccount() )
+			{
+				   ReleaseSocket();
+				   return false;
+			}
 	   }
 	   else if ( type == "SOCKS 5")
 	   {
@@ -269,16 +299,40 @@ bool  CSendMail::Connect(CString Ip,CString Port,CString type,bool Proxy)
 	   {
 		   
 		   char buff[600];
-		   sprintf( buff, "%s%s:%d%s","CONNECT ","119.75.218.45",80," HTTP/1.1\r\nUser-Agent: MyApp/0.1\r\n\r\n");
+		   
+		   sprintf( buff, "CONNECT %s:%d HTTP/1.1\r\nHost: %s:%d\r\n\r\n",m_ipServer.GetBuffer(),atol(m_Port),m_ipServer.GetBuffer(),atol(m_Port));
+		   //sprintf( buff, "%s%s:%d%s","CONNECT ",m_ipServer.GetBuffer(),atol(m_Port),"	");
 		   m_Socket.Send(buff,strlen(buff)); //发送请求
 		   memset(buff,0,600);
 		   m_Socket.Receive(buff,600);
-		   if(strstr(buff, "HTTP/1.0 200 Connection established") == NULL) //连接不成功
+		   if(strstr(buff, "HTTP/1.0 200") )   //连接成功
 		   {
-			m_Socket.Close(); 
-			return FALSE;
+			   m_Socket.Send("",0);
+			   if( !CheckResponse( "220" ) )
+			   {
+					ReleaseSocket();
+					return false;
+			   }
+			   if (!CheckAccount() )
+			   {
+					ReleaseSocket();
+					return false;
+			   }	
 		   }
-		   
+		   else if(strstr(buff, "HTTP/1.1 200") ) //连接成功
+		   {
+			   if (!CheckAccount() )
+			   {
+					ReleaseSocket();
+					return false;
+			   }	
+		   }
+		   else
+		   {
+			   ReleaseSocket();
+			   return FALSE;
+		   }
+
 	   }
 	}
 	else
@@ -294,15 +348,6 @@ bool  CSendMail::Connect(CString Ip,CString Port,CString type,bool Proxy)
 			return FALSE;
 		}
 
-		//向服务器发送"HELO "+服务器名
-		string strTmp="HELO "+m_ipServer+"\r\n";
-		if(m_Socket.Send( strTmp.c_str(),strTmp.length() )  == SOCKET_ERROR)	
-		{
-			ReleaseSocket();
-			return false;
-		}
-		if(!CheckResponse("250")) return false;
-
 		if (!CheckAccount() )
 		{
 			ReleaseSocket();
@@ -315,7 +360,7 @@ bool  CSendMail::Connect(CString Ip,CString Port,CString type,bool Proxy)
 
 bool  CSendMail::CreateSocket()
 {
-	return m_MainSocket.Create() > 0 ? true : false ;
+	return m_Socket.Create() > 0 ? true : false ;
 }
 
 void  CSendMail::ReleaseSocket()
@@ -335,13 +380,28 @@ bool  CSendMail::CheckResponse(CString RecvCode)
 	}
 	catch(...)
 	{
-		return false;
+		return true;
 	}
 }
 
 bool  CSendMail::CheckAccount()
 {
 	CBase base64;
+
+	//向服务器发送"HELO "+服务器名
+	string strTmp="HELO "+m_ipServer+"\r\n";
+	if(m_Socket.Send( strTmp.c_str(),strTmp.length() )  == SOCKET_ERROR)	
+	{
+			ReleaseSocket();
+			return false;
+	}
+	if( m_Proxy )
+	{
+		if(!CheckResponse("220")) 
+			return false;
+	}
+	else
+		if(!CheckResponse("250")) return false;
 
 
 	//发送"AUTH LOGIN"
@@ -352,6 +412,7 @@ bool  CSendMail::CheckAccount()
 		return false;
 	}
 	if(!CheckResponse("334")) return false;
+
 
 	//发送经base64编码的用户名
 	string strUserName=base64.Encode((unsigned char *)m_User.GetBuffer(),m_User.GetLength())+"\r\n";
@@ -390,6 +451,7 @@ bool  CSendMail::SendData(CString SendFrom,vector<string> SendtoList,
 	strTmp="MAIL FROM:<"+SendFrom+">\r\n";
 	if(m_Socket.Send(strTmp.c_str(),strTmp.length()) == SOCKET_ERROR)
 	{
+		int elen = WSAGetLastError();
 		ReleaseSocket();
 		return false;
 	}
@@ -401,6 +463,7 @@ bool  CSendMail::SendData(CString SendFrom,vector<string> SendtoList,
 		strTmp="RCPT To:<"+SendtoList[i]+">\r\n";
 		if(m_Socket.Send(strTmp.c_str(),strTmp.length()) == SOCKET_ERROR)
 		{
+			int elen = WSAGetLastError();
 			ReleaseSocket();
 			return false;
 		}
@@ -410,6 +473,7 @@ bool  CSendMail::SendData(CString SendFrom,vector<string> SendtoList,
 	//发送"DATA\r\n"
 	if(m_Socket.Send("DATA\r\n",strlen("DATA\r\n")) == SOCKET_ERROR)
 	{
+		int elen = WSAGetLastError();
 		ReleaseSocket();
 		return false;
 	}
@@ -426,20 +490,18 @@ bool  CSendMail::SendData(CString SendFrom,vector<string> SendtoList,
 	strTmp+="MIME_Version:1.0\r\n";
 
 	//	//"X-Mailer:Smtp Client By xxx"//版权信息
-	strTmp+="X-Mailer:"; strTmp+="Stmp by:Test!"; strTmp+="\r\n";
+	strTmp+="Y-Mailer:Stmp by:Test!\r\n";
 
 	//"MIME_Version:1.0\r\n"
-	strTmp+="MIME_Version:1.0\r\n";
+	strTmp+="MIME_Version:1.0\r\n\r\n";
 
+	/*
 	//"Content-type:multipart/mixed;Boundary=xxx\r\n\r\n";
-	strTmp+="Content-type:multipart/mixed;Boundary=";
-	strTmp+="boundary";
-	strTmp+="\r\n\r\n";
-
-	//strTmp="RCPT To:<283899487@qq.com>\r\nRCPT To:<185123@qq.com>\r\n";
+	strTmp+="Content-type:multipart/mixed;Boundary=boundary\r\n\r\n";
 
 	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
 	{
+		int elen = WSAGetLastError();
 		ReleaseSocket();
 		return false;	
 	}
@@ -451,8 +513,9 @@ bool  CSendMail::SendData(CString SendFrom,vector<string> SendtoList,
 	strTmp+="Content-type:text/plain;Charset=gb2312\r\n";
 	strTmp+="Content-Transfer-Encoding:8bit\r\n\r\n";
 
+	*/
 	//邮件内容
-	strTmp+=Content+"\r\n\r\n";
+	strTmp+=Content+"\r\n.\r\n";
 
 	//将邮件内容发送出去
 	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
@@ -462,6 +525,9 @@ bool  CSendMail::SendData(CString SendFrom,vector<string> SendtoList,
 		return false;	
 	}
 
+	if(!CheckResponse("250")) return false;
+
+	/*
 	//界尾
 	strTmp="--";
 	strTmp+="boundary";
@@ -476,7 +542,7 @@ bool  CSendMail::SendData(CString SendFrom,vector<string> SendtoList,
 	if(!CheckResponse("250")) return false;
 	//	AfxMessageBox("here");
 	//退出
-
+  */
 	if(m_Socket.Send("QUIT\r\n",strlen("QUIT\r\n") ) == SOCKET_ERROR)
 	{
 		ReleaseSocket();
