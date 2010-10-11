@@ -7,9 +7,8 @@
 #include "../SoccerTeam.h"
 #include "../SoccerPitch.h"
 #include "../Messageing/MessageDispatcher.h"
-#include "../Messageing/SoccerMessages.h"
 #include "../SteeringBehaviors.h"
-#include "../Telegram.h"
+#include "../../Public/MsgImpl.h"
 #include "../../Config.h"		
 
 //uncomment to send state info to debug window
@@ -20,7 +19,7 @@ EmptyFun(void,GlobalKeeperState,Enter,GoalKeeper);
 EmptyFun(void,GlobalKeeperState,Execute,GoalKeeper);
 EmptyFun(void,GlobalKeeperState,Exit,GoalKeeper);
 
-bool GlobalKeeperState::OnMessage(GoalKeeper* keeper, const Telegram& telegram)
+bool GlobalKeeperState::OnMessage(GoalKeeper* keeper, const tagMessage& telegram)
 {
 	switch(telegram.Msg)
 	{

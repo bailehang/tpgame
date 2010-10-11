@@ -273,6 +273,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Public\Log.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Public\MsgImpl.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Public\PrecisionTimer.cpp"
 				>
 			</File>
@@ -286,10 +294,6 @@
 			</File>
 			<File
 				RelativePath=".\Public\Stream_Utility_Fun.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Public\Tool.h"
 				>
 			</File>
 			<Filter
@@ -350,10 +354,6 @@
 			</File>
 			<File
 				RelativePath=".\App\SupportSpotCalculator.h"
-				>
-			</File>
-			<File
-				RelativePath=".\App\Telegram.h"
 				>
 			</File>
 			<File
@@ -457,10 +457,6 @@
 				</File>
 				<File
 					RelativePath=".\App\Messageing\MessageDispatcher.h"
-					>
-				</File>
-				<File
-					RelativePath=".\App\Messageing\SoccerMessages.h"
 					>
 				</File>
 			</Filter>

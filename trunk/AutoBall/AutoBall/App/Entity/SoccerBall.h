@@ -35,7 +35,7 @@ public:
 	void      Render();
 
 	/// 足球不需要消息
-	bool      HandleMessage(const Telegram& msg){return false;}
+	bool      HandleMessage(const tagMessage& msg){return false;}
 
 	/// 收到一个方向力
 	void      Kick(Vector2D direction, double force,CMoveEntity* entity);

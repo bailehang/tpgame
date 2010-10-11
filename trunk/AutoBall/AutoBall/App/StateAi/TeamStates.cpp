@@ -5,7 +5,6 @@
 #include "../Entity/PlayerBase.h"
 #include "../SoccerPitch.h"
 #include "../Messageing/MessageDispatcher.h"
-#include "../Messageing/SoccerMessages.h"
 #include "../../Config.h"			   
 
 extern SoccerPitch* g_SoccerPitch;

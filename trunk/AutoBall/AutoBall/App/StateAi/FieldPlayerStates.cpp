@@ -7,9 +7,8 @@
 #include "../SoccerTeam.h"
 #include "../SoccerPitch.h"
 #include "../Messageing/MessageDispatcher.h"
-#include "../Messageing/SoccerMessages.h"
 #include "../SteeringBehaviors.h"
-#include "../Telegram.h"
+#include "../../Public/MsgImpl.h"
 #include "../../Config.h"	
 
 
@@ -34,7 +33,7 @@ void GlobalPlayerState::Execute(FieldPlayer* player)
 
 }
 
-bool GlobalPlayerState::OnMessage(FieldPlayer* player, const Telegram& telegram)
+bool GlobalPlayerState::OnMessage(FieldPlayer* player, const tagMessage& telegram)
 {
 	switch(telegram.Msg)
 	{

@@ -6,7 +6,7 @@
 #include <string>
 
 #include "State.h"
-#include "../Telegram.h"
+#include "../../Public/MsgImpl.h"
 
 template <class entity_type>
 class StateMachine
@@ -36,7 +36,7 @@ public:
 		if (m_pCurrentState) m_pCurrentState->Execute(m_pOwner);
 	}
 
-	bool  HandleMessage(const Telegram& msg)const
+	bool  HandleMessage(const tagMessage& msg)const
 	{
 		//first see if the current state is valid and that it can handle
 		//the message

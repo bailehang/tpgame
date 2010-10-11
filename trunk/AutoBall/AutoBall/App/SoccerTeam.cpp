@@ -12,7 +12,6 @@
 #include "Entity/EntityManager.h"
 #include "StateAi/StateMachine.h"
 #include "Messageing/MessageDispatcher.h"
-#include "Messageing/SoccerMessages.h"
 #include "../Public/Singleton.h"
 #include "../Render/VGdi.h"
 #include "../Render/Vector2D.h"

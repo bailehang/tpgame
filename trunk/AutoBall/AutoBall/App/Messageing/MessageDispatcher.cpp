@@ -4,17 +4,9 @@
 #include "../Entity/EntityManager.h"
 #include "../../Public/FrameCounter.h"
 #include "../../Public/Singleton.h"
-//#include "Debug/DebugConsole.h"
 
 using std::set;
 
-//uncomment below to send message info to the debug window
-//#define SHOW_MESSAGING_INFO
-
-//--------------------------- Instance ----------------------------------------
-//
-//   this class is a singleton
-//-----------------------------------------------------------------------------
 MessageDispatcher* MessageDispatcher::Instance()
 {
 	static MessageDispatcher instance; 
@@ -26,7 +18,7 @@ MessageDispatcher* MessageDispatcher::Instance()
 //  
 //  see description in header
 //------------------------------------------------------------------------
-void MessageDispatcher::Discharge(CBaseEntity* pReceiver, const Telegram& telegram)
+void MessageDispatcher::Discharge(CBaseEntity* pReceiver, const tagMessage& telegram)
 {
 	if (!pReceiver->HandleMessage(telegram))
 	{
@@ -37,12 +29,6 @@ void MessageDispatcher::Discharge(CBaseEntity* pReceiver, const Telegram& telegr
 	}
 }
 
-//---------------------------- DispatchMsg ---------------------------
-//
-//  given a message, a receiver, a sender and any time delay, this function
-//  routes the message to the correct agent (if no delay) or stores
-//  in the message queue to be dispatched at the correct time
-//------------------------------------------------------------------------
 void MessageDispatcher::DispatchMsg(double       delay,
 									int          sender,
 									int          receiver,
@@ -50,23 +36,18 @@ void MessageDispatcher::DispatchMsg(double       delay,
 									void*        AdditionalInfo = NULL)
 {
 
-	//get a pointer to the receiver
 	CBaseEntity* pReceiver = GetInstObj(EntityManager).FindEntity(receiver);
 
-	//make sure the receiver is valid
 	if (pReceiver == NULL)
 	{
 #ifdef SHOW_MESSAGING_INFO
 		debug_con << "\nWarning! No Receiver with ID of " << receiver << " found" << "";
 #endif
-
 		return;
 	}
 
-	//create the telegram
-	Telegram telegram(0, sender, receiver, msg, AdditionalInfo);
-
-	//if there is no delay, route telegram immediately                       
+	tagMessage telegram(0, sender, receiver, msg, AdditionalInfo);
+                     
 	if (delay <= 0.0)                                                        
 	{
 #ifdef SHOW_MESSAGING_INFO
@@ -74,19 +55,14 @@ void MessageDispatcher::DispatchMsg(double       delay,
 			<< " by " << sender << " for " << receiver 
 			<< ". Msg is " << msg << "";
 #endif
-
-		//send the telegram to the recipient
 		Discharge(pReceiver, telegram);
 	}
-
-	//else calculate the time when the telegram should be dispatched
 	else
 	{
 		double CurrentTime = TickCounter->GetCurrentFrame(); 
 
 		telegram.DispatchTime = CurrentTime + delay;
 
-		//and put it in the queue
 		PriorityQ.insert(telegram);   
 
 #ifdef SHOW_MESSAGING_INFO
@@ -97,11 +73,6 @@ void MessageDispatcher::DispatchMsg(double       delay,
 	}
 }
 
-//---------------------- DispatchDelayedMessages -------------------------
-//
-//  This function dispatches any telegrams with a timestamp that has
-//  expired. Any dispatched telegrams are removed from the queue
-//------------------------------------------------------------------------
 void MessageDispatcher::DispatchDelayedMessages()
 { 
 	//first get current time
@@ -115,7 +86,7 @@ void MessageDispatcher::DispatchDelayedMessages()
 		(PriorityQ.begin()->DispatchTime > 0) )
 	{
 		//read the telegram from the front of the queue
-		const Telegram& telegram = *PriorityQ.begin();
+		const tagMessage& telegram = *PriorityQ.begin();
 
 		//find the recipient
 		CBaseEntity* pReceiver = GetInstObj(EntityManager).FindEntity(telegram.Receiver);

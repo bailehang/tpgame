@@ -6,7 +6,6 @@
 #include "../Goal.h"
 #include "../SteeringBehaviors.h"
 #include "../Messageing/MessageDispatcher.h"
-#include "../Messageing/SoccerMessages.h"
 #include "../../Render/Transformations.h"
 #include "../../Render/Vector2D.h"
 #include "../../Render/VGdi.h"
@@ -267,13 +266,13 @@ bool PlayerBase::AtTarget()const
 
 bool PlayerBase::FollowTarget() const
 {
-	long len = GetInstObj(CGameSetup).FollowMinDistenRange;
+	long len = (long)GetInstObj(CGameSetup).FollowMinDistenRange;
 	return (Vec2DDistanceSq(Pos(), Ball()->Pos() ) < len*len );
 }
 
 bool PlayerBase::FollowReturn() const
 {
-	long len = GetInstObj(CGameSetup).FollowMaxDistenRange;
+	long len = (long)GetInstObj(CGameSetup).FollowMaxDistenRange;
 	return (Vec2DDistanceSq(Pos(), HomeRegion()->Center() ) > len*len );
 }
 

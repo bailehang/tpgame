@@ -31,22 +31,11 @@ enum	eStateAi
 	Ent_StateNumer			
 };
 
-
-// 事件类型
-enum	eEventAi
+enum  eEventType
 {
-	Ent_InValidEvent=-1,
-	Ent_MoveEvent	= 0,
-	Ent_StopEvent	   ,
-	Ent_UseSkillEvent  ,
-	Ent_EventNum
-};
-
-
-struct  tagEevent
-{
-	void*		Sender;
-	void*		Receiver;
-
-	eEventAi	eEvent;
+	Msg_ReceiveBall,
+	Msg_PassToMe,
+	Msg_SupportAttacker,
+	Msg_GoHome,
+	Msg_Wait
 };
