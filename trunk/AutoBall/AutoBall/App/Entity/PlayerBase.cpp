@@ -12,17 +12,12 @@
 #include "../../Render/Geometry.h"
 #include "../../Render/Utils.h"
 
-
-//----------------------------- dtor -------------------------------------
-//------------------------------------------------------------------------
 PlayerBase::~PlayerBase()
 {
 	SAFE_DELETE( m_pSteering );
 
 }
 
-//----------------------------- ctor -------------------------------------
-//------------------------------------------------------------------------
 PlayerBase::PlayerBase(SoccerTeam* home_team,
 					   int   home_region,
 					   Vector2D  heading,
@@ -95,20 +90,11 @@ void PlayerBase::TrackBall()
 	RotateHeadingToFacePosition(Ball()->Pos());  
 }
 
-//----------------------------- TrackTarget --------------------------------
-//
-//  sets the player's heading to point at the current target
-//------------------------------------------------------------------------
 void PlayerBase::TrackTarget()
 {
 	SetHeading(Vec2DNormalize(Steering()->Target() - Pos()));
 }
 
-
-//------------------------------------------------------------------------
-//
-//binary predicates for std::sort (see CanPassForward/Backward)
-//------------------------------------------------------------------------
 bool  SortByDistanceToOpponentsGoal(const PlayerBase*const p1,
 									const PlayerBase*const p2)
 {
@@ -121,11 +107,6 @@ bool  SortByReversedDistanceToOpponentsGoal(const PlayerBase*const p1,
 	return (p1->DistToOppGoal() > p2->DistToOppGoal());
 }
 
-
-//------------------------- WithinFieldOfView ---------------------------
-//
-//  returns true if subject is within field of view of this player
-//-----------------------------------------------------------------------
 bool PlayerBase::PositionInFrontOfPlayer(Vector2D position)const
 {
 	Vector2D ToSubject = position - Pos();
@@ -139,11 +120,6 @@ bool PlayerBase::PositionInFrontOfPlayer(Vector2D position)const
 		return false;
 }
 
-//------------------------- IsThreatened ---------------------------------
-//
-//  returns true if there is an opponent within this player's 
-//  comfort zone
-//------------------------------------------------------------------------
 bool PlayerBase::isThreatened()const
 {
 	//check against all opponents to make sure non are within this
@@ -166,11 +142,6 @@ bool PlayerBase::isThreatened()const
 	return false;
 }
 
-//----------------------------- FindSupport -----------------------------------
-//
-//  determines the player who is closest to the SupportSpot and messages him
-//  to tell him to change state to SupportAttacker
-//-----------------------------------------------------------------------------
 void PlayerBase::FindSupport()const
 {    
 	//if there is no support we need to find a suitable player.

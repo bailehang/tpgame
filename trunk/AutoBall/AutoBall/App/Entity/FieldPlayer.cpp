@@ -24,8 +24,6 @@ FieldPlayer::~FieldPlayer()
 	SAFE_DELETE(m_pStateMachine);
 }
 
-//----------------------------- ctor -------------------------------------
-//------------------------------------------------------------------------
 FieldPlayer::FieldPlayer(SoccerTeam* home_team,
 						 int   home_region,
 						 State<FieldPlayer>* start_state,
@@ -65,27 +63,20 @@ FieldPlayer::FieldPlayer(SoccerTeam* home_team,
 	m_pKickLimiter = new Regulator(GetInstObj(CGameSetup).PlayerKickFrequency);
 }
 
-//------------------------------ Update ----------------------------------
-//
-//  
-//------------------------------------------------------------------------
 void FieldPlayer::Update()
 { 
-	if( GetID() == 5 )
+   if( GetID() == 5 )
    {
 	  char  str[256];
 	  sprintf_s(str,"Position x=%f,y=%f",m_vPosition.x,m_vPosition.y);
 	  char  p;
 	  p='1';
    }
-	//run the logic for the current state
 	m_pStateMachine->Update();
 
-	//calculate the combined steering force
 	m_pSteering->Calculate();
 
-	//if no steering force is produced decelerate the player by applying a
-	//braking force
+	/// 如果没有操作力，提供一个操作力
 	if (m_pSteering->Force().IsZero())
 	{
 		const double BrakingRate = 0.8; 
@@ -93,44 +84,27 @@ void FieldPlayer::Update()
 		m_vVelocity = m_vVelocity * BrakingRate;                                     
 	}
 
-	//the steering force's side component is a force that rotates the 
-	//player about its axis. We must limit the rotation so that a player
-	//can only turn by PlayerMaxTurnRate rads per update.
+	/// 计算最大旋转力操作力
 	double TurningForce =   m_pSteering->SideComponent();
 
 	Clamp(TurningForce, -GetInstObj(CGameSetup).PlayerMaxTurnRate, GetInstObj(CGameSetup).PlayerMaxTurnRate);
 
-	//rotate the heading vector
+	/// 旋转
 	Vec2DRotateAroundOrigin(m_vHeading, TurningForce);
 
-	//make sure the velocity vector points in the same direction as
-	//the heading vector
+	/// 更新当前速度
 	m_vVelocity = m_vHeading * m_vVelocity.Length();
 
-	//and recreate m_vSide
 	m_vSide = m_vHeading.Perp();
 
 
-	//now to calculate the acceleration due to the force exerted by
-	//the forward component of the steering force in the direction
-	//of the player's heading
 	Vector2D accel = m_vHeading * m_pSteering->ForwardComponent() / m_dMass;
 
 	m_vVelocity += accel;
 
-	//make sure player does not exceed maximum velocity
+	/// 整理最大速度
 	m_vVelocity.Truncate(m_dMaxSpeed);
-
-	//update the position
 	m_vPosition += m_vVelocity;
-
-	if( GetID() == 9 )
-    {
-	  //char  str[256];
-	  //sprintf_s(str,"Position x=%f,y=%f",m_vPosition.x,m_vPosition.y);
-	  //PutFileLog(str);
-    }
-	
 
 	//enforce a non-penetration constraint if desired
 	if(GetInstObj(CGameSetup).bNonPenetrationConstraint)
@@ -139,18 +113,12 @@ void FieldPlayer::Update()
 	}
 }
 
-//-------------------- HandleMessage -------------------------------------
-//
-//  routes any messages appropriately
-//------------------------------------------------------------------------
+
 bool FieldPlayer::HandleMessage(const tagMessage& msg)
 {
 	return m_pStateMachine->HandleMessage(msg);
 }
 
-//--------------------------- Render -------------------------------------
-//
-//------------------------------------------------------------------------
 void FieldPlayer::Render()                                         
 {
 	GetInstObj(CGDI).TransparentText();
@@ -167,13 +135,12 @@ void FieldPlayer::Render()
 	}
 
 
-
 	//render the player's body
 	m_vecPlayerVBTrans = WorldTransform(m_vecPlayerVB,
-		Pos(),
-		Heading(),
-		Side(),
-		Scale());  
+										Pos(),
+										Heading(),
+										Side(),
+										Scale());  
 	GetInstObj(CGDI).ClosedShape(m_vecPlayerVBTrans); /**/ 
 
 	//and 'is 'ead
@@ -184,10 +151,11 @@ void FieldPlayer::Render()
 		GetInstObj(CGDI).YellowBrush();
 
 	GetInstObj(CGDI).Circle(Pos(), 5);
-	/*
-	GetInstObj(CGDI).TextColor(255, 0, 0);
-	GetInstObj(CGDI).TextAtPos(Pos().x-3, Pos().y-5, ttos(GetID()) );
-	*/
+
+	/**
+		GetInstObj(CGDI).TextColor(255, 0, 0);
+		GetInstObj(CGDI).TextAtPos(Pos().x-3, Pos().y-5, ttos(GetID()) );
+	 */
 
 	//render the state
 	if (GetInstObj(CGameSetup).bStates)
@@ -197,13 +165,11 @@ void FieldPlayer::Render()
 	}
 
 	//show IDs
-	
 	if (GetInstObj(CGameSetup).bIDs)
 	{
 		GetInstObj(CGDI).TextColor(0, 170, 0);
 		GetInstObj(CGDI).TextAtPos(Pos().x-20, Pos().y-20, ttos(GetID()));
 	}
-	
 
 
 	if (GetInstObj(CGameSetup).bViewTargets)
@@ -211,5 +177,5 @@ void FieldPlayer::Render()
 		GetInstObj(CGDI).RedBrush();
 		GetInstObj(CGDI).Circle(Steering()->Target(), 3);
 		GetInstObj(CGDI).TextAtPos(Steering()->Target(), ttos(GetID()));
-	}  /**/ 
+	} 
 }

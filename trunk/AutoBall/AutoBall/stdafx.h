@@ -20,6 +20,11 @@
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
+
+#include <mmsystem.h>
+
+#pragma comment(lib,"winmm.lib")
+
 using namespace std;
 
 

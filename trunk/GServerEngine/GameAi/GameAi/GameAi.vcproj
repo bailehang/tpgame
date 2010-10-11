@@ -263,6 +263,10 @@
 				RelativePath=".\Public\StateSet.h"
 				>
 			</File>
+			<File
+				RelativePath=".\tp_macro.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Tools"

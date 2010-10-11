@@ -550,8 +550,6 @@ void KickBall::Execute(FieldPlayer* player)
 	}
 
 	/// 计算指向球的向量与球员自己的朝向向量的点积
-	//calculate the dot product of the vector pointing to the ball
-	//and the player's heading
 	Vector2D ToBall = player->Ball()->Pos() - player->Pos();
 	double   dot    = player->Heading().Dot(Vec2DNormalize(ToBall)); 
 
@@ -569,8 +567,6 @@ void KickBall::Execute(FieldPlayer* player)
 
 		return;
 	}
-
-	/* Attempt a shot at the goal */
 
 	/// 计算指向球的向量与球员自己的朝向向量的点积
 	Vector2D    BallTarget;
@@ -605,9 +601,6 @@ void KickBall::Execute(FieldPlayer* player)
 		player->Team()->SetThrowIn(false);
 		return;
 	}
-
-
-	/* Attempt a pass to a player */
 
 	/// 找到接球队员，那么receiver将指向他
 	PlayerBase* receiver = NULL;
@@ -756,7 +749,6 @@ void ReceiveBall::Enter(FieldPlayer* player)
 	}
 
 	/// 让球员知道，这个队员正在接球
-	//let the team know this player is receiving the ball
 	player->Team()->SetReceiver(player);
 
 	/// 该队员现在也是控球队员
@@ -794,8 +786,6 @@ void ReceiveBall::Execute(FieldPlayer* player)
 	if( !player->Team()->IsChaseBall() ) return;
 
 	/// 如果他离球足够近或者他的球队市区球的控制权，那么他应该状态去追求
-	//if the ball comes close enough to the player or if his team lose control
-	//he should change state to chase the ball
 	if (player->BallWithinReceivingRange() || !player->Team()->InControl())
 	{
 		player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
@@ -810,8 +800,6 @@ void ReceiveBall::Execute(FieldPlayer* player)
 	}
 
 	/// 如果改队员达到了操控目标的位置，那么它应该等在哪儿，并转向面对着球
-	//if the player has 'arrived' at the steering target he should wait and
-	//turn to face the ball
 	if (player->AtTarget())
 	{
 		player->Steering()->ArriveOff();

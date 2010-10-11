@@ -52,6 +52,7 @@ private:
 	CString	  m_Port;
 	CString   m_PassWord;
 	CString   m_User;
+	bool	  m_Proxy;
 
 	long	  ProxyPort;
 	CString   ProxyIpAdd;

@@ -29,35 +29,6 @@ bool Overlapped(const T* ob, const conT& conOb, double MinDistBetweenObstacles =
 	return false;
 }
 
-/*
-template <class T, class conT>
-void TagNeighbors(T* entity, conT& others, const double radius)
-{
-	typename conT::iterator it;
-
-	//iterate through all entities checking for range
-	for (it=others.begin(); it != others.end(); ++it)
-	{
-		//first clear any current tag
-		(*it)->UnTag();
-
-		//work in distance squared to avoid sqrts
-		Vector2D to = (*it)->Pos() - entity->Pos();
-
-		//the bounding radius of the other is taken into account by adding it 
-		//to the range
-		double range = radius + (*it)->BRadius();
-
-		//if entity within range, tag for further consideration
-		if ( ((*it) != entity) && (to.LengthSq() < range*range))
-		{
-			(*it)->Tag();
-		}
-
-	}//next entity
-}
- */
-
 template <class T, class conT>
 void EnforceNonPenetrationContraint(T entity, const conT& others)
 {
