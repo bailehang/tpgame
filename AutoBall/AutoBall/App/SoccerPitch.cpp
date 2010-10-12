@@ -20,8 +20,6 @@
 const int NumRegionsHorizontal = 12; 
 const int NumRegionsVertical   = 4;
 
-//------------------------------- ctor -----------------------------------
-//------------------------------------------------------------------------
 SoccerPitch::SoccerPitch(int cx, int cy):m_cxClient(cx),
 	m_cyClient(cy),
 	m_bPaused(false),
@@ -40,7 +38,6 @@ SoccerPitch::SoccerPitch(int cx, int cy):m_cxClient(cx),
 	m_pRedGoal  = new Goal(Vector2D( m_pPlayingArea->Left(), (cy-GetInstObj(CGameSetup).GoalWidth)/2),
 		Vector2D(m_pPlayingArea->Left(), cy - (cy-GetInstObj(CGameSetup).GoalWidth)/2),
 		Vector2D(1,0));
-
 
 
 	m_pBlueGoal = new Goal( Vector2D( m_pPlayingArea->Right(), (cy-GetInstObj(CGameSetup).GoalWidth)/2),
@@ -79,8 +76,6 @@ SoccerPitch::SoccerPitch(int cx, int cy):m_cxClient(cx),
 	//ParamLoader* p = ParamLoader::Instance();
 }
 
-//-------------------------------- dtor ----------------------------------
-//------------------------------------------------------------------------
 SoccerPitch::~SoccerPitch()
 {
 	SAFE_DELETE( m_pBall );
@@ -99,11 +94,6 @@ SoccerPitch::~SoccerPitch()
 	}
 }
 
-//----------------------------- Update -----------------------------------
-//
-//  this demo works on a fixed frame rate (60 by default) so we don't need
-//  to pass a time_elapsed as a parameter to the game entities
-//------------------------------------------------------------------------
 void SoccerPitch::Update()
 {
 	if (m_bPaused) return;
@@ -131,10 +121,8 @@ void SoccerPitch::Update()
 	}
 }
 
-//------------------------- CreateRegions --------------------------------
 void SoccerPitch::CreateRegions(double width, double height)
 {  
-	//index into the vector
 	int idx = m_Regions.size()-1;
 
 	for (int col=0; col<NumRegionsHorizontal; ++col)
@@ -151,17 +139,8 @@ void SoccerPitch::CreateRegions(double width, double height)
 }
 
 
-//------------------------------ Render ----------------------------------
-//------------------------------------------------------------------------
 bool SoccerPitch::Render()
 {
-	//draw the grass
-
-	//GetInstObj(CGDI).DarkGreenPen();
-	//GetInstObj(CGDI).DarkGreenBrush();
-	//GetInstObj(CGDI).Rect(0,0,100, 100);
-
-
 	//render regions
 	if (GetInstObj(CGameSetup).bRegions)
 	{   
@@ -171,7 +150,6 @@ bool SoccerPitch::Render()
 		}
 	}
 
-	//render the goals
 	//GetInstObj(CGDI).HollowBrush();
 	GetInstObj(CGDI).RedPen();
 	GetInstObj(CGDI).HatchRBrush();

@@ -25,16 +25,13 @@ public:
 
 public:
 
-	/// 碰撞检测,然后向相反方向移动
+	/// 碰撞检测,然后如果出界外，将进入界外球状态
 	void TestCollisionWithWalls(const std::vector<Wall2D>& walls);
 
-	//Entity class Update
 	void      Update();
 
-	//Entity class Render
 	void      Render();
 
-	/// 足球不需要消息
 	bool      HandleMessage(const tagMessage& msg){return false;}
 
 	/// 收到一个方向力
