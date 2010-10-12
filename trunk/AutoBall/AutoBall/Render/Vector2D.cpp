@@ -32,17 +32,6 @@ void   Vector2D::Normalize()
 	}
 
 	return;
-
-	if ( nor < tol )
-		nor = 1 ;
-
-	x =  x / nor;
-	y =  y / nor; 
-
-	if ( x < tol )
-		x = 0.0f;
-	if ( y < tol )
-		y = 0.0f;
 }
 
 double  Vector2D::Dot(const Vector2D& v2)const

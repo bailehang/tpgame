@@ -15,7 +15,7 @@ struct tagMessage
 	int          Receiver;
 	int          Msg;
 
-	double       DispatchTime;
+	LONG64       DispatchTime;
 	void*        ExtraInfo;
 
 
@@ -26,7 +26,7 @@ struct tagMessage
 	{}
 
 
-	tagMessage(double time,
+	tagMessage(LONG64 time,
 		int    sender,
 		int    receiver,
 		int    msg,
@@ -44,7 +44,7 @@ const double SmallestDelay = 0.25;
 
 inline bool operator==(const tagMessage& t1, const tagMessage& t2)
 {
-	return ( fabs(t1.DispatchTime-t2.DispatchTime) < SmallestDelay) &&
+	return ( fabs( (double)(t1.DispatchTime-t2.DispatchTime) ) < SmallestDelay) &&
 				 (t1.Sender == t2.Sender)&&
 				 (t1.Receiver == t2.Receiver)&&(t1.Msg == t2.Msg);
 }

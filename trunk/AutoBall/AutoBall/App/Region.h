@@ -21,14 +21,14 @@ public:
 
 
 	Region(double left,
-		double top,
-		double right,
-		double bottom,
-		int id = -1):m_dTop(top),
-		m_dRight(right),
-		m_dLeft(left),
-		m_dBottom(bottom),
-		m_iID(id)
+			double top,
+			double right,
+			double bottom,
+			int id = -1):m_dTop(top),
+			m_dRight(right),
+			m_dLeft(left),
+			m_dBottom(bottom),
+			m_iID(id)
 	{
 		m_vCenter = Vector2D( (left+right)*0.5, (top+bottom)*0.5 );
 
@@ -46,7 +46,6 @@ public:
 	/// 在当前矩形区域，返回一个随机位置信息
 	inline	   Vector2D GetRandomPosition()const;
 
-	//-------------------------------
 	double     Top()const{return m_dTop;}
 	double     Bottom()const{return m_dBottom;}
 	double     Left()const{return m_dLeft;}
@@ -56,10 +55,10 @@ public:
 	double     Length()const{return max(Width(), Height());}
 	double     Breadth()const{return min(Width(), Height());}
 
-	Vector2D  Center()const{return m_vCenter;}
-	int       ID()const{return m_iID;}
+	Vector2D   Center()const{return m_vCenter;}
+	int        ID()const	{return m_iID;}
 
-	protected:
+protected:
 
 	/// 前后左右，坐标
 	double        m_dTop;

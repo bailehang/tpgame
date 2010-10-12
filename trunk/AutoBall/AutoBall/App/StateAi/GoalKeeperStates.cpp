@@ -45,17 +45,6 @@ bool GlobalKeeperState::OnMessage(GoalKeeper* keeper, const tagMessage& telegram
 }
 
 
-//--------------------------- TendGoal -----------------------------------
-//
-//  This is the main state for the goalkeeper. When in this state he will
-//  move left to right across the goalmouth using the 'interpose' steering
-//  behavior to put himself between the ball and the back of the net.
-//
-//  If the ball comes within the 'goalkeeper range' he moves out of the
-//  goalmouth to attempt to intercept it. (see next state)
-//------------------------------------------------------------------------
-
-
 EmptyMsg(bool,TendGoal,OnMessage,GoalKeeper);
 
 void TendGoal::Enter(GoalKeeper* keeper)
@@ -85,16 +74,12 @@ void TendGoal::Execute(GoalKeeper* keeper)
 	}
 
 	/// 如果球在预定义的距离，守门员已到那个位置尽力截住它
-	//if ball is within a predefined distance, the keeper moves out from
-	//position to try and intercept it.
 	if (keeper->BallWithinRangeForIntercept() && !keeper->Team()->InControl())
 	{
 		keeper->GetFSM()->ChangeState(&GetInstObj(InterceptBall));
 	}
 
 	/// 如果守门员离球门线太远了，而且没有对方队员的威胁，他应该移回球门
-	//if the keeper has ventured too far away from the goal-line and there
-	//is no threat from the opponents he should move back towards it
 	if (keeper->TooFarFromGoalMouth() && keeper->Team()->InControl())
 	{
 		keeper->GetFSM()->ChangeState(&GetInstObj(ReturnHome));
@@ -109,13 +94,6 @@ void TendGoal::Exit(GoalKeeper* keeper)
 	keeper->Steering()->InterposeOff();
 }
 
-
-//------------------------- ReturnHome: ----------------------------------
-//
-//  In this state the goalkeeper simply returns back to the center of
-//  the goal region before changing state back to TendGoal
-//------------------------------------------------------------------------
-
 EmptyMsg(bool,ReturnHome,OnMessage,GoalKeeper);
 
 void ReturnHome::Enter(GoalKeeper* keeper)
@@ -128,8 +106,6 @@ void ReturnHome::Execute(GoalKeeper* keeper)
 	keeper->Steering()->SetTarget(keeper->HomeRegion()->Center());
 
 	/// 如果离初始区域足够近，或者对手控制了球，改变状态守门
-	//if close enough to home or the opponents get control over the ball,
-	//change state to tend goal
 	if (keeper->InHomeRegion() || !keeper->Team()->InControl())
 	{
 		keeper->GetFSM()->ChangeState(&GetInstObj(TendGoal));
@@ -141,14 +117,6 @@ void ReturnHome::Exit(GoalKeeper* keeper)
 	keeper->Steering()->ArriveOff();
 }
 
-
-
-//----------------- InterceptBall ----------------------------------------
-//
-//  In this state the GP will attempt to intercept the ball using the
-//  pursuit steering behavior, but he only does so so long as he remains
-//  within his home region.
-//------------------------------------------------------------------------
 
 EmptyMsg(bool,InterceptBall,OnMessage,GoalKeeper);
 
@@ -165,9 +133,6 @@ void InterceptBall::Execute(GoalKeeper* keeper)
 { 
 	///	 如果守门员离球门很远，那么他应该移会自己的区域，除非他是离球最近的球员
 	///  那样的情况下，它应该尽量拦截住球
-	//if the goalkeeper moves to far away from the goal he should return to his
-	//home region UNLESS he is the closest player to the ball, in which case,
-	//he should keep trying to intercept it.
 	if (keeper->TooFarFromGoalMouth() && !keeper->isClosestPlayerOnPitchToBall())
 	{
 		keeper->GetFSM()->ChangeState(&GetInstObj(ReturnHome));
@@ -176,8 +141,6 @@ void InterceptBall::Execute(GoalKeeper* keeper)
 	}
 
 	/// 如果球在守门员手可触及的范围，应该抓住球，然后在把他传回赛场
-	//if the ball becomes in range of the goalkeeper's hands he traps the 
-	//ball and puts it back in play
 	if (keeper->BallWithinKeeperRange())
 	{
 		keeper->Ball()->Trap();
