@@ -444,6 +444,10 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Script"
+				>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Render"

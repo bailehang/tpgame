@@ -8,12 +8,12 @@
 #include "State.h"
 #include "../../Public/MsgImpl.h"
 
-template <class entity_type>
+template <class entity>
 class StateMachine
 {
 public:
 
-	StateMachine(entity_type* owner):m_pOwner(owner),
+	StateMachine(entity* owner):m_pOwner(owner),
 		m_pCurrentState(NULL),
 		m_pPreviousState(NULL),
 		m_pGlobalState(NULL)
@@ -21,9 +21,9 @@ public:
 
 	~StateMachine() { }
 
-	void SetCurrentState(State<entity_type>* s) {m_pCurrentState = s;}
-	void SetGlobalState(State<entity_type>* s)  {m_pGlobalState  = s;}
-	void SetPreviousState(State<entity_type>* s){m_pPreviousState= s;}
+	void SetCurrentState(State<entity>* s) {m_pCurrentState = s;}
+	void SetGlobalState(State<entity>* s)  {m_pGlobalState  = s;}
+	void SetPreviousState(State<entity>* s){m_pPreviousState= s;}
 
 	void  Update()const
 	{
@@ -47,7 +47,7 @@ public:
 		return false;
 	}
 
-	void  ChangeState(State<entity_type>* pNewState)
+	void  ChangeState(State<entity>* pNewState)
 	{
 		assert(pNewState && "<StateMachine::ChangeState>:trying to assign null state to current");
 
@@ -65,15 +65,15 @@ public:
 		ChangeState(m_pPreviousState);
 	}
 
-	bool  isInState(const State<entity_type>& st)const
+	bool  isInState(const State<entity>& st)const
 	{
 		if (typeid(*m_pCurrentState) == typeid(st)) return true;
 		return false;
 	}
 
-	State<entity_type>*  CurrentState()  const{return m_pCurrentState;}
-	State<entity_type>*  GlobalState()   const{return m_pGlobalState;}
-	State<entity_type>*  PreviousState() const{return m_pPreviousState;}
+	State<entity>*  CurrentState()  const{return m_pCurrentState;}
+	State<entity>*  GlobalState()   const{return m_pGlobalState;}
+	State<entity>*  PreviousState() const{return m_pPreviousState;}
 
 	std::string         GetNameOfCurrentState()const
 	{
@@ -89,10 +89,10 @@ public:
 
 private:
 
-	entity_type*          m_pOwner;
-	State<entity_type>*   m_pCurrentState;
-	State<entity_type>*   m_pPreviousState;
-	State<entity_type>*   m_pGlobalState;
+	entity*          m_pOwner;
+	State<entity>*   m_pCurrentState;
+	State<entity>*   m_pPreviousState;
+	State<entity>*   m_pGlobalState;
 
 };
 

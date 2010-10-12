@@ -75,7 +75,7 @@ public:
 
 	//returns true if the point specified by 'position' is located in
 	//front of the player
-	/// 
+	///	 查看position是否在队员前面
 	bool        PositionInFrontOfPlayer(Vector2D position)const;
 
 	/// 是否是离球最近的球员

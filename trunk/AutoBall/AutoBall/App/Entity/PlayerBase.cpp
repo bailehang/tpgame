@@ -45,19 +45,17 @@ CMoveEntity(home_team->Pitch()->GetRegionFromIndex(home_region)->Center(),
 			 m_PlayerRole(role)
 {
 
-	//setup the vertex buffers and calculate the bounding radius
 	const int NumPlayerVerts = 4;
 	const Vector2D player[NumPlayerVerts] = {Vector2D(-3, 8),
 											 Vector2D(3,10),
 											 Vector2D(3,-10),
 											 Vector2D(-3,-8)};
 
+	/// 计算边界比例
 	for (int vtx=0; vtx<NumPlayerVerts; ++vtx)
 	{
 		m_vecPlayerVB.push_back(player[vtx]);
 
-		//set the bounding radius to the length of the 
-		//greatest extent
 		if (abs(player[vtx].x) > m_dBoundingRadius)
 		{
 			m_dBoundingRadius = abs(player[vtx].x);
@@ -69,22 +67,16 @@ CMoveEntity(home_team->Pitch()->GetRegionFromIndex(home_region)->Center(),
 		}
 	}
 
-	//set up the steering behavior class
+	
+	/// 操作行为
 	m_pSteering = new SteeringBehaviors(this,
 		m_pTeam->Pitch(),
 		Ball());  
 
-	//a player's start target is its start position (because it's just waiting)
+	/// 设定目标,初始状态为出生地
 	m_pSteering->SetTarget(home_team->Pitch()->GetRegionFromIndex(home_region)->Center());
 }
 
-
-
-
-//----------------------------- TrackBall --------------------------------
-//
-//  sets the player's heading to point at the ball
-//------------------------------------------------------------------------
 void PlayerBase::TrackBall()
 {
 	RotateHeadingToFacePosition(Ball()->Pos());  
@@ -122,15 +114,12 @@ bool PlayerBase::PositionInFrontOfPlayer(Vector2D position)const
 
 bool PlayerBase::isThreatened()const
 {
-	//check against all opponents to make sure non are within this
-	//player's comfort zone
 	std::vector<PlayerBase*>::const_iterator curOpp;  
 	curOpp = Team()->Opponents()->Members().begin();
 
 	for (curOpp; curOpp != Team()->Opponents()->Members().end(); ++curOpp)
 	{
-		//calculate distance to the player. if dist is less than our
-		//comfort zone, and the opponent is infront of the player, return true
+		/// 如果curOpp在前面，而且在我的视野范围内
 		if (PositionInFrontOfPlayer((*curOpp)->Pos()) &&
 			(Vec2DDistanceSq(Pos(), (*curOpp)->Pos()) < GetInstObj(CGameSetup).PlayerComfortZoneSq))
 		{        
@@ -144,7 +133,7 @@ bool PlayerBase::isThreatened()const
 
 void PlayerBase::FindSupport()const
 {    
-	//if there is no support we need to find a suitable player.
+	/// 查找最近玩家，让其转换为接应状态
 	if (Team()->SupportingPlayer() == NULL)
 	{
 		PlayerBase* BestSupportPly = Team()->DetermineBestSupportingAttacker();
@@ -160,12 +149,10 @@ void PlayerBase::FindSupport()const
 
 	PlayerBase* BestSupportPly = Team()->DetermineBestSupportingAttacker();
 
-	//if the best player available to support the attacker changes, update
-	//the pointers and send messages to the relevant players to update their
-	//states
+	
+	/// 如果当前位置适合让带球队员给自己传球，请求发球
 	if (BestSupportPly && (BestSupportPly != Team()->SupportingPlayer()))
 	{
-
 		if (Team()->SupportingPlayer())
 		{
 			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
@@ -174,8 +161,6 @@ void PlayerBase::FindSupport()const
 				Msg_GoHome,
 				NULL);
 		}
-
-
 
 		Team()->SetSupportingPlayer(BestSupportPly);
 
@@ -187,8 +172,6 @@ void PlayerBase::FindSupport()const
 	}
 }
 
-
-//calculate distance to opponent's goal. Used frequently by the passing//methods
 double PlayerBase::DistToOppGoal()const
 {
 	return fabs(Pos().x - Team()->OpponentsGoal()->Center().x);

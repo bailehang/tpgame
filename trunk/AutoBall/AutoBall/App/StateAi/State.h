@@ -35,20 +35,20 @@ class FieldPlayer;
 		CLASSFUNTION(GlobalPlayerState,Player,MSG);\
 	}
 
-template <class entity_type>
+template <class entity>
 class State
 {
 public:
 
 	virtual ~State()	{}
 
-	virtual void Enter(entity_type*)=0;
+	virtual void Enter(entity*)=0;
 
-	virtual void Execute(entity_type*)=0;
+	virtual void Execute(entity*)=0;
 
-	virtual void Exit(entity_type*)=0;
+	virtual void Exit(entity*)=0;
 
-	virtual bool OnMessage(entity_type*, const tagMessage&)=0;
+	virtual bool OnMessage(entity*, const tagMessage&)=0;
 };
 
 
