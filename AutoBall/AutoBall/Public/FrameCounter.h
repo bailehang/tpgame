@@ -5,25 +5,18 @@
 #pragma  once 
 
 
-#define TickCounter FrameCounter::Instance()
+#define TickCounter GetInstObj(FrameCounter)
 
 class FrameCounter
 {
-private:
-
-	long m_lCount;
-
-	int  m_iFramesElapsed;
+public:
 
 	FrameCounter():m_lCount(0), m_iFramesElapsed(0){}
 
-	//copy ctor and assignment should be private
 	FrameCounter(const FrameCounter&);
 	FrameCounter& operator=(const FrameCounter&);
 
 public:
-
-	static FrameCounter* Instance();
 
 	void Update(){++m_lCount; ++m_iFramesElapsed;}
 
@@ -34,4 +27,9 @@ public:
 	void Start(){m_iFramesElapsed = 0;}
 	int  FramesElapsedSinceStartCalled()const{return m_iFramesElapsed;}
 
+private:
+
+	long m_lCount;
+
+	int  m_iFramesElapsed;
 };

@@ -39,15 +39,13 @@ public:
 	Wall2D(Vector2D A, Vector2D B, Vector2D N):m_vA(A), m_vB(B), m_vN(N)
 	{ }
 
-	Wall2D(std::ifstream& in){Read(in);}
-
 	virtual void Render(bool RenderNormals = false)const
 	{
 		GetInstObj(CGDI).Line(m_vA, m_vB);
 		GetInstObj(CGDI).Line(m_vA-Vector2D(1,1), m_vB-Vector2D(1,1));
 
 		//render the normals if rqd
-		if (true)
+		if (RenderNormals)
 		{
 			int MidX = (int)((m_vA.x+m_vB.x)/2);
 			int MidY = (int)((m_vA.y+m_vB.y)/2);
@@ -66,28 +64,5 @@ public:
 	void     SetNormal(Vector2D n){m_vN = n;}
 
 	Vector2D Center()const{return (m_vA+m_vB)/2.0;}
-
-	std::ostream& Wall2D::Write(std::ostream& os)const
-	{
-		os << std::endl;
-// 		os << From() << ",";
-// 		os << To() << ",";
-// 		os << Normal();
-		return os;
-	}
-
-	void Read(std::ifstream& in)
-	{
-		double x,y;
-
-		in >> x >> y;
-		SetFrom(Vector2D(x,y));
-
-		in >> x >> y;
-		SetTo(Vector2D(x,y));
-
-		in >> x >> y;
-		SetNormal(Vector2D(x,y));
-	}
 
 };

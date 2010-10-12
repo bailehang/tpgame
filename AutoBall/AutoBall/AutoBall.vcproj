@@ -249,22 +249,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Public\FrameCounter.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\Public\FrameCounter.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Public\GameSetup.cpp"
 				>
 			</File>

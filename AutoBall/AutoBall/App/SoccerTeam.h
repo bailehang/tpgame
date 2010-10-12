@@ -23,25 +23,19 @@ public:
 
 public:
 
-	SoccerTeam(Goal*        home_goal,
-		Goal*        opponents_goal,
-		SoccerPitch* pitch,
-		team_color   color);
+	SoccerTeam(Goal*  home_goal,
+			   Goal*  opponents_goal,
+			   SoccerPitch* pitch,
+			   team_color   color);
 
 	~SoccerTeam();
 
-	//the usual suspects
 	void        Render()const;
 	void        Update();
 
-	//calling this changes the state of all field players to that of 
-	//ReturnToHomeRegion. Mainly used when a goal keeper has
-	//possession
+	/// 让所有的队员归位
 	void        ReturnAllFieldPlayersToHome()const;
 
-	//returns true if player has a clean shot at the goal and sets ShotTarget
-	//to a normalized vector pointing in the direction the shot should be
-	//made. Else returns false and sets heading to a zero vector
 	///  计算是否能射门进球
 	bool        CanShoot(Vector2D  BallPos,
 						 double    power, 
@@ -87,24 +81,21 @@ public:
 	/// 计算最佳传球位置，并查找最合适的对方队员前往这个地点
 	PlayerBase* DetermineBestSupportingAttacker();
 
-
+	/// 得到所有的队内成员
 	const std::vector<PlayerBase*>& Members()const{return m_Players;}  
-
-	StateMachine<SoccerTeam>* GetFSM()const{return m_pStateMachine;}
-
-	Goal*const           HomeGoal()const{return m_pHomeGoal;}
+	StateMachine<SoccerTeam>* GetFSM()const {return m_pStateMachine;}   
+	Goal*const           HomeGoal()const	{return m_pHomeGoal;}
 	Goal*const           OpponentsGoal()const{return m_pOpponentsGoal;}
-
-	SoccerPitch*const    Pitch()const{return m_pPitch;}           
-
-	SoccerTeam*const     Opponents()const{return m_pOpponents;}
-	void                 SetOpponents(SoccerTeam* opps){m_pOpponents = opps;}
+	bool				 AllPlayersAtHome()const;
+	SoccerPitch*const    Pitch()const		{return m_pPitch;}           
+	SoccerTeam*const     Opponents()const	{return m_pOpponents;}
 
 	team_color           Color()const{return m_Color;}
 
+	void                 SetOpponents(SoccerTeam* opps){m_pOpponents = opps;}
 	void                 SetPlayerClosestToBall(PlayerBase* plyr){m_pPlayerClosestToBall=plyr;}
-	PlayerBase*          PlayerClosestToBall()const{return m_pPlayerClosestToBall;}
 
+	PlayerBase*          PlayerClosestToBall()const{return m_pPlayerClosestToBall;}
 	double               ClosestDistToBallSq()const{return m_dDistSqToBallOfClosestPlayer;}
 
 	Vector2D             GetSupportSpot()const{return m_pSupportSpotCalc->GetBestSupportingSpot();}
@@ -119,29 +110,21 @@ public:
 	void                 SetControllingPlayer(PlayerBase* plyr)
 	{
 		m_pControllingPlayer = plyr;
-
-		//rub it in the opponents faces!
 		Opponents()->LostControl();
 	}
 
-
 	bool  InControl()const{if(m_pControllingPlayer)return true; else return false;}
 	void  LostControl(){m_pControllingPlayer = NULL;}
-
 	PlayerBase*  GetPlayerFromID(int id)const;
 
 
 	void SetPlayerHomeRegion(int plyr, int region)const;
-
 	void DetermineBestSupportingPosition()const
 	{
 		m_pSupportSpotCalc->DetermineBestSupportingPosition();
 	}
 
 	void UpdateTargetsOfWaitingPlayers()const;
-
-	//returns false if any of the team are not located within their home region
-	bool AllPlayersAtHome()const;
 
 	std::string Name() const 
 	{
@@ -152,12 +135,11 @@ public:
 
 	bool  IsChaseBall() const	   { return m_IsChase; }
 	void  SetChaseBall(bool chase) { m_IsChase = chase;}
-
 	bool  IsThrowIn() const	   { return m_IsThrowIn; }
 	void  SetThrowIn(bool throwin) { m_IsThrowIn = throwin;}
 
 private:
-	//creates all the players for this team
+	///> 创建成员
 	void CreatePlayers();
 
 	///> 每一帧计算当前离球最近的球员
@@ -168,21 +150,20 @@ private:
 
 private:
 
-	StateMachine<SoccerTeam>*  m_pStateMachine;///> 当前队伍的状态机
-	team_color                m_Color;	       ///> 队伍颜色
-	std::vector<PlayerBase*>  m_Players;	   ///> 队伍所有的成员
-	SoccerPitch*              m_pPitch;		   ///> 指向的球场指针
-	Goal*                     m_pOpponentsGoal;///> 对方球门
-	Goal*                     m_pHomeGoal;	   ///> 自己球门
-	SoccerTeam*               m_pOpponents;	   ///> 敌对队伍指针
-
+	StateMachine<SoccerTeam>*  m_pStateMachine;		 ///> 当前队伍的状态机
+	team_color                m_Color;				 ///> 队伍颜色
+	std::vector<PlayerBase*>  m_Players;			 ///> 队伍所有的成员
+	SoccerPitch*              m_pPitch;				 ///> 指向的球场指针
+	Goal*                     m_pOpponentsGoal;		 ///> 对方球门
+	Goal*                     m_pHomeGoal;			 ///> 自己球门
+	SoccerTeam*               m_pOpponents;			 ///> 敌对队伍指针
 	PlayerBase*               m_pControllingPlayer;	 ///> 控球队员
 	PlayerBase*               m_pSupportingPlayer;	 ///> 接应队员
 	PlayerBase*               m_pReceivingPlayer;	 ///> 指向接球队员
 	PlayerBase*               m_pPlayerClosestToBall;///> 指向离球最近的队员
-
-	double                     m_dDistSqToBallOfClosestPlayer;///> 离最近球员最近的距离
-
 	SupportSpotCalculator*    m_pSupportSpotCalc;	 ///>  用来决策队员的行为类
+
+	double                    m_dDistSqToBallOfClosestPlayer;///> 离最近球员最近的距离
+
 
 };
