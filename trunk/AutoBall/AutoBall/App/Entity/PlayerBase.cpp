@@ -272,3 +272,9 @@ const Region* const PlayerBase::HomeRegion()const
 {
 	return Pitch()->GetRegionFromIndex(m_iHomeRegion);
 }
+
+bool   PlayerBase::InsideHomeRegion(Vector2D pos, Region::region_modifier r)const
+{
+	 const Region* HomeRgn = HomeRegion();
+	 return HomeRgn->Inside(pos,r);
+}

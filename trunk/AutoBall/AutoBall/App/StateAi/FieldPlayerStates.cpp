@@ -295,9 +295,9 @@ void ReturnToHomeRegion::Enter(FieldPlayer* player)
 	}
 	player->Steering()->ArriveOn();
 
-	if (!player->HomeRegion()->Inside(player->Steering()->Target(), Region::halfsize))
+	if (!player->InsideHomeRegion(player->Steering()->Target(), Region::halfsize))
 	{
-		player->Steering()->SetTarget(player->HomeRegion()->Center());
+		player->Steering()->SetTarget(player->GetHomeCenter());
 	}
 
 #ifdef PLAYER_STATE_INFO_ON
@@ -318,7 +318,7 @@ void ReturnToHomeRegion::Execute(FieldPlayer* player)
 		//there is not an assigned receiver && the goalkeeper does not gave
 		//the ball, go chase it
 		if ( player->isClosestTeamMemberToBall() &&
-			(player->Team()->Receiver() == NULL) &&
+			player->Team()->IsReceiver() &&
 			!player->Pitch()->GoalKeeperHasBall())
 		{
 			player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
@@ -690,7 +690,7 @@ void Dribble::Execute(FieldPlayer* player)
 
 	if( !player->Team()->IsChaseBall() ) return;
 
-	double dot = player->Team()->HomeGoal()->Facing().Dot(player->Heading());
+	double dot = player->Team()->HomeGoalFacing().Dot(player->Heading());
 
 
 	/// 如果球在队员和自己方球们之间，他们需要通过多次轻踢和小转弯
@@ -703,7 +703,7 @@ void Dribble::Execute(FieldPlayer* player)
 		/// 计算队员的朝向和球门的朝向之间角度的正负号(+/-)
 		/// 使得队员可以转到正确方向
 		double angle = QuarterPi * -1 *
-			player->Team()->HomeGoal()->Facing().Sign(player->Heading());
+			player->Team()->HomeGoalFacing().Sign(player->Heading());
 
 		Vec2DRotateAroundOrigin(direction, angle);
 
@@ -718,7 +718,7 @@ void Dribble::Execute(FieldPlayer* player)
 	//kick the ball down the field
 	else
 	{
-		player->Ball()->Kick(player->Team()->HomeGoal()->Facing(),
+		player->Ball()->Kick(player->Team()->HomeGoalFacing(),
 			GetInstObj(CGameSetup).MaxDribbleForce,player); 
 		player->Team()->SetThrowIn(false);
 	}
