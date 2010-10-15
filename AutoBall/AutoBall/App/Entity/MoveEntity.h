@@ -29,7 +29,7 @@ public:
 	virtual ~CMoveEntity() {}
 	
 	Vector2D  Velocity()const					 {return m_vVelocity;  }
-	void      SetVelocity(const Vector2D& NewVel){m_vVelocity = NewVel;}
+	void      SetVelocity(const Vector2D NewVel=Vector2D(0,0)){m_vVelocity = NewVel;}
 	double    Mass()const						 {return m_dMass;}
 	Vector2D  Side()const						 {return m_vSide;}
 	double    MaxSpeed()const					 {return m_dMaxSpeed;}                       

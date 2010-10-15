@@ -4,8 +4,8 @@
 #include <vector>
 #include "../Render/Vector2D.h"
 #include "SupportSpotCalculator.h"
+#include "Goal.h"
 
-class Goal;
 class PlayerBase;
 class FieldPlayer;
 class SoccerPitch;
@@ -101,9 +101,11 @@ public:
 	Vector2D             GetSupportSpot()const{return m_pSupportSpotCalc->GetBestSupportingSpot();}
 
 	PlayerBase*          SupportingPlayer()const{return m_pSupportingPlayer;}
-	void                 SetSupportingPlayer(PlayerBase* plyr){m_pSupportingPlayer = plyr;}
+	void                 SetSupportingPlayer(PlayerBase* plyr=NULL){m_pSupportingPlayer = plyr;}
 
 	PlayerBase*          Receiver()const{return m_pReceivingPlayer;}
+
+	bool				 IsReceiver() const { return m_pReceivingPlayer ==NULL; }
 	void                 SetReceiver(PlayerBase* plyr){m_pReceivingPlayer = plyr;}
 
 	PlayerBase*          ControllingPlayer()const{return m_pControllingPlayer;}
@@ -135,8 +137,9 @@ public:
 
 	bool  IsChaseBall() const	   { return m_IsChase; }
 	void  SetChaseBall(bool chase) { m_IsChase = chase;}
-	bool  IsThrowIn() const	   { return m_IsThrowIn; }
+	bool  IsThrowIn() const	       { return m_IsThrowIn; }
 	void  SetThrowIn(bool throwin) { m_IsThrowIn = throwin;}
+	Vector2D  HomeGoalFacing()	   { return m_pHomeGoal->Facing();}
 
 private:
 	///> 创建成员

@@ -60,7 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib"
+				AdditionalDependencies="winmm.lib luabindD.lib lua5.1.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -133,7 +133,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib"
+				AdditionalDependencies="winmm.lib luabind.lib lua5.1.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -447,6 +447,14 @@
 			<Filter
 				Name="Script"
 				>
+				<File
+					RelativePath=".\App\Script\FunReg.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Script\StateMachineScript.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

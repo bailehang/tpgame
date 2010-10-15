@@ -3,6 +3,7 @@
 
 #include "../../Public/Common/Autolist.h"
 #include "../Regulator.h"
+#include "PlayerBase.h"
 
 class SoccerTeam;
 class SoccerPitch;

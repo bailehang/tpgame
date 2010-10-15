@@ -3,13 +3,13 @@
 #pragma  once
 
 #include "../../Public/Common/Autolist.h"
+#include "../Region.h"
+#include "../SoccerTeam.h"
 #include "MoveEntity.h"
 
-class SoccerTeam;
 class SoccerPitch;
 class SoccerBall;
 class SteeringBehaviors;
-class Region;
 
 /// 球员基类类 
 class  PlayerBase : public  CMoveEntity,
@@ -98,12 +98,16 @@ public:
 
 	void        SetDefaultHomeRegion(){m_iHomeRegion = m_iDefaultRegion;}
 
-	SoccerBall*  const        Ball()const;
+	SoccerBall*  const       Ball()const;
 	SoccerPitch* const       Pitch()const;
 	SteeringBehaviors*const  Steering()const{return m_pSteering;}
 	const Region* const      HomeRegion()const;
+	bool					 InsideHomeRegion(Vector2D pos, Region::region_modifier r)const;
 	void                     SetHomeRegion(int NewRegion){m_iHomeRegion = NewRegion;}
 	SoccerTeam*const         Team()const{return m_pTeam;}
+
+	bool					 IsChaseBall()const {m_pTeam->IsChaseBall();}
+	Vector2D				 GetHomeCenter()    { HomeRegion()->Center();}
 
 protected:
 	player_role				m_PlayerRole;	 ///> 当前队员角色
