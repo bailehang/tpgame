@@ -57,146 +57,162 @@ LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 HDC			g_hWndDC;	 //窗口DC 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPTSTR    lpCmdLine,
-                     int       nCmdShow)
+					   HINSTANCE hPrevInstance,
+					   LPTSTR    lpCmdLine,
+					   int       nCmdShow)
 {
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
+	try{
+		UNREFERENCED_PARAMETER(hPrevInstance);
+		UNREFERENCED_PARAMETER(lpCmdLine);
 
-	//handle to our window
-	HWND						hWnd;
+		//handle to our window
+		HWND						hWnd;
 
-	//our window class structure
-	WNDCLASSEX     winclass;
+		//our window class structure
+		WNDCLASSEX     winclass;
 
-	// first fill in the window class stucture
-	winclass.cbSize        = sizeof(WNDCLASSEX);
-	winclass.style         = CS_HREDRAW | CS_VREDRAW;
-	winclass.lpfnWndProc   = WndProc;
-	winclass.cbClsExtra    = 0;
-	winclass.cbWndExtra    = 0;
-	winclass.hInstance     = hInstance;
-	winclass.hIcon		   = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_AUTOBALL));
-	winclass.hCursor       = LoadCursor(NULL, IDC_ARROW);
-	winclass.hbrBackground = NULL;
-	winclass.lpszMenuName  = MAKEINTRESOURCE(IDC_AUTOBALL);
-	winclass.lpszClassName = g_szWindowClassName;
-	winclass.hIconSm       = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SMALL));
+		// first fill in the window class stucture
+		winclass.cbSize        = sizeof(WNDCLASSEX);
+		winclass.style         = CS_HREDRAW | CS_VREDRAW;
+		winclass.lpfnWndProc   = WndProc;
+		winclass.cbClsExtra    = 0;
+		winclass.cbWndExtra    = 0;
+		winclass.hInstance     = hInstance;
+		winclass.hIcon		   = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_AUTOBALL));
+		winclass.hCursor       = LoadCursor(NULL, IDC_ARROW);
+		winclass.hbrBackground = NULL;
+		winclass.lpszMenuName  = MAKEINTRESOURCE(IDC_AUTOBALL);
+		winclass.lpszClassName = g_szWindowClassName;
+		winclass.hIconSm       = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
-	//create a lua state
-	pLua = lua_open();
+		//create a lua state
+		pLua = lua_open();
 
-	//open the lua libaries - new in lua5.1
-	luaL_openlibs(pLua);
+		//open the lua libaries - new in lua5.1
+		luaL_openlibs(pLua);
 
-	//open luabind
-	open(pLua);
+		//open luabind
+		open(pLua);
 
-	ReisterAllFun(pLua);
+		ReisterAllFun(pLua);
 
-	if (int error = luaL_dofile(pLua, "BallAI.lua") != 0)
-	{
-		 throw std::runtime_error("ERROR(" + ttos(error) + "): Problem with lua script file BallAI.lua");
-	}
-
-	g_states = globals(pLua);
-
-
-	if (type(g_states) != LUA_TTABLE)
-	{
-		throw std::runtime_error("ERROR: runing lua script file BallAI.lua error!");
-	}
-
-
-	//register the window class
-	if (!RegisterClassEx(&winclass))
-	{
-		MessageBox(NULL, "Registration Failed!", "Error", 0);
-
-		//exit the application
-		return 0;
-	}
-
-	//create the window and assign its ID to hwnd    
-	hWnd = CreateWindowEx (NULL,                 // extended style
-		g_szWindowClassName,  // window class name
-		g_szApplicationName,  // window caption
-		WS_OVERLAPPED | WS_VISIBLE | WS_CAPTION | WS_SYSMENU,
-		GetSystemMetrics(SM_CXSCREEN)/2 - WindowWidth/2,
-		GetSystemMetrics(SM_CYSCREEN)/2 - WindowHeight/2,                    
-		WindowWidth,     // initial x size
-		WindowHeight,    // initial y size
-		NULL,                 // parent window handle
-		NULL,                 // window menu handle
-		hInstance,            // program instance handle
-		NULL);                // creation parameters
-
-	//make sure the window creation has gone OK
-	if(!hWnd)
-	{
-		MessageBox(NULL, "CreateWindowEx Failed!", "Error!", 0);
-	}
-
-	// Perform application initialization:
-	InitInstance (hWnd,nCmdShow);
-	/*
-	HWND hwndButton  = CreateWindowEx(0,_T("Button"),_T("开始"),WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 
-	50,    
-	10,  
-	30,        
-	30,      
-	hWnd,      
-	NULL,      
-	(HINSTANCE) GetWindowLong(hWnd, GWL_HINSTANCE), 
-	NULL); 
-
-	*/
-	g_hWndDC=GetDC(hWnd);
-
-	//start the timer
-	timer.Start();
-
-	MSG msg;
-
-	//enter the message loop
-	bool bDone = false;
-
-	while(!bDone)
-	{
-
-		while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) ) 
+		if (int error = luaL_dofile(pLua, "BallAI.lua") != 0)
 		{
-			if( msg.message == WM_QUIT ) 
-			{
-				// Stop loop if it's a quit message
-				bDone = true;
-			} 
+			throw std::runtime_error("ERROR(" + ttos(error) + "): Problem with lua script file BallAI.lua");
+		}
 
-			else 
+		g_states = globals(pLua);
+
+
+		if (type(g_states) != LUA_TTABLE)
+		{
+			throw std::runtime_error("ERROR: runing lua script file BallAI.lua error!");
+		}
+
+
+		//register the window class
+		if (!RegisterClassEx(&winclass))
+		{
+			MessageBox(NULL, "Registration Failed!", "Error", 0);
+
+			//exit the application
+			return 0;
+		}
+
+		//create the window and assign its ID to hwnd    
+		hWnd = CreateWindowEx (NULL,                 // extended style
+			g_szWindowClassName,  // window class name
+			g_szApplicationName,  // window caption
+			WS_OVERLAPPED | WS_VISIBLE | WS_CAPTION | WS_SYSMENU,
+			GetSystemMetrics(SM_CXSCREEN)/2 - WindowWidth/2,
+			GetSystemMetrics(SM_CYSCREEN)/2 - WindowHeight/2,                    
+			WindowWidth,     // initial x size
+			WindowHeight,    // initial y size
+			NULL,                 // parent window handle
+			NULL,                 // window menu handle
+			hInstance,            // program instance handle
+			NULL);                // creation parameters
+
+		//make sure the window creation has gone OK
+		if(!hWnd)
+		{
+			MessageBox(NULL, "CreateWindowEx Failed!", "Error!", 0);
+		}
+
+		// Perform application initialization:
+		InitInstance (hWnd,nCmdShow);
+		/*
+		HWND hwndButton  = CreateWindowEx(0,_T("Button"),_T("开始"),WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 
+		50,    
+		10,  
+		30,        
+		30,      
+		hWnd,      
+		NULL,      
+		(HINSTANCE) GetWindowLong(hWnd, GWL_HINSTANCE), 
+		NULL); 
+
+		*/
+		g_hWndDC=GetDC(hWnd);
+
+		//start the timer
+		timer.Start();
+
+		MSG msg;
+
+		//enter the message loop
+		bool bDone = false;
+
+		while(!bDone)
+		{
+
+			while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) ) 
 			{
-				TranslateMessage( &msg );
-				DispatchMessage( &msg );
+				if( msg.message == WM_QUIT ) 
+				{
+					// Stop loop if it's a quit message
+					bDone = true;
+				} 
+
+				else 
+				{
+					TranslateMessage( &msg );
+					DispatchMessage( &msg );
+				}
 			}
-		}
 
-		if (timer.ReadyForNextFrame() && msg.message != WM_QUIT)
+			if (timer.ReadyForNextFrame() && msg.message != WM_QUIT)
+			{
+				//update game states
+				g_SoccerPitch->Update(); 
+
+				//render 
+				RedrawWindow(hWnd, NULL, NULL,true);
+
+				Sleep(2);
+			}
+
+		}//end while
+
+		SAFE_DELETE( g_SoccerPitch );
+
+		UnregisterClass( g_szWindowClassName, winclass.hInstance );
+	}
+	catch(luabind::error e)
+	{
+		std::cout<< e.what()<<std::endl;
+	}
+	catch(luabind::cast_failed e)
+	{
+		std::cout<<e.what()<<std::endl;
+	}
+	catch( ... )
+	{
+		__asm
 		{
-			//update game states
-			g_SoccerPitch->Update(); 
-
-			//render 
-			RedrawWindow(hWnd, NULL, NULL,true);
-
-			Sleep(2);
+			int 3 
 		}
-
-	}//end while
-
-	SAFE_DELETE( g_SoccerPitch );
-
-	UnregisterClass( g_szWindowClassName, winclass.hInstance );
-
+	}
 	return msg.wParam;
 }
 
@@ -256,51 +272,51 @@ void MyPaint(HDC hdc)
 
 BOOL InitInstance(HWND hWnd,int nCmdShow)
 {
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+	ShowWindow(hWnd, nCmdShow);
+	UpdateWindow(hWnd);
 
-   HDC  hdc_ = GetDC(hWnd);
-   mdc  = CreateCompatibleDC(hdc_);
+	HDC  hdc_ = GetDC(hWnd);
+	mdc  = CreateCompatibleDC(hdc_);
 
-   SelectObject(mdc,bgmp);
+	SelectObject(mdc,bgmp);
 
-   bgmp = (HBITMAP)LoadImage(NULL,"background.bmp",IMAGE_BITMAP,1050,680,LR_LOADFROMFILE);
+	bgmp = (HBITMAP)LoadImage(NULL,"background.bmp",IMAGE_BITMAP,1050,680,LR_LOADFROMFILE);
 
-   SelectObject(mdc,bgmp);
-   //GetObject(bgmp,sizeof(BITMAP),&bm1);
+	SelectObject(mdc,bgmp);
+	//GetObject(bgmp,sizeof(BITMAP),&bm1);
 
-   //BitBlt(hdc_,0,0,1050,680,mdc,0,0,SRCCOPY);
+	//BitBlt(hdc_,0,0,1050,680,mdc,0,0,SRCCOPY);
 
-   /*
-   px2 = new unsigned char [bm1.bmHeight * bm1.bmWidthBytes];
-   GetBitmapBits(bgmp,bm1.bmHeight*bm1.bmWidthBytes,px2);
+	/*
+	px2 = new unsigned char [bm1.bmHeight * bm1.bmWidthBytes];
+	GetBitmapBits(bgmp,bm1.bmHeight*bm1.bmWidthBytes,px2);
 
-   int xend,yend;
-   int x,y,i;
-   int rgb_b;
+	int xend,yend;
+	int x,y,i;
+	int rgb_b;
 
-   int pxbytes = bm1.bmBitsPixel / 8;
-   xend = xa +298;
-   yend = ya +329;
+	int pxbytes = bm1.bmBitsPixel / 8;
+	xend = xa +298;
+	yend = ya +329;
 
-   for (y =ya;y<yend;y++)
-   {
-	   for (x=xa;x<xend;x++)
-	   {
-		   rgb_b = y * bm1.bmBitsPixel + x * pxbytes;
+	for (y =ya;y<yend;y++)
+	{
+	for (x=xa;x<xend;x++)
+	{
+	rgb_b = y * bm1.bmBitsPixel + x * pxbytes;
 
-		   px1[rgb_b]   = px1[rgb_b] * 0.5;
-		   px1[rgb_b+1] = px1[rgb_b+1] * 0.5;
-		   px1[rgb_b+2] = px1[rgb_b+2] * 0.5;
-	   }
-   }
+	px1[rgb_b]   = px1[rgb_b] * 0.5;
+	px1[rgb_b+1] = px1[rgb_b+1] * 0.5;
+	px1[rgb_b+2] = px1[rgb_b+2] * 0.5;
+	}
+	}
 
 
-   */
-   ReleaseDC(hWnd,hdc_);
-   DeleteDC(hdc_);
+	*/
+	ReleaseDC(hWnd,hdc_);
+	DeleteDC(hdc_);
 
-   return TRUE;
+	return TRUE;
 }
 
 //
@@ -326,10 +342,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 
-		
+
 	case WM_CREATE:
 		{
-			
+
 			RECT rect;
 
 			GetClientRect(hwnd, &rect);
@@ -412,7 +428,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			BeginPaint (hwnd, &ps);
 
 			GetInstObj(CGDI).StartDrawing(hdcBackBuffer);
-			
+
 			MyPaint(hdcBackBuffer);
 			//GetInstObj(CGDI).DrawBground(hdcBackBuffer,bgmp);
 
