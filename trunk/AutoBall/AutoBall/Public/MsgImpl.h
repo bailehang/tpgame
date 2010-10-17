@@ -8,9 +8,12 @@
 #include <iostream>
 #include <math.h>
 #include "../Public/BaseDef.h"
+#include "../Render/Vector2D.h"
 
-struct tagMessage
+class  tagMessage
 {
+public:
+
 	int          Sender;
 	int          Receiver;
 	int          Msg;
@@ -37,6 +40,11 @@ struct tagMessage
 		ExtraInfo(info)
 	{}
 
+
+public:
+
+	int				GetMsg()	{	return Msg; }
+	Vector2D		GetVec()	{	return *(Vector2D*)ExtraInfo;}
 };
 
 /// ×îÐ¡ÑÓ³Ù

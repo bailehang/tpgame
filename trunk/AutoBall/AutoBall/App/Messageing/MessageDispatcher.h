@@ -1,5 +1,5 @@
-#ifndef MESSAGE_DISPATCHER_H
-#define MESSAGE_DISPATCHER_H
+
+#pragma once 
 #pragma warning (disable:4786)
 
 #include <set>
@@ -46,5 +46,7 @@ public:
 };
 
 
-
-#endif
+inline MessageDispatcher*  MsgDispatcher()
+{
+	return	MessageDispatcher::Instance();
+}

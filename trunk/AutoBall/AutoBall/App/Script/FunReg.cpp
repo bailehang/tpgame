@@ -6,6 +6,7 @@
 #include "StateMachineScript.h"
 #include "../Entity/FieldPlayer.h"
 #include "../Entity/SoccerBall.h"
+#include "../Messageing/MessageDispatcher.h"
 #include "../SteeringBehaviors.h"
 
 
@@ -14,9 +15,31 @@ void   ReisterVection(lua_State* pLua)
 	module(pLua)
 		[
 			class_<Vector2D>("Vector2D")
-
+			
+			.def(constructor<>())
 			.def("Dot",&Vector2D::Dot)
 			.def("Sign",&Vector2D::Sign)
+		];
+}
+
+void  ReisterTagMsg(lua_State* pLua)
+{
+	module(pLua)
+		[
+			class_<tagMessage>("tagMessage")
+
+			.def("GetMsg",&tagMessage::GetMsg)
+			.def("GetVec",&tagMessage::GetVec)
+		];
+}
+
+void  ReisterMessageDispatcher(lua_State* pLua)
+{
+	module(pLua)
+		[
+			class_<MessageDispatcher>("MessageDispatcher")
+
+			.def("DispatchMsg",&MessageDispatcher::DispatchMsg)
 		];
 }
 
@@ -24,12 +47,13 @@ void   ReisterStateMachine(lua_State* pLua)
 {
 	module(pLua)
 		[
-			class_<StateMachine<FieldPlayer> >("StateMachine")
-			.def("ChangeState",&StateMachine<FieldPlayer>::ChangeState)
-			.def("SetCurrentState",&StateMachine<FieldPlayer>::SetCurrentState)
-			.def("SetCurrentState", &StateMachine<FieldPlayer>::SetCurrentState)
-			.def("isInState",&StateMachine<FieldPlayer>::isInState)
+			class_<StateMachineScript<FieldPlayer> >("StateMachineScript")
+
+			.def("ChangeState",&StateMachineScript<FieldPlayer>::ChangeState)
+			.def("SetCurrentState",&StateMachineScript<FieldPlayer>::SetCurrentState)
+			.def("isInState",&StateMachineScript<FieldPlayer>::isInState)
 		];
+	//.def("HandleMessage",&StateMachineScript<FieldPlayer>::HandleMessage)
 }
 
 void  ReisterBaseEntity(lua_State* pLua)
@@ -63,6 +87,7 @@ void  ReisterPlayerBase(lua_State* pLua)
 			class_<PlayerBase,bases<CMoveEntity> >("PlayerBase")
 
 			.def("isThreatened",&PlayerBase::isThreatened)
+			.def("IsChaseBall",&PlayerBase::IsChaseBall)
 			.def("BallWithinReceivingRange",&PlayerBase::BallWithinReceivingRange)
 			.def("isControllingPlayer",&PlayerBase::isControllingPlayer)
 			.def("SetDefaultHomeRegion",&PlayerBase::SetDefaultHomeRegion)
@@ -75,6 +100,7 @@ void  ReisterPlayerBase(lua_State* pLua)
 			.def("FollowTarget",&PlayerBase::FollowTarget)
 			.def("InsideHomeRegion",&PlayerBase::InsideHomeRegion)
 			.def("GetHomeCenter",&PlayerBase::GetHomeCenter)
+			.def("InHotRegion",&PlayerBase::InHotRegion)
 
 			.def("Steering",&PlayerBase::Steering)
 			.def("Ball",&PlayerBase::Ball)
@@ -101,7 +127,7 @@ void  ReisterFieldPlayer(lua_State* pLua)
 			class_<FieldPlayer,bases<PlayerBase> >("FieldPlayer")
 
 			.def("isReadyForNextKick",&FieldPlayer::isReadyForNextKick)
-			.def("GetFSM",&FieldPlayer::GetFSM)
+			.def("GetFSM",&FieldPlayer::GetScriptFSM)
 		];
 }
 
@@ -116,6 +142,9 @@ void  ReisterSteering(lua_State* pLua)
 			.def("SeekOn",&SteeringBehaviors::SeekOn)
 			.def("SeekOff",&SteeringBehaviors::SeekOff)
 			.def("ArriveOn",&SteeringBehaviors::ArriveOn)
+			.def("ArriveOff",&SteeringBehaviors::ArriveOff)
+			.def("PursuitOn",&SteeringBehaviors::PursuitOn)	
+			.def("PursuitOff",&SteeringBehaviors::PursuitOff)
 		];
 }
 
@@ -127,14 +156,19 @@ void  ReisterTeam(lua_State* pLua)
 
 			.def("CanShoot",&SoccerTeam::CanShoot)
 			.def("InControl",&SoccerTeam::InControl)
+			.def("IsControl",&SoccerTeam::IsControl)
 			.def("GetSupportSpot",&SoccerTeam::GetSupportSpot)
 			.def("RequestPass",&SoccerTeam::RequestPass)
 			.def("Receiver",&SoccerTeam::Receiver)
+			.def("SetReceiver",&SoccerTeam::SetReceiver)
 			.def("InControl",&SoccerTeam::InControl)
 			.def("SetControllingPlayer",&SoccerTeam::SetControllingPlayer)
 			.def("SetThrowIn",&SoccerTeam::SetThrowIn)
 			.def("HomeGoalFacing",&SoccerTeam::HomeGoalFacing)
 			.def("IsReceiver",&SoccerTeam::IsReceiver)
+			.def("IsThrowIn",&SoccerTeam::IsThrowIn)
+			.def("SetThrowIn",&SoccerTeam::SetThrowIn)
+			.def("isOpponentWithinRadius",&SoccerTeam::isOpponentWithinRadius)
 		];
 }
 
@@ -153,13 +187,21 @@ void   ReisterAllFun(lua_State* pLua)
 {
 	module(pLua)
 		[
-			def("AddNoiseToKick",&AddNoiseToKick)
+			def("AddNoiseToKick",&AddNoiseToKick),
+			def("RandFloat",&RandFloat),
+			def("Vec2DRotateAroundOrigin",&Vec2DRotateAroundOrigin),
+			def("MsgDispatcher",&MsgDispatcher),
+			def("Vec2DNormalize",&Vec2DNormalize),
+			def("Vec2DSub",&Vec2DSub),
+			def("GetField",&GetExtraInfoField)
+
 		];
 
 
 	/// 绑定其他函数
 
 	ReisterVection(pLua);
+	ReisterTagMsg(pLua);
 	ReisterStateMachine(pLua);
 	ReisterBaseEntity(pLua);
 	ReisterMoveEntity(pLua);

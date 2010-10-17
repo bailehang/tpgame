@@ -8,6 +8,7 @@
 #include <cassert>
 #include <string>
 #include <luabind/luabind.hpp>
+#include <luabind/adopt_policy.hpp>
 #include <iostream>
 
 extern "C"
@@ -23,11 +24,11 @@ using namespace std;
 #include "../../Public/MsgImpl.h"
 
 template < class entity>
-class  StateMachine
+class  StateMachineScript
 {
 
 public:
-	StateMachine(entity* owner):m_pOwner(owner)
+	StateMachineScript(entity* owner):m_pOwner(owner)
 	{
 
 	}
@@ -37,14 +38,45 @@ public:
 		m_CurrentState = s; 
 	}
 
+	void  SetPreviousState(const luabind::object& s)
+	{ 
+		m_pPreviousState = s; 
+	}
+
+	void  SetGlobalState(const luabind::object& s)
+	{ 
+		m_pGlobalState = s; 
+	}
+
 	void  Update() const
 	{
+		if (m_pGlobalState.is_valid())
+			m_pGlobalState["Execute"](m_pOwner);
+
 		if (m_CurrentState.is_valid())
 			m_CurrentState["Execute"](m_pOwner);
+
+	}
+
+	bool  HandleMessage(const tagMessage& msg)const
+	{
+		if (m_CurrentState && call_function<bool>(m_CurrentState,"OnMessage",m_pOwner, msg)[ adopt(_2) ])
+		{
+			return true;
+		}
+
+		if (m_pGlobalState && call_function<bool>(m_pGlobalState,"OnMessage",m_pOwner, msg)[ adopt(_2) ])
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	void  ChangeState(const luabind::object& s)
 	{
+		m_pPreviousState = m_CurrentState;
+
 		m_CurrentState["Exit"](m_pOwner);
 
 		m_CurrentState = s;
@@ -59,11 +91,18 @@ public:
 		return false;
 	}
 
+	void  EnterCurrentState() 
+	{
+		m_CurrentState["Enter"](m_pOwner);
+	}
+
 	const luabind::object&  CurrentState()const{return m_CurrentState;}
 
 private:
 
 	entity*          m_pOwner;
 	
-	luabind::object  m_CurrentState;
+	luabind::object   m_CurrentState;
+	luabind::object   m_pPreviousState;
+	luabind::object   m_pGlobalState;
 };

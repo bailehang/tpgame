@@ -271,7 +271,7 @@ void SupportAttacker::Execute(FieldPlayer* player)
 
 void SupportAttacker::Exit(FieldPlayer* player)
 {
-	player->Team()->SetSupportingPlayer(NULL);
+	player->Team()->SetSupportingPlayer();
 
 	player->Steering()->ArriveOff();
 }
@@ -376,7 +376,7 @@ void Wait::Enter(FieldPlayer* player)
 	//ready for kick off
 	if (!player->Pitch()->GameOn())
 	{
-		player->Steering()->SetTarget(player->HomeRegion()->Center());
+		player->Steering()->SetTarget(player->GetHomeCenter() );
 	}
 }
 
@@ -435,7 +435,7 @@ void Wait::Execute(FieldPlayer* player)
 		/// 如果太远需要归位
 		if( !player->IsSelfRegin() && (player->Team()->InControl() ||  player->FollowReturn() ) )
 		{
-			player->Steering()->SetTarget(player->HomeRegion()->Center());
+			player->Steering()->SetTarget(player->GetHomeCenter());
 			player->GetFSM()->ChangeState(&GetInstObj(ReturnToHomeRegion));
 		}
 

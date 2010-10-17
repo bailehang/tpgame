@@ -18,10 +18,14 @@
 #include "../../Render/Utils.h"
 
 
+extern luabind::object	g_states;
+
 FieldPlayer::~FieldPlayer()
 {
 	SAFE_DELETE(m_pKickLimiter);
 	SAFE_DELETE(m_pStateMachine);
+	SAFE_DELETE(m_pStateMachineScript);
+	
 }
 
 FieldPlayer::FieldPlayer(SoccerTeam* home_team,
@@ -47,7 +51,7 @@ FieldPlayer::FieldPlayer(SoccerTeam* home_team,
 {
 	//set up the state machine
 	m_pStateMachine =  new StateMachine<FieldPlayer>(this);
-
+	m_pStateMachineScript = NULL;
 	if (start_state)
 	{    
 		m_pStateMachine->SetCurrentState(start_state);
@@ -63,16 +67,50 @@ FieldPlayer::FieldPlayer(SoccerTeam* home_team,
 	m_pKickLimiter = new Regulator(GetInstObj(CGameSetup).PlayerKickFrequency);
 }
 
+FieldPlayer::FieldPlayer(SoccerTeam*    home_team,
+				int			   home_region,
+				string		   State,
+				Vector2D	   heading,
+				Vector2D       velocity,
+				double         mass,
+				double         max_force,
+				double         max_speed,
+				double         max_turn_rate,
+				double         scale,
+				player_role    role): PlayerBase(home_team,
+						 home_region,
+						 heading,
+						 velocity,
+						 mass,
+						 max_force,
+						 max_speed,
+						 max_turn_rate,
+						 scale,
+						 role)
+{
+	 m_pStateMachineScript = new StateMachineScript<FieldPlayer>(this);
+	 m_pStateMachine = NULL;
+	 if( State != "" )
+	 {
+		m_pStateMachineScript->SetCurrentState( g_states[State] );
+		m_pStateMachineScript->SetPreviousState(g_states[State] );
+		m_pStateMachineScript->SetGlobalState ( g_states["State_GlobalPlayer"]);
+
+		m_pStateMachineScript->EnterCurrentState();
+	 }
+
+	 m_pSteering->SeparationOn();
+
+	//set up the kick regulator
+	m_pKickLimiter = new Regulator(GetInstObj(CGameSetup).PlayerKickFrequency);
+}
+
 void FieldPlayer::Update()
 { 
-   if( GetID() == 5 )
-   {
-	  char  str[256];
-	  sprintf_s(str,"Position x=%f,y=%f",m_vPosition.x,m_vPosition.y);
-	  char  p;
-	  p='1';
-   }
-	m_pStateMachine->Update();
+	if( Team()->Color() == SoccerTeam::blue )
+		m_pStateMachineScript->Update();
+	else
+	    m_pStateMachine->Update();
 
 	m_pSteering->Calculate();
 
@@ -115,8 +153,11 @@ void FieldPlayer::Update()
 
 
 bool FieldPlayer::HandleMessage(const tagMessage& msg)
-{
-	return m_pStateMachine->HandleMessage(msg);
+{	
+	if( Team()->Color() == SoccerTeam::blue )
+		return	m_pStateMachineScript->HandleMessage(msg);
+	else
+		return m_pStateMachine->HandleMessage(msg);
 }
 
 void FieldPlayer::Render()                                         
@@ -133,7 +174,6 @@ void FieldPlayer::Render()
 	{
 		GetInstObj(CGDI).RedPen();
 	}
-
 
 	//render the player's body
 	m_vecPlayerVBTrans = WorldTransform(m_vecPlayerVB,
@@ -161,7 +201,8 @@ void FieldPlayer::Render()
 	if (GetInstObj(CGameSetup).bStates)
 	{  
 		GetInstObj(CGDI).TextColor(0, 170, 0);
-		GetInstObj(CGDI).TextAtPos(m_vPosition.x, m_vPosition.y -20, std::string(m_pStateMachine->GetNameOfCurrentState()));
+		if( Team()->Color() != SoccerTeam::blue )
+			GetInstObj(CGDI).TextAtPos(m_vPosition.x, m_vPosition.y -20, std::string(m_pStateMachine->GetNameOfCurrentState()));
 	}
 
 	//show IDs
