@@ -6,18 +6,21 @@ State_GlobalPlayer["Enter"] = function(player)
 end
 
 
-State_GlobalPlayer["Exectue"] = function(player)
+State_GlobalPlayer["Execute"] = function(player)
 
 	if not player:IsChaseBall() then
+
 		return;
+
 	end
 
+	--
 	if player:BallWithinReceivingRange() and player:isControllingPlayer() then
 
-		player:setMaxSpeed(1.2);
+		player:SetMaxSpeed(1.2);
 
 	else
-		player:setMaxSpeed(1.6);
+		player:SetMaxSpeed(1.6);
 	end
 
 end
@@ -100,7 +103,7 @@ State_ChaseBall["Enter"] = function(player)
 
 end
 
-State_ChaseBall["Exectue"] = function(player)
+State_ChaseBall["Execute"] = function(player)
 
 	if player:BallWithinKickingRange() then
 
@@ -147,7 +150,7 @@ State_SupportAttacker["Enter"] = function(player)
 end
 
 
-State_SupportAttacker["Exectue"] = function(player)
+State_SupportAttacker["Execute"] = function(player)
 
 	if player:IsChaseBall() then
 		return;
