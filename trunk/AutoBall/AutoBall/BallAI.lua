@@ -308,18 +308,11 @@ State_Wait["Execute"] = function(player)
 	end
 
 
-	if not player:isControllingPlayer() then
-
-		if player:Team():IsControl()  then
-
-			if player:isAheadOfAttacker() then
+	if not player:isControllingPlayer()  and player:Team():IsControl() and  player:isAheadOfAttacker()  then
 
 				player:Team():RequestPass(player);
 
 				return;
-			end
-		end
-
 	end
 
 
@@ -417,7 +410,7 @@ State_FollowBall["Execute"] = function(player)
 end
 
 
-State_Wait["Exit"] = function(player)
+State_FollowBall["Exit"] = function(player)
 
 	player:Steering():SeekOff();
 
