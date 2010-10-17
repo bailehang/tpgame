@@ -50,12 +50,11 @@ public:
 
 	void  Update() const
 	{
-		if (m_pGlobalState.is_valid())
-			m_pGlobalState["Execute"](m_pOwner);
-
 		if (m_CurrentState.is_valid())
 			m_CurrentState["Execute"](m_pOwner);
 
+		if (m_pGlobalState.is_valid())
+			m_pGlobalState["Execute"](m_pOwner);
 	}
 
 	bool  HandleMessage(const tagMessage& msg)const
