@@ -3,6 +3,7 @@
 #pragma  once
 
 #include "../../Public/Common/Autolist.h"
+#include "../../Public/MsgImpl.h"
 #include "../Region.h"
 #include "../SoccerTeam.h"
 #include "MoveEntity.h"
@@ -106,8 +107,8 @@ public:
 	void                     SetHomeRegion(int NewRegion){m_iHomeRegion = NewRegion;}
 	SoccerTeam*const         Team()const{return m_pTeam;}
 
-	bool					 IsChaseBall()const {m_pTeam->IsChaseBall();}
-	Vector2D				 GetHomeCenter()    { HomeRegion()->Center();}
+	bool					 IsChaseBall()const { return m_pTeam->IsChaseBall();}
+	Vector2D				 GetHomeCenter()    { return HomeRegion()->Center();}
 
 protected:
 	player_role				m_PlayerRole;	 ///> 当前队员角色

@@ -10,7 +10,7 @@
 #include "../../Public/BaseDef.h"
 #include "../../Public/MsgImpl.h"
 
-struct tagMessage;
+class  tagMessage;
 class  CBaseEntity
 {
 

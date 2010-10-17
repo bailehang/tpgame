@@ -72,8 +72,8 @@ public:
 	}
 
 	State<entity>*  CurrentState()  const{return m_pCurrentState;}
-	State<entity>*  GlobalState()   const{return m_pGlobalState;}
-	State<entity>*  PreviousState() const{return m_pPreviousState;}
+	//State<entity>*  GlobalState()   const{return m_pGlobalState;}
+	//State<entity>*  PreviousState() const{return m_pPreviousState;}
 
 	std::string         GetNameOfCurrentState()const
 	{

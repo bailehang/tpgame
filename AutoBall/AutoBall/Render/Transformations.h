@@ -188,6 +188,16 @@ inline void Vec2DRotateAroundOrigin(Vector2D& v, double ang)
 	mat.TransformVector2Ds(v);
 }
 
+inline Vector2D Vec2DSub(Vector2D& v1, Vector2D& v2)
+{
+	return v1 - v2;
+}
+
+inline Vector2D* VecAddr(Vector2D& v)
+{
+	return &v;
+}
+
 //------------------------ CreateWhiskers ------------------------------------
 //
 //  given an origin, a facing direction, a 'field of view' describing the 

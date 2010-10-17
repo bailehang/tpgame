@@ -11,10 +11,22 @@
 #include "Public/Timer.h"
 #include "Public/GameSetup.h"
 #include "Public/Singleton.h"
+#include "Public/Stream_Utility_Fun.h"
 #include "Render/Vector2D.h"
 #include "Render/VGdi.h"
 #include "Render/Utils.h"
+#include <luabind/luabind.hpp>
+#include <iostream>
 
+extern "C"
+{
+#include <lua.h>
+#include <Lualib.h>
+#include <lauxlib.h>
+};
+
+using namespace luabind;
+using namespace std;
 
 #define MAX_LOADSTRING 100
 
@@ -26,8 +38,11 @@ SoccerPitch* g_SoccerPitch;
 //create a timer
 CTimer timer(GetInstObj(CGameSetup).FrameRate);
 
-HBITMAP		bgmp;//位图句柄
+HBITMAP		bgmp;    //位图句柄
 HDC			mdc;
+luabind::object		g_states;//全局的luaObject
+lua_State*  pLua;
+extern  void   ReisterAllFun(lua_State* pLua);
 
 // 全局变量:
 HINSTANCE hInst;								// 当前实例
@@ -69,6 +84,31 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	winclass.lpszClassName = g_szWindowClassName;
 	winclass.hIconSm       = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
+	//create a lua state
+	pLua = lua_open();
+
+	//open the lua libaries - new in lua5.1
+	luaL_openlibs(pLua);
+
+	//open luabind
+	open(pLua);
+
+	ReisterAllFun(pLua);
+
+	if (int error = luaL_dofile(pLua, "BallAI.lua") != 0)
+	{
+		 throw std::runtime_error("ERROR(" + ttos(error) + "): Problem with lua script file BallAI.lua");
+	}
+
+	g_states = globals(pLua);
+
+
+	if (type(g_states) != LUA_TTABLE)
+	{
+		throw std::runtime_error("ERROR: runing lua script file BallAI.lua error!");
+	}
+
+
 	//register the window class
 	if (!RegisterClassEx(&winclass))
 	{
@@ -102,14 +142,14 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	InitInstance (hWnd,nCmdShow);
 	/*
 	HWND hwndButton  = CreateWindowEx(0,_T("Button"),_T("开始"),WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 
-					50,    
-					10,  
-					30,        
-					30,      
-					hWnd,      
-					NULL,      
-					(HINSTANCE) GetWindowLong(hWnd, GWL_HINSTANCE), 
-					NULL); 
+	50,    
+	10,  
+	30,        
+	30,      
+	hWnd,      
+	NULL,      
+	(HINSTANCE) GetWindowLong(hWnd, GWL_HINSTANCE), 
+	NULL); 
 
 	*/
 	g_hWndDC=GetDC(hWnd);

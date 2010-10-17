@@ -106,7 +106,7 @@ public:
 	PlayerBase*          Receiver()const{return m_pReceivingPlayer;}
 
 	bool				 IsReceiver() const { return m_pReceivingPlayer ==NULL; }
-	void                 SetReceiver(PlayerBase* plyr){m_pReceivingPlayer = plyr;}
+	void                 SetReceiver(PlayerBase* plyr=NULL){m_pReceivingPlayer = plyr;}
 
 	PlayerBase*          ControllingPlayer()const{return m_pControllingPlayer;}
 	void                 SetControllingPlayer(PlayerBase* plyr)
@@ -115,7 +115,18 @@ public:
 		Opponents()->LostControl();
 	}
 
-	bool  InControl()const{if(m_pControllingPlayer)return true; else return false;}
+	bool  InControl()const{
+		if(m_pControllingPlayer)
+			return true; 
+		else return false;
+	}
+
+	bool IsControl()const 
+	{
+		if(m_pControllingPlayer)
+			return true; 
+		else return false;
+	}
 	void  LostControl(){m_pControllingPlayer = NULL;}
 	PlayerBase*  GetPlayerFromID(int id)const;
 
@@ -156,6 +167,7 @@ private:
 	StateMachine<SoccerTeam>*  m_pStateMachine;		 ///> 当前队伍的状态机
 	team_color                m_Color;				 ///> 队伍颜色
 	std::vector<PlayerBase*>  m_Players;			 ///> 队伍所有的成员
+	GoalKeeper*				  m_GoalKeeper;			 ///> blue守门员
 	SoccerPitch*              m_pPitch;				 ///> 指向的球场指针
 	Goal*                     m_pOpponentsGoal;		 ///> 对方球门
 	Goal*                     m_pHomeGoal;			 ///> 自己球门

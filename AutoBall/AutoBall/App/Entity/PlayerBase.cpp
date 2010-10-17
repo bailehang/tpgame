@@ -183,7 +183,9 @@ double PlayerBase::DistToHomeGoal()const
 }
 
 bool PlayerBase::isControllingPlayer()const
-{return Team()->ControllingPlayer()==this;}
+{
+	return Team()->ControllingPlayer()==this;
+}
 
 bool PlayerBase::BallWithinKeeperRange()const
 {
