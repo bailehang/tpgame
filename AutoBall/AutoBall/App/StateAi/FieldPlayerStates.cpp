@@ -59,10 +59,8 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const tagMessage& telegra
 			}
 
 			/// 设置目标最佳接应位置
-			//set the target to be the best supporting position
 			player->Steering()->SetTarget(player->Team()->GetSupportSpot());
 
-			//change the state
 			player->GetFSM()->ChangeState(&GetInstObj(SupportAttacker));
 
 			return true;
@@ -314,9 +312,6 @@ void ReturnToHomeRegion::Execute(FieldPlayer* player)
 
 	if (player->Pitch()->GameOn())
 	{
-		//if the ball is nearer this player than any other team member  &&
-		//there is not an assigned receiver && the goalkeeper does not gave
-		//the ball, go chase it
 		if ( player->isClosestTeamMemberToBall() &&
 			player->Team()->IsReceiver() &&
 			!player->Pitch()->GoalKeeperHasBall())
@@ -327,17 +322,12 @@ void ReturnToHomeRegion::Execute(FieldPlayer* player)
 		}
 	}
 
-	//if game is on and close enough to home, change state to wait and set the 
-	//player target to his current position.(so that if he gets jostled out of 
-	//position he can move back to it)
 	if (player->Pitch()->GameOn() && player->HomeRegion()->Inside(player->Pos(),
 		Region::halfsize))
 	{
 		player->Steering()->SetTarget(player->Pos());
 		player->GetFSM()->ChangeState(&GetInstObj(Wait));
 	}
-	//if game is not on the player must return much closer to the center of his
-	//home region
 	else if(!player->Pitch()->GameOn() && player->AtTarget())
 	{
 		player->GetFSM()->ChangeState(&GetInstObj(Wait));
@@ -371,9 +361,6 @@ void Wait::Enter(FieldPlayer* player)
 	//  debug_con << "Player " << player->GetID() << " enters wait state" << "";
 #endif
 
-	//if the game is not on make sure the target is the center of the player's
-	//home region. This is ensure all the players are in the correct positions
-	//ready for kick off
 	if (!player->Pitch()->GameOn())
 	{
 		player->Steering()->SetTarget(player->GetHomeCenter() );
@@ -752,7 +739,6 @@ void ReceiveBall::Enter(FieldPlayer* player)
 	player->Team()->SetReceiver(player);
 
 	/// 该队员现在也是控球队员
-	//this player is also now the controlling player
 	player->Team()->SetControllingPlayer(player);
 
 	/// 有2类控球行为，1.用arrive指导接球队员到达传球队员发送的消息中制定的位置。
