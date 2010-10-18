@@ -205,8 +205,13 @@ inline  void PrintLuaMsg( const char* pInfo )
 
 	sprintf_s<128>( str , "%s" , pInfo );
 
-	CLog log( "cs.txt" );
 
+	//freopen("cs.txt","ab+",stdout);
+
+	//std:cout<< str << std::endl;
+
+	//fclose(stdout); 
+	CLog log( "cs.txt" );
 	log << str ;
 
 
