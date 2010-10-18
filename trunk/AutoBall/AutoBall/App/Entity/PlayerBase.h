@@ -100,6 +100,8 @@ public:
 	void        SetDefaultHomeRegion(){m_iHomeRegion = m_iDefaultRegion;}
 
 	SoccerBall*  const       Ball()const;
+	Vector2D				 BallPos() const;
+	void					 SetSteeringTarget( Vector2D& vec );
 	SoccerPitch* const       Pitch()const;
 	SteeringBehaviors*const  Steering()const{return m_pSteering;}
 	const Region* const      HomeRegion()const;

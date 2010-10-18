@@ -17,7 +17,7 @@ public:
 	template< typename type >
 	CLog& operator  << (const type& v)
 	{
-		 out << v;
+		 out << v << std::endl;
 
 		 return *this;
 	}

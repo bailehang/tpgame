@@ -692,9 +692,8 @@ void SoccerTeam::UpdateTargetsOfWaitingPlayers()const
 
 	for (it; it != m_Players.end(); ++it)
 	{  
-		if ( (*it)->Role() != PlayerBase::goal_keeper )
+		if ( (*it)->Role() != PlayerBase::goal_keeper && Color() != blue )
 		{
-			//cast to a field player
 			FieldPlayer* plyr = static_cast<FieldPlayer*>(*it);
 
 			if ( plyr->GetFSM()->isInState(*&GetInstObj(Wait)) ||

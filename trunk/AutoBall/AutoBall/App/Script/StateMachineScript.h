@@ -22,6 +22,7 @@ using namespace luabind;
 using namespace std;
 
 #include "../../Public/MsgImpl.h"
+#include "../../Public/Log.h"
 
 template < class entity>
 class  StateMachineScript
@@ -50,35 +51,60 @@ public:
 
 	void  Update() const
 	{
-		if (m_CurrentState.is_valid())
-			m_CurrentState["Execute"](m_pOwner);
+		try
+		{
+			if (m_pPreviousState.is_valid())
+				m_pPreviousState["Execute"](m_pOwner);
 
-		if (m_pGlobalState.is_valid())
-			m_pGlobalState["Execute"](m_pOwner);
+// 			if (m_pGlobalState.is_valid())
+// 				m_pGlobalState["Execute"](m_pOwner);
+		}
+		catch ( ... )
+		{
+			__asm int 3
+		}
 	}
 
 	bool  HandleMessage(const tagMessage& msg)const
 	{
-		if (m_CurrentState && call_function<bool>(m_CurrentState,"OnMessage",m_pOwner, msg)[ adopt(_2) ])
+		/*
+		try
 		{
-			return true;
-		}
+			if (m_CurrentState  )
+			{	
+				int result = call_function<int>(m_CurrentState,"OnMessage",m_pOwner, msg);
+				if ( result > 0 )
+				{
+					return true;
+				}
+			}
 
-		if (m_pGlobalState && call_function<bool>(m_pGlobalState,"OnMessage",m_pOwner, msg)[ adopt(_2) ])
+			if (m_pGlobalState )
+			{
+				int result = call_function<int>(m_pGlobalState,"OnMessage",m_pOwner, msg);
+				if ( result > 0 )
+				{
+					return true;
+				}
+			}
+		}
+		catch ( ... )
 		{
-			return true;
+		   __asm int 3
 		}
-
+		*/
+	
 		return false;
 	}
 
 	void  ChangeState(const luabind::object& s)
 	{
-		m_pPreviousState = m_CurrentState;
+		//m_pPreviousState = m_CurrentState;
 
 		m_CurrentState["Exit"](m_pOwner);
 
-		m_CurrentState = s;
+		m_CurrentState   = s;
+		m_pPreviousState = s;
 
 		m_CurrentState["Enter"](m_pOwner);
 	}

@@ -38,10 +38,12 @@ SoccerPitch* g_SoccerPitch;
 //create a timer
 CTimer timer(GetInstObj(CGameSetup).FrameRate);
 
-HBITMAP		bgmp;    //位图句柄
-HDC			mdc;
+HBITMAP				bgmp;    //位图句柄
+HDC					mdc;
 luabind::object		g_states;//全局的luaObject
-lua_State*  pLua;
+lua_State*			pLua;
+
+
 extern  void   ReisterAllFun(lua_State* pLua);
 
 // 全局变量:
@@ -197,23 +199,29 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		SAFE_DELETE( g_SoccerPitch );
 
 		UnregisterClass( g_szWindowClassName, winclass.hInstance );
+
+		return msg.wParam;
 	}
 	catch(luabind::error e)
 	{
-		std::cout<< e.what()<<std::endl;
+
+#ifdef  ERROR_LOG 
+		//debug_con << e.what() <<std::endl;
+#endif
+		__asm int 3
 	}
 	catch(luabind::cast_failed e)
 	{
-		std::cout<<e.what()<<std::endl;
+#ifdef  ERROR_LOG 
+		//debug_con << e.what() <<std::endl;
+#endif
+		__asm int 3 
 	}
 	catch( ... )
 	{
-		__asm
-		{
-			int 3 
-		}
+		__asm int 3 
 	}
-	return msg.wParam;
+	return 0;
 }
 
 

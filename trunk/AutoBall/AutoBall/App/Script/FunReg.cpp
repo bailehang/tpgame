@@ -92,6 +92,7 @@ void  ReisterPlayerBase(lua_State* pLua)
 			.def("isControllingPlayer",&PlayerBase::isControllingPlayer)
 			.def("SetDefaultHomeRegion",&PlayerBase::SetDefaultHomeRegion)
 			.def("FindSupport",&PlayerBase::FindSupport)
+			.def("BallWithinKickingRange",&PlayerBase::BallWithinKickingRange)
 			.def("isClosestTeamMemberToBall",&PlayerBase::isClosestTeamMemberToBall)
 			.def("AtTarget",&PlayerBase::AtTarget)
 			.def("TrackBall",&PlayerBase::TrackBall)
@@ -101,6 +102,9 @@ void  ReisterPlayerBase(lua_State* pLua)
 			.def("InsideHomeRegion",&PlayerBase::InsideHomeRegion)
 			.def("GetHomeCenter",&PlayerBase::GetHomeCenter)
 			.def("InHotRegion",&PlayerBase::InHotRegion)
+			.def("isAheadOfAttacker",&PlayerBase::isAheadOfAttacker)
+			.def("BallPos",&PlayerBase::BallPos)
+			.def("SetSteeringTarget",&PlayerBase::SetSteeringTarget)
 
 			.def("Steering",&PlayerBase::Steering)
 			.def("Ball",&PlayerBase::Ball)
@@ -139,6 +143,7 @@ void  ReisterSteering(lua_State* pLua)
 			class_<SteeringBehaviors>("SteeringBehaviors")
 
 			.def("SetTarget",&SteeringBehaviors::SetTarget)
+			.def("Target",&SteeringBehaviors::Target)
 			.def("SeekOn",&SteeringBehaviors::SeekOn)
 			.def("SeekOff",&SteeringBehaviors::SeekOff)
 			.def("ArriveOn",&SteeringBehaviors::ArriveOn)
@@ -193,7 +198,9 @@ void   ReisterAllFun(lua_State* pLua)
 			def("MsgDispatcher",&MsgDispatcher),
 			def("Vec2DNormalize",&Vec2DNormalize),
 			def("Vec2DSub",&Vec2DSub),
-			def("GetField",&GetExtraInfoField)
+			def("GetField",&GetExtraInfoField),
+			def("VecAddr",&VecAddr),
+			def("PrintLuaMsg",&PrintLuaMsg)
 
 		];
 

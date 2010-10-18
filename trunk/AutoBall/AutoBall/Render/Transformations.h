@@ -4,6 +4,7 @@
 #include <vector>
 #include "Vector2D.h"
 #include "C2DMatrix.h"
+#include "../Public/Log.h"
 
 //--------------------------- WorldTransform -----------------------------
 //
@@ -198,37 +199,17 @@ inline Vector2D* VecAddr(Vector2D& v)
 	return &v;
 }
 
-//------------------------ CreateWhiskers ------------------------------------
-//
-//  given an origin, a facing direction, a 'field of view' describing the 
-//  limit of the outer whiskers, a whisker length and the number of whiskers
-//  this method returns a vector containing the end positions of a series
-//  of whiskers radiating away from the origin and with equal distance between
-//  them. (like the spokes of a wheel clipped to a specific segment size)
-//----------------------------------------------------------------------------
-inline std::vector<Vector2D> CreateWhiskers(unsigned int  NumWhiskers,
-											double        WhiskerLength,
-											double        fov,
-											Vector2D      facing,
-											Vector2D      origin)
+inline  void PrintLuaMsg( const char* pInfo )
 {
-	//this is the magnitude of the angle separating each whisker
-	double SectorSize = fov/(double)(NumWhiskers-1);
+	char  str[128];
 
-	std::vector<Vector2D> whiskers;
-	Vector2D temp;
-	double angle = -fov*0.5; 
+	sprintf_s<128>( str , "%s" , pInfo );
 
-	for (unsigned int w=0; w<NumWhiskers; ++w)
-	{
-		//create the whisker extending outwards at this angle
-		temp = facing;
-		Vec2DRotateAroundOrigin(temp, angle);
-		whiskers.push_back(origin + WhiskerLength * temp);
+	CLog log( "cs.txt" );
 
-		angle+=SectorSize;
-	}
-	return whiskers;
+	log << str ;
+
+
 }
 
 #endif

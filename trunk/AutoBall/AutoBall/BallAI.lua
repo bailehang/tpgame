@@ -13,14 +13,13 @@ State_GlobalPlayer["Execute"] = function(player)
 		return;
 
 	end
-
-	--
 	if player:BallWithinReceivingRange() and player:isControllingPlayer() then
 
 		player:SetMaxSpeed(1.2);
 
 	else
 		player:SetMaxSpeed(1.6);
+
 	end
 
 end
@@ -29,7 +28,9 @@ State_GlobalPlayer["OnMessage"] = function(player,Msg)
 
 	if Msg:GetMsg() == 0 then
 
-		player:Steering():SetTarget( Msg:GetVec() )
+		player:SetSteeringTarget( Msg:GetVec() );
+
+		PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_ReceiveBall 26" );
 		player:GetFSM():ChangeState( State_ReceiveBall );
 
 		return 1;
@@ -57,6 +58,8 @@ State_GlobalPlayer["OnMessage"] = function(player,Msg)
 
 		Dispatcher:DispatchMsg( 0,player:ID(),receiver:ID(), addrvec );
 
+		PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_Wait 25" );
+
 		player:GetFSM():ChangeState( State_Wait );
 
 		player:FindSupport();
@@ -70,19 +73,29 @@ State_GlobalPlayer["OnMessage"] = function(player,Msg)
 			return 1;
 		end
 
-		player:Steering():SetTarget( player:Team():GetSupportSpot() );
+		player:SetSteeringTarget( player:Team():GetSupportSpot() );
+
+		PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_SupportAttacker 24" );
+
 		player:GetFSM():ChangeState( State_SupportAttacker );
 
-		return 1
+		return 1;
 
 	elseif Msg:GetMsg() == 3 then
 
-	    player:SetDefaultHomeRegion();
+		player:SetDefaultHomeRegion();
+
+		PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_ReturnGoHome 23" );
+
 		player:GetFSM():ChangeState( State_ReturnGoHome );
+
+		return 1;
 
 	elseif Msg:GetMsg() == 4 then
 
+		PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_Wait 22" );
 		player:GetFSM():ChangeState( State_Wait );
+
 		return 1;
 
 	end
@@ -105,24 +118,36 @@ end
 
 State_ChaseBall["Execute"] = function(player)
 
+	--PrintLuaMsg( player:ID() .. " State_ChaseBall Execute 123 " );
+
 	if player:BallWithinKickingRange() then
 
+		PrintLuaMsg( player:ID() .. " State_ChaseBall GlobalPlayer change to State_KickBall 21" );
+
 		player:GetFSM():ChangeState(State_KickBall)
+
 		return;
+
+	elseif  player:isClosestTeamMemberToBall() then
+
+		PrintLuaMsg( player:ID() .. " State_ChaseBall Execute 345 " );
+
+		player:SetSteeringTarget( player:BallPos() )
+
+		return ;
 
 	end
 
-	if  player:isClosestTeamMemberToBall() then
-		player:Steering():SetTarget( player:Ball():Pos() );
-		return;
-	end
+	--PrintLuaMsg( player:ID() .. " State_ChaseBall GlobalPlayer change to State_ReturnGoHome 20" );
 
-	player:GetFSM():ChangeState(State_ReturnGoHome);
+	--player:GetFSM():ChangeState(State_ReturnGoHome);
 
 end
 
 State_ChaseBall["OnMessage"] = function(player,Msg)
+
 	return 0;
+
 end
 
 
@@ -145,7 +170,7 @@ end
 State_SupportAttacker["Enter"] = function(player)
 
 	player:Steering():ArriveOn();
-	player:Steering():SetTarget( player:Team():GetSupportSpot() )
+	player:SetSteeringTarget( player:Team():GetSupportSpot() )
 
 end
 
@@ -158,14 +183,16 @@ State_SupportAttacker["Execute"] = function(player)
 
 	if  player:Team():IsControl() then
 
+		PrintLuaMsg( player:ID() .. " State_SupportAttacker GlobalPlayer change to State_ReturnGoHome 19" );
+
 		player:GetFSM():ChangeState(State_ReturnGoHome);
 
 	end
 
 
-	if  type(player:Team():GetSupportSpot() ) ~= type( player:Steering():Target() ) then
+	if    player:Team():GetSupportSpot()  ~=  player:Steering():Target()  then
 
-		player:Steering():SetTarget(player:Team():GetSupportSpot() );
+		player:SetSteeringTarget(player:Team():GetSupportSpot() );
 		player:Steering():ArriveOn();
 
 	end
@@ -182,7 +209,9 @@ State_SupportAttacker["Execute"] = function(player)
 
 		player:TrackBall();
 
-		player:SetVelocity();
+		local  vec = Vector2D();
+		player:SetVelocity(vec);
+
 
 		if  not player:isThreatened() then
 
@@ -218,9 +247,9 @@ State_ReturnGoHome["Enter"] = function(player)
 
 	player:Steering():ArriveOn();
 
-	if not player:InSideHomeRegion( player:Steering():Target(), 0 ) then
+	if not player:InsideHomeRegion( player:Steering():Target(), 0 ) then
 
-		player:Steering():SetTarget( player:GetHomeCenter() )
+		player:SetSteeringTarget( player:GetHomeCenter() )
 
 	end
 
@@ -239,20 +268,29 @@ State_ReturnGoHome["Execute"] = function(player)
 
 		if player:isClosestTeamMemberToBall() and player:Team():IsReceiver() and  not player:Pitch():GoalKeeperHasBall() then
 
+			PrintLuaMsg( player:ID() .. " State_ReturnGoHome GlobalPlayer change to State_ChaseBall 18" );
+
 			player:GetFSM():ChangeState(State_ChaseBall);
 
 		end
 
 	end
 
-	if player:Pitch():GameOn() and  player:InSideHomeRegion( player:Pos(), 1 ) then
+	if player:Pitch():GameOn() and  player:InsideHomeRegion( player:Pos(), 1 ) then
 
-		player:Steering():SetTarget( player:Pos() );
+		player:SetSteeringTarget( player:Pos() );
+
+		PrintLuaMsg( player:ID() .. " State_ReturnGoHome GlobalPlayer change to State_Wait 17" );
+
 		player:GetFSM():ChangeState(State_Wait);
+
 
 	elseif not player:Pitch():GameOn() and player:AtTarget() then
 
+		PrintLuaMsg( player:ID() .. " State_ReturnGoHome GlobalPlayer change to State_Wait 16" );
+
 		player:GetFSM():ChangeState(State_Wait);
+
 
 	end
 
@@ -279,7 +317,7 @@ State_Wait["Enter"] = function(player)
 
 	if  not player:Pitch():GameOn()	then
 
-		player:Steering():SetTarget( player:GetHomeCenter() )
+		player:SetSteeringTarget( player:GetHomeCenter() )
 
 	end
 
@@ -320,6 +358,8 @@ State_Wait["Execute"] = function(player)
 
 		if player:isClosestTeamMemberToBall() and player:Team():IsReceiver() and  not player:Pitch():GoalKeeperHasBall() then
 
+			PrintLuaMsg( player:ID() .. " State_Wait GlobalPlayer change to State_ChaseBall 15" );
+
 			player:GetFSM():ChangeState( State_ChaseBall )
 
 			return ;
@@ -330,7 +370,10 @@ State_Wait["Execute"] = function(player)
 
 			if player:Team():IsControl() or player:FollowReturn() then
 
-				player:Steering():SetTarget( player:GetHomeCenter() );
+				player:SetSteeringTarget( player:GetHomeCenter() );
+
+				PrintLuaMsg( player:ID() .. " State_Wait GlobalPlayer change to State_ReturnGoHome 14" );
+
 				player:GetFSM():ChangeState( State_ReturnGoHome );
 
 			end
@@ -339,7 +382,10 @@ State_Wait["Execute"] = function(player)
 
 		if not player:Team():IsControl() and player:FollowTarget() then
 
-			player:Steering():SetTarget( player:Ball():Pos() )
+			player:SetSteeringTarget( player:BallPos() )
+
+			PrintLuaMsg( player:ID() .. " State_Wait GlobalPlayer change to State_FollowBall 13" );
+
 			player:GetFSM():ChangeState( State_FollowBall )
 
 		end
@@ -383,24 +429,27 @@ State_FollowBall["Execute"] = function(player)
 
 		if  player:Team():IsControl() or player:FollowReturn() then
 
-			player:Steering():SetTarget( player:GetHomeCenter() )
+			player:SetSteeringTarget( player:GetHomeCenter() )
+			PrintLuaMsg( player:ID() .. " State_FollowBall GlobalPlayer change to State_ReturnGoHome 12" );
 			player:GetFSM():ChangeState( State_ReturnGoHome )
-
 		end
 
 		if not player:isClosestTeamMemberToBall() and  not player:Team():IsControl() then
 
-			player:Steering():SetTarget( player:Ball():Pos() );
+			player:SetSteeringTarget( player:BallPos() );
 
 		end
 
 		if player:isClosestTeamMemberToBall() and player:Team():IsThrowIn() then
 
+			PrintLuaMsg( player:ID() .. " State_FollowBall GlobalPlayer change to State_ChaseBall 11" );
 			player:GetFSM():ChangeState( State_ChaseBall );
 
 		end
 
 		if player:isClosestTeamMemberToBall() and player:Team():IsReceiver() and not player:Pitch():GoalKeeperHasBall() then
+
+			PrintLuaMsg( player:ID() .. " State_FollowBall GlobalPlayer change to State_ChaseBall 10" );
 
 			player:GetFSM():ChangeState( State_ChaseBall );
 		end
@@ -433,6 +482,7 @@ State_KickBall["Enter"] = function(player)
 
 	if not player:isReadyForNextKick() then
 
+		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_ChaseBall 9" );
 		player:GetFSM():ChangeState( State_ChaseBall )
 
 	end
@@ -443,33 +493,43 @@ State_KickBall["Execute"] = function(player)
 
 	if not player:IsChaseBall() then
 
-		player:GetFsm():ChangeState( State_Wait )
+		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_Wait 8" );
+
+		player:GetFSM():ChangeState( State_Wait )
 
 	end
 
-	local ToBall = Vec2DSub( player:Ball():Pos(), player:Pos());
+	PrintLuaMsg( player:ID() .. " State_KickBall player msg info 333" );
+	local ToBall = Vec2DSub( player:BallPos(), player:Pos());
 
 	local Vec2D  = Vec2DNormalize(ToBall);
 
-	local dot	  = player:Heading():Dot(Vec2D);
+	local dot    = player:Heading():Dot(Vec2D);
 
 	if player:Team():IsReceiver() or player:Pitch():GoalKeeperHasBall() or dot < 0 then
 
-		player:GetFsm():ChangeState( State_ChaseBall );
+		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_ChaseBall 7" );
 
+		player:GetFSM():ChangeState( State_ChaseBall );
+
+		return;
 	end
+
+	PrintLuaMsg( player:ID() .. " State_KickBall player msg info 222" );
 
 	local  BallTarget = Vector2D();
 
 	local  power = 6 * dot;
 
-	if player:Team():CanShoot( player:Ball():Pos() , power , BallTarget ) or  RandFloat() <  0.005 then
+	if player:Team():CanShoot( player:BallPos() , power , BallTarget ) or  RandFloat() <  0.005 then
 
-		BallTarget = AddNoiseToKick( player:Ball():Pos() , BallTarget );
+		BallTarget = AddNoiseToKick( player:BallPos() , BallTarget );
 
-		local  kickDirection = Vec2DSub(BallTarget,player:Ball():Pos());
+		local  kickDirection = Vec2DSub(BallTarget,player:BallPos());
 
-		player:Ball():Kcik( kickDirection , power , player );
+		player:Ball():Kick( kickDirection , power , player );
+
+		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_Wait 6" );
 
 		player:GetFSM():ChangeState( State_Wait )
 
@@ -487,11 +547,11 @@ State_KickBall["Execute"] = function(player)
 
 	if player:isThreatened() and player:Team():FindPass( player, receiver, BallTarget,power,100 ) then
 
-		BallTarget = AddNoiseToKick( player:Ball():Pos() , BallTarget );
+		BallTarget = AddNoiseToKick( player:BallPos() , BallTarget );
 
-		local  kickDirection = Vec2DSub( BallTarget , player:Ball():Pos() );
+		local  kickDirection = Vec2DSub( BallTarget , player:BallPos() );
 
-		player:Ball():Kcik( kickDirection , power , player );
+		player:Ball():Kick( kickDirection , power , player );
 
 
 		player:Team():SetThrowIn( false );
@@ -506,11 +566,15 @@ State_KickBall["Execute"] = function(player)
 
 		player:GetFSM():ChangeState( State_Wait )
 
+		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_Wait 5" );
+
 		player:FindSupport();
 
 	else
 
 		player:FindSupport();
+
+		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_Dribble 4" );
 
 		player:GetFSM():ChangeState( State_Dribble )
 
@@ -526,6 +590,8 @@ State_KickBall["Exit"] = function(player)
 	if not player:isReadyForNextKick() then
 
 		player:GetFSM():ChangeState( State_ChaseBall )
+
+		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_ChaseBall 3" );
 
 	end
 
@@ -563,7 +629,9 @@ State_Dribble["Execute"] = function(player)
 
 		local  direction = player:Heading();
 
-		local  angle = 3.1415926/4 * -1 * player:Team():HomeGoalFacing():Sign( player:Heading() );
+		local  sSign = player:Team():HomeGoalFacing():Sign( player:Heading() ) ;
+
+		local  angle = 3.1415926/4 * -1 * sSign;
 
 		Vec2DRotateAroundOrigin( direction , angle );
 
@@ -581,6 +649,7 @@ State_Dribble["Execute"] = function(player)
 
 	end
 
+	PrintLuaMsg( player:ID() .. " State_Dribble GlobalPlayer change to State_ChaseBall 1112" );
 
 	player:GetFSM():ChangeState( State_ChaseBall )
 
@@ -616,7 +685,7 @@ State_ReceiveBall["Enter"] = function(player)
 
 	elseif RandFloat() < 0.5 and not player:Team():isOpponentWithinRadius(player:Pos(),PassThreatRadius) then
 
-			 player:Steering():ArriveOn();
+		player:Steering():ArriveOn();
 	else
 
 		player:Steering():PursuitOn();
@@ -636,13 +705,14 @@ State_ReceiveBall["Execute"] = function(player)
 
 	if  player:BallWithinReceivingRange() or not player:Team():IsControl() then
 
-		player:GetFSM():ChangeState(State_ChaseBall);
+		PrintLuaMsg( player:ID() .. " State_ReceiveBall GlobalPlayer change to State_ChaseBall 111" );
 
+		player:GetFSM():ChangeState(State_ChaseBall);
 	end
 
-	if player:Steering():PursuitIsOn() then
+	if player:Steering():PursuitOn() then
 
-		player:Steering():SetTarget( player:Ball():Pos() );
+		player:SetSteeringTarget( player:BallPos() );
 
 	end
 
@@ -652,7 +722,8 @@ State_ReceiveBall["Execute"] = function(player)
 		player:Steering():PursuitOff();
 
 		player:TrackBall();
-		player:SetVelocity();
+		local  vec = Vector2D();
+		player:SetVelocity(vec);
 
 	end
 

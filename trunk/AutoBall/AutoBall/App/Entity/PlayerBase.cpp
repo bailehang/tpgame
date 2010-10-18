@@ -265,9 +265,19 @@ SoccerBall* const PlayerBase::Ball()const
 	return Team()->Pitch()->Ball();
 }
 
+Vector2D   PlayerBase::BallPos() const
+{
+	return Ball()->Pos();
+}
+
 SoccerPitch* const PlayerBase::Pitch()const
 {
 	return Team()->Pitch();
+}
+
+void   PlayerBase::SetSteeringTarget( Vector2D& vec )
+{
+	Steering()->SetTarget( vec );
 }
 
 const Region* const PlayerBase::HomeRegion()const
