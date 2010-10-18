@@ -8,6 +8,8 @@ end
 
 State_GlobalPlayer["Execute"] = function(player)
 
+	PrintLuaMsg( player:ID() .. " State_GlobalPlayer Execute " );
+
 	if not player:IsChaseBall() then
 
 		return;
@@ -112,6 +114,8 @@ State_ChaseBall = {}
 
 State_ChaseBall["Enter"] = function(player)
 
+	PrintLuaMsg( player:ID() .. " Enter State_ChaseBall " );
+
 	player:Steering():SeekOn();
 
 end
@@ -120,9 +124,11 @@ State_ChaseBall["Execute"] = function(player)
 
 	--PrintLuaMsg( player:ID() .. " State_ChaseBall Execute 123 " );
 
+	PrintLuaMsg( player:ID() .. " State_ChaseBall Execute " );
+
 	if player:BallWithinKickingRange() then
 
-		PrintLuaMsg( player:ID() .. " State_ChaseBall GlobalPlayer change to State_KickBall 21" );
+		--PrintLuaMsg( player:ID() .. " State_ChaseBall GlobalPlayer change to State_KickBall 21" );
 
 		player:GetFSM():ChangeState(State_KickBall)
 
@@ -130,7 +136,7 @@ State_ChaseBall["Execute"] = function(player)
 
 	elseif  player:isClosestTeamMemberToBall() then
 
-		PrintLuaMsg( player:ID() .. " State_ChaseBall Execute 345 " );
+		--PrintLuaMsg( player:ID() .. " State_ChaseBall Execute 345 " );
 
 		player:SetSteeringTarget( player:BallPos() )
 
@@ -140,7 +146,7 @@ State_ChaseBall["Execute"] = function(player)
 
 	--PrintLuaMsg( player:ID() .. " State_ChaseBall GlobalPlayer change to State_ReturnGoHome 20" );
 
-	--player:GetFSM():ChangeState(State_ReturnGoHome);
+	player:GetFSM():ChangeState(State_ReturnGoHome);
 
 end
 
@@ -176,6 +182,8 @@ end
 
 
 State_SupportAttacker["Execute"] = function(player)
+
+	PrintLuaMsg( player:ID() .. " State_SupportAttacker Execute " );
 
 	if player:IsChaseBall() then
 		return;
@@ -258,6 +266,8 @@ end
 
 State_ReturnGoHome["Execute"] = function(player)
 
+	PrintLuaMsg( player:ID() .. " State_ReturnGoHome Execute " );
+
 	if  not player:IsChaseBall() then
 
 		return;
@@ -326,6 +336,8 @@ end
 
 
 State_Wait["Execute"] = function(player)
+
+	PrintLuaMsg( player:ID() .. " State_Wait Execute " );
 
 	if not player:IsChaseBall() then
 		return;
@@ -419,6 +431,8 @@ end
 
 State_FollowBall["Execute"] = function(player)
 
+	PrintLuaMsg( player:ID() .. " State_FollowBall Execute " );
+
 	if not player:IsChaseBall() then
 
 		return;
@@ -491,6 +505,8 @@ end
 
 State_KickBall["Execute"] = function(player)
 
+	PrintLuaMsg( player:ID() .. " State_KickBall Execute " );
+
 	if not player:IsChaseBall() then
 
 		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_Wait 8" );
@@ -500,6 +516,7 @@ State_KickBall["Execute"] = function(player)
 	end
 
 	PrintLuaMsg( player:ID() .. " State_KickBall player msg info 333" );
+
 	local ToBall = Vec2DSub( player:BallPos(), player:Pos());
 
 	local Vec2D  = Vec2DNormalize(ToBall);
@@ -587,6 +604,8 @@ end
 
 State_KickBall["Exit"] = function(player)
 
+	PrintLuaMsg( player:ID() .. " leave State_KickBall " );
+
 	if not player:isReadyForNextKick() then
 
 		player:GetFSM():ChangeState( State_ChaseBall )
@@ -617,6 +636,8 @@ end
 
 
 State_Dribble["Execute"] = function(player)
+
+	PrintLuaMsg( player:ID() .. " State_Dribble Execute " );
 
 	if not player:IsChaseBall() then
 		return ;
@@ -696,6 +717,8 @@ end
 
 
 State_ReceiveBall["Execute"] = function(player)
+
+	PrintLuaMsg( player:ID() .. " State_ReceiveBall Execute " );
 
 	if not player:IsChaseBall() then
 

@@ -56,8 +56,8 @@ public:
 			if (m_pPreviousState.is_valid())
 				m_pPreviousState["Execute"](m_pOwner);
 
-// 			if (m_pGlobalState.is_valid())
-// 				m_pGlobalState["Execute"](m_pOwner);
+ 			if (m_pGlobalState.is_valid())
+ 				m_pGlobalState["Execute"](m_pOwner);
 		}
 		catch ( ... )
 		{
@@ -67,12 +67,12 @@ public:
 
 	bool  HandleMessage(const tagMessage& msg)const
 	{
-		/*
+		
 		try
 		{
 			if (m_CurrentState  )
 			{	
-				int result = call_function<int>(m_CurrentState,"OnMessage",m_pOwner, msg);
+				int result = call_function<int>(m_CurrentState.interpreter(),"OnMessage",m_pOwner, msg);
 				if ( result > 0 )
 				{
 					return true;
@@ -81,7 +81,7 @@ public:
 
 			if (m_pGlobalState )
 			{
-				int result = call_function<int>(m_pGlobalState,"OnMessage",m_pOwner, msg);
+				int result = call_function<int>(m_pGlobalState.interpreter(),"OnMessage",m_pOwner, msg);
 				if ( result > 0 )
 				{
 					return true;
@@ -92,7 +92,8 @@ public:
 		{
 		   __asm int 3
 		}
-		*/
+		
+		
 	
 		return false;
 	}
