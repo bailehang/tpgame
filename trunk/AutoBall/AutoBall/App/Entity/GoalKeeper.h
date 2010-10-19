@@ -5,20 +5,20 @@
 #include "../StateAi/StateMachine.h"
 #include "MoveEntity.h"
 
-class SoccerTeam;
-class SoccerPitch;
-class SoccerBall;
+class FootBallTeam;
+class FootBall;
+class FootBall;
 class Region;
-class PlayerBase;
+class BasePlayer;
 template < class T>
 class  State;
 
 /// 封装守门员类
-class  GoalKeeper : public PlayerBase
+class  GoalKeeper : public BasePlayer
 {
 
 public:
-	GoalKeeper(SoccerTeam*        home_team,
+	GoalKeeper(FootBallTeam*      home_team,
 			   int                home_region,
 			   State<GoalKeeper>* start_state,
 			   Vector2D           heading,
@@ -33,7 +33,7 @@ public:
 
 	void        Update();
 	void        Render();
-	bool        HandleMessage(const tagMessage& msg);
+	bool        OnMessage(const tagMessage& msg);
 
 	///  是否在拦截范围内
 	bool        BallWithinRangeForIntercept()const;
@@ -45,7 +45,6 @@ public:
 	Vector2D    GetRearInterposeTarget()const;
 
 	StateMachine<GoalKeeper>* GetFSM()const{return m_pStateMachine;}
-
 
 	Vector2D    LookAt()const		 {return m_vLookAt;}
 	void        SetLookAt(Vector2D v){m_vLookAt=v;}

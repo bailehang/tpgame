@@ -1,9 +1,7 @@
-#ifndef GEOMETRY_H
-#define GEOMETRY_H
-//------------------------------------------------------------------------
-//Name:   geometry.h 
-//Desc:   useful 2D geometry functions
-//------------------------------------------------------------------------
+
+
+#pragma once 
+
 #include "utils.h"
 #include "Vector2D.h"
 #include "Matrix.h"
@@ -351,5 +349,3 @@ inline bool PointInCircle(Vector2D Pos,
 	return false;
 }
 
-
-#endif

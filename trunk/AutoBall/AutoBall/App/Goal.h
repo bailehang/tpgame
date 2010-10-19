@@ -1,7 +1,7 @@
 
 #pragma  once 
 
-#include "Entity/SoccerBall.h"
+#include "Entity/FootBall.h"
 #include "../Render/Vector2D.h"
 #include "../Render/MathGeo.h"
 
@@ -19,7 +19,7 @@ public:
 	{  }
 
 	/// 如果跨过球门口，改方法返回真
-	inline bool Scored(const SoccerBall*const ball);
+	inline bool Scored(const FootBall*const ball);
 
 	Vector2D Center()const		{return m_vCenter;}
 	Vector2D Facing()const		{return m_vFacing;}
@@ -42,7 +42,7 @@ private:
 
 
 /// 如果跨过球门口，改方法返回真
-bool Goal::Scored(const SoccerBall*const ball)
+bool Goal::Scored(const FootBall*const ball)
 {
 	if (LineIntersection2D(ball->Pos(), ball->OldPos(), m_vLeftPost, m_vRightPost))
 	{

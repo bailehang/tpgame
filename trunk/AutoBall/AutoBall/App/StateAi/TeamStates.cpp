@@ -1,15 +1,15 @@
 #include "Stdafx.h"	  
 #include "State.h"
 #include "StateMachine.h"
-#include "../SoccerTeam.h"
-#include "../Entity/PlayerBase.h"
-#include "../SoccerPitch.h"
+#include "../FootBallTeam.h"
+#include "../Entity/BasePlayer.h"
+#include "../FootBallPitch.h"
 #include "../Messageing/MessageDispatcher.h"
 #include "../../Config.h"			   
 
-extern SoccerPitch* g_SoccerPitch;
+extern FootBallPitch* g_FootBallPitch;
 
-void ChangePlayerHomeRegions(SoccerTeam* team, const int NewRegions[TeamSize])
+void ChangePlayerHomeRegions(FootBallTeam* team, const int NewRegions[TeamSize])
 {
 	for (int plyr=0; plyr<TeamSize; ++plyr)
 	{
@@ -17,15 +17,15 @@ void ChangePlayerHomeRegions(SoccerTeam* team, const int NewRegions[TeamSize])
 	}
 }
 
-EmptyMsg(bool,Attacking,OnMessage,SoccerTeam);
+EmptyMsg(bool,Attacking,OnMessage,FootBallTeam);
 
-void Attacking::Enter(SoccerTeam* team)
+void Attacking::Enter(FootBallTeam* team)
 {
 	const int BlueRegions[TeamSize] = {1,22,19,16,11,8,6};
 	const int RedRegions[TeamSize]  = {45,25,28,31,32,35,41};
 
 	//set up the player's home regions
-	if (team->Color() == SoccerTeam::blue)
+	if (team->Color() == FootBallTeam::blue)
 	{
 		ChangePlayerHomeRegions(team, BlueRegions);
 	}
@@ -41,7 +41,7 @@ void Attacking::Enter(SoccerTeam* team)
 }
 
 
-void Attacking::Execute(SoccerTeam* team)
+void Attacking::Execute(FootBallTeam* team)
 {
 	/// 如果队伍不在控球，改变状态
 	//if this team is no longer in control change states
@@ -55,7 +55,7 @@ void Attacking::Execute(SoccerTeam* team)
 	team->DetermineBestSupportingPosition();
 }
 
-void Attacking::Exit(SoccerTeam* team)
+void Attacking::Exit(FootBallTeam* team)
 {
 	//there is no supporting player for defense
 	team->SetSupportingPlayer(NULL);
@@ -63,16 +63,16 @@ void Attacking::Exit(SoccerTeam* team)
 
 
 
-EmptyMsg(bool,Defending,OnMessage,SoccerTeam);
+EmptyMsg(bool,Defending,OnMessage,FootBallTeam);
 
-void Defending::Enter(SoccerTeam* team)
+void Defending::Enter(FootBallTeam* team)
 {
 	//these define the home regions for this state of each of the players
   const int BlueRegions[TeamSize] = {1,22,19,16,11,8,6};
   const int RedRegions[TeamSize]  = {45,25,28,31,32,35,41};
 
 	//set up the player's home regions
-	if (team->Color() == SoccerTeam::blue)
+	if (team->Color() == FootBallTeam::blue)
 	{
 		ChangePlayerHomeRegions(team, BlueRegions);
 	}
@@ -86,7 +86,7 @@ void Defending::Enter(SoccerTeam* team)
 	team->UpdateTargetsOfWaitingPlayers();
 }
 
-void Defending::Execute(SoccerTeam* team)
+void Defending::Execute(FootBallTeam* team)
 {
 	//if in control change states
 	if (team->InControl())
@@ -96,12 +96,12 @@ void Defending::Execute(SoccerTeam* team)
 }
 
 
-void Defending::Exit(SoccerTeam* team){}
+void Defending::Exit(FootBallTeam* team){}
 
 
-EmptyMsg(bool,PrepareForKickOff,OnMessage,SoccerTeam);
+EmptyMsg(bool,PrepareForKickOff,OnMessage,FootBallTeam);
 
-void PrepareForKickOff::Enter(SoccerTeam* team)
+void PrepareForKickOff::Enter(FootBallTeam* team)
 {
 	/// 重置关键队伍的指针
 	//reset key player pointers
@@ -114,7 +114,7 @@ void PrepareForKickOff::Enter(SoccerTeam* team)
 	team->ReturnAllFieldPlayersToHome();
 }
 
-void PrepareForKickOff::Execute(SoccerTeam* team)
+void PrepareForKickOff::Execute(FootBallTeam* team)
 {
 	//if both teams in position, start the game
 	if (team->AllPlayersAtHome() && team->Opponents()->AllPlayersAtHome())
@@ -123,20 +123,20 @@ void PrepareForKickOff::Execute(SoccerTeam* team)
 	}
 }
 
-void PrepareForKickOff::Exit(SoccerTeam* team)
+void PrepareForKickOff::Exit(FootBallTeam* team)
 {
 	team->Pitch()->SetGameOn();
 }
 
 
-EmptyMsg(bool,Throw_In,OnMessage,SoccerTeam);
+EmptyMsg(bool,Throw_In,OnMessage,FootBallTeam);
 
-void Throw_In::Enter(SoccerTeam* team)
+void Throw_In::Enter(FootBallTeam* team)
 {
 	team->SetThrowIn(true);
 }
 
-void Throw_In::Execute(SoccerTeam* team)
+void Throw_In::Execute(FootBallTeam* team)
 {
 	//if both teams in position, start the game
 	if ( !team->IsThrowIn() )
@@ -145,10 +145,10 @@ void Throw_In::Execute(SoccerTeam* team)
 	}
 }
 
-void Throw_In::Exit(SoccerTeam* team)
+void Throw_In::Exit(FootBallTeam* team)
 {
-	g_SoccerPitch->m_pBlueTeam->SetChaseBall(true);
-	g_SoccerPitch->m_pRedTeam->SetChaseBall(true);
+	g_FootBallPitch->m_pBlueTeam->SetChaseBall(true);
+	g_FootBallPitch->m_pRedTeam->SetChaseBall(true);
 
 	team->SetThrowIn(false);
 }

@@ -20,7 +20,7 @@ public:
 
 	virtual   void  Update() = 0 ;
 	virtual   void  Render() = 0 ;
-	virtual	  bool  HandleMessage(const tagMessage& e ){ return false;}
+	virtual	  bool  OnMessage(const tagMessage& e ){ return false;}
 
 	static    int   GetNextValidId()		{ return m_iNextValidID; }
 	static    void  ResetNextValidId()		{ m_iNextValidID = 0 ;   }

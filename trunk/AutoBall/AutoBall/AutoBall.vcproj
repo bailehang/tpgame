@@ -293,6 +293,22 @@
 			Name="App"
 			>
 			<File
+				RelativePath=".\App\FootBallPitch.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\App\FootBallPitch.h"
+				>
+			</File>
+			<File
+				RelativePath=".\App\FootBallTeam.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\App\FootBallTeam.h"
+				>
+			</File>
+			<File
 				RelativePath=".\App\Goal.h"
 				>
 			</File>
@@ -301,35 +317,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\App\SoccerPitch.cpp"
+				RelativePath=".\App\SpotCalculator.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\App\SoccerPitch.h"
+				RelativePath=".\App\SpotCalculator.h"
 				>
 			</File>
 			<File
-				RelativePath=".\App\SoccerTeam.cpp"
+				RelativePath=".\App\Steering.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\App\SoccerTeam.h"
-				>
-			</File>
-			<File
-				RelativePath=".\App\SteeringBehaviors.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\App\SteeringBehaviors.h"
-				>
-			</File>
-			<File
-				RelativePath=".\App\SupportSpotCalculator.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\App\SupportSpotCalculator.h"
+				RelativePath=".\App\Steering.h"
 				>
 			</File>
 			<File
@@ -348,11 +348,11 @@
 				Name="StateAi"
 				>
 				<File
-					RelativePath=".\App\StateAi\FieldPlayerStates.cpp"
+					RelativePath=".\App\StateAi\GoalKeeperStates.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\App\StateAi\GoalKeeperStates.cpp"
+					RelativePath=".\App\StateAi\PlayerStates.cpp"
 					>
 				</File>
 				<File
@@ -380,6 +380,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\App\Entity\BasePlayer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\BasePlayer.h"
+					>
+				</File>
+				<File
 					RelativePath=".\App\Entity\EntityManager.cpp"
 					>
 				</File>
@@ -388,11 +396,19 @@
 					>
 				</File>
 				<File
-					RelativePath=".\App\Entity\FieldPlayer.cpp"
+					RelativePath=".\App\Entity\FootBall.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\App\Entity\FieldPlayer.h"
+					RelativePath=".\App\Entity\FootBall.h"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\FootBaller.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\App\Entity\FootBaller.h"
 					>
 				</File>
 				<File
@@ -409,22 +425,6 @@
 				</File>
 				<File
 					RelativePath=".\App\Entity\MoveEntity.h"
-					>
-				</File>
-				<File
-					RelativePath=".\App\Entity\PlayerBase.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\App\Entity\PlayerBase.h"
-					>
-				</File>
-				<File
-					RelativePath=".\App\Entity\SoccerBall.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\App\Entity\SoccerBall.h"
 					>
 				</File>
 			</Filter>

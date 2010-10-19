@@ -4,10 +4,11 @@
  */
 #include "stdafx.h"
 #include "StateMachineScript.h"
-#include "../Entity/FieldPlayer.h"
-#include "../Entity/SoccerBall.h"
+#include "../FootBallPitch.h"
+#include "../Entity/FootBaller.h"
+#include "../Entity/FootBall.h"
 #include "../Messageing/MessageDispatcher.h"
-#include "../SteeringBehaviors.h"
+#include "../Steering.h"
 
 
 void   ReisterVection(lua_State* pLua)
@@ -48,13 +49,13 @@ void   ReisterStateMachine(lua_State* pLua)
 {
 	module(pLua)
 		[
-			class_<StateMachineScript<FieldPlayer> >("StateMachineScript")
+			class_<StateMachineScript<FootBaller> >("StateMachineScript")
 
-			.def("ChangeState",&StateMachineScript<FieldPlayer>::ChangeState)
-			.def("SetCurrentState",&StateMachineScript<FieldPlayer>::SetCurrentState)
-			.def("isInState",&StateMachineScript<FieldPlayer>::isInState)
+			.def("ChangeState",&StateMachineScript<FootBaller>::ChangeState)
+			.def("SetCurrentState",&StateMachineScript<FootBaller>::SetCurrentState)
+			.def("isInState",&StateMachineScript<FootBaller>::isInState)
 		];
-	//.def("HandleMessage",&StateMachineScript<FieldPlayer>::HandleMessage)
+	//.def("OnMessage",&StateMachineScript<FootBaller>::OnMessage)
 }
 
 void  ReisterBaseEntity(lua_State* pLua)
@@ -85,32 +86,32 @@ void  ReisterPlayerBase(lua_State* pLua)
 {
 	module(pLua)
 		[
-			class_<PlayerBase,bases<CMoveEntity> >("PlayerBase")
+			class_<BasePlayer,bases<CMoveEntity> >("BasePlayer")
 
-			.def("isThreatened",&PlayerBase::isThreatened)
-			.def("IsChaseBall",&PlayerBase::IsChaseBall)
-			.def("BallWithinReceivingRange",&PlayerBase::BallWithinReceivingRange)
-			.def("isControllingPlayer",&PlayerBase::isControllingPlayer)
-			.def("SetDefaultHomeRegion",&PlayerBase::SetDefaultHomeRegion)
-			.def("FindSupport",&PlayerBase::FindSupport)
-			.def("BallWithinKickingRange",&PlayerBase::BallWithinKickingRange)
-			.def("isClosestTeamMemberToBall",&PlayerBase::isClosestTeamMemberToBall)
-			.def("AtTarget",&PlayerBase::AtTarget)
-			.def("TrackBall",&PlayerBase::TrackBall)
-			.def("IsSelfRegin",&PlayerBase::IsSelfRegin)
-			.def("FollowReturn",&PlayerBase::FollowReturn)
-			.def("FollowTarget",&PlayerBase::FollowTarget)
-			.def("InsideHomeRegion",&PlayerBase::InsideHomeRegion)
-			.def("GetHomeCenter",&PlayerBase::GetHomeCenter)
-			.def("InHotRegion",&PlayerBase::InHotRegion)
-			.def("isAheadOfAttacker",&PlayerBase::isAheadOfAttacker)
-			.def("BallPos",&PlayerBase::BallPos)
-			.def("SetSteeringTarget",&PlayerBase::SetSteeringTarget)
+			.def("isThreatened",&BasePlayer::isThreatened)
+			.def("IsChaseBall",&BasePlayer::IsChaseBall)
+			.def("BallWithinReceivingRange",&BasePlayer::BallWithinReceivingRange)
+			.def("isControllingPlayer",&BasePlayer::isControllingPlayer)
+			.def("SetDefaultHomeRegion",&BasePlayer::SetDefaultHomeRegion)
+			.def("FindSupport",&BasePlayer::FindSupport)
+			.def("BallWithinKickingRange",&BasePlayer::BallWithinKickingRange)
+			.def("isClosestTeamMemberToBall",&BasePlayer::isClosestTeamMemberToBall)
+			.def("AtTarget",&BasePlayer::AtTarget)
+			.def("TrackBall",&BasePlayer::TrackBall)
+			.def("IsSelfRegin",&BasePlayer::IsSelfRegin)
+			.def("FollowReturn",&BasePlayer::FollowReturn)
+			.def("FollowTarget",&BasePlayer::FollowTarget)
+			.def("InsideHomeRegion",&BasePlayer::InsideHomeRegion)
+			.def("GetHomeCenter",&BasePlayer::GetHomeCenter)
+			.def("InHotRegion",&BasePlayer::InHotRegion)
+			.def("isAheadOfAttacker",&BasePlayer::isAheadOfAttacker)
+			.def("BallPos",&BasePlayer::BallPos)
+			.def("SetSteeringTarget",&BasePlayer::SetSteeringTarget)
 
-			.def("Steering",&PlayerBase::Steering)
-			.def("Ball",&PlayerBase::Ball)
-			.def("Team",&PlayerBase::Team)
-			.def("Pitch",&PlayerBase::Pitch)
+			.def("Steering",&BasePlayer::Steering)
+			.def("Ball",&BasePlayer::Ball)
+			.def("Team",&BasePlayer::Team)
+			.def("Pitch",&BasePlayer::Pitch)
 
 		];
 }
@@ -119,9 +120,9 @@ void  ReisterSoccerBall(lua_State* pLua)
 {
 	module(pLua)
 		[
-			class_<SoccerBall,bases<CMoveEntity> >("SoccerBall")
+			class_<FootBall,bases<CMoveEntity> >("FootBall")
 
-			.def("Kick",&SoccerBall::Kick)
+			.def("Kick",&FootBall::Kick)
 		];
 }
 
@@ -129,12 +130,12 @@ void  ReisterFieldPlayer(lua_State* pLua)
 {
 	module(pLua)
 		[
-			class_<FieldPlayer,bases<PlayerBase> >("FieldPlayer")
+			class_<FootBaller,bases<BasePlayer> >("FootBaller")
 
-			.def("isReadyForNextKick",&FieldPlayer::isReadyForNextKick)
-			.def("GetFSM",&FieldPlayer::GetScriptFSM)
-			.def("GetScriptValue",&FieldPlayer::GetScriptValue)
-			.def("SetScriptValue",&FieldPlayer::SetScriptValue)
+			.def("isReadyForNextKick",&FootBaller::isReadyForNextKick)
+			.def("GetFSM",&FootBaller::GetScriptFSM)
+			.def("GetScriptValue",&FootBaller::GetScriptValue)
+			.def("SetScriptValue",&FootBaller::SetScriptValue)
 		];
 }
 
@@ -160,23 +161,23 @@ void  ReisterTeam(lua_State* pLua)
 {
 	module(pLua)
 		[
-			class_<SoccerTeam>("SoccerTeam")
+			class_<FootBallTeam>("FootBallTeam")
 
-			.def("CanShoot",&SoccerTeam::CanShoot)
-			.def("InControl",&SoccerTeam::InControl)
-			.def("IsControl",&SoccerTeam::IsControl)
-			.def("GetSupportSpot",&SoccerTeam::GetSupportSpot)
-			.def("RequestPass",&SoccerTeam::RequestPass)
-			.def("Receiver",&SoccerTeam::Receiver)
-			.def("SetReceiver",&SoccerTeam::SetReceiver)
-			.def("InControl",&SoccerTeam::InControl)
-			.def("SetControllingPlayer",&SoccerTeam::SetControllingPlayer)
-			.def("SetThrowIn",&SoccerTeam::SetThrowIn)
-			.def("HomeGoalFacing",&SoccerTeam::HomeGoalFacing)
-			.def("IsReceiver",&SoccerTeam::IsReceiver)
-			.def("IsThrowIn",&SoccerTeam::IsThrowIn)
-			.def("SetThrowIn",&SoccerTeam::SetThrowIn)
-			.def("isOpponentWithinRadius",&SoccerTeam::isOpponentWithinRadius)
+			.def("CanShoot",&FootBallTeam::CanShoot)
+			.def("InControl",&FootBallTeam::InControl)
+			.def("IsControl",&FootBallTeam::IsControl)
+			.def("GetSupportSpot",&FootBallTeam::GetSupportSpot)
+			.def("RequestPass",&FootBallTeam::RequestPass)
+			.def("Receiver",&FootBallTeam::Receiver)
+			.def("SetReceiver",&FootBallTeam::SetReceiver)
+			.def("InControl",&FootBallTeam::InControl)
+			.def("SetControllingPlayer",&FootBallTeam::SetControllingPlayer)
+			.def("SetThrowIn",&FootBallTeam::SetThrowIn)
+			.def("HomeGoalFacing",&FootBallTeam::HomeGoalFacing)
+			.def("IsReceiver",&FootBallTeam::IsReceiver)
+			.def("IsThrowIn",&FootBallTeam::IsThrowIn)
+			.def("SetThrowIn",&FootBallTeam::SetThrowIn)
+			.def("isOpponentWithinRadius",&FootBallTeam::isOpponentWithinRadius)
 		];
 }
 
@@ -184,10 +185,10 @@ void  ReisterPitch(lua_State* pLua)
 {
 	module(pLua)
 		[
-			class_<SoccerPitch>("SoccerPitch")
+			class_<FootBallPitch>("FootBallPitch")
 
-			.def("GoalKeeperHasBall",&SoccerPitch::GoalKeeperHasBall)
-			.def("GameOn",&SoccerPitch::GameOn)
+			.def("GoalKeeperHasBall",&FootBallPitch::GoalKeeperHasBall)
+			.def("GameOn",&FootBallPitch::GameOn)
 		];
 }
 

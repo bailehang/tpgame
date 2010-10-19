@@ -17,7 +17,7 @@ MessageDispatcher* MessageDispatcher::Instance()
 
 void MessageDispatcher::Discharge(CBaseEntity* pReceiver, const tagMessage& telegram)
 {
-	if (!pReceiver->HandleMessage(telegram))
+	if (!pReceiver->OnMessage(telegram))
 	{
 
 	}

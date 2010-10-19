@@ -1,13 +1,13 @@
 #include "Stdafx.h"
 #include "State.h"
 #include "StateMachine.h"	 
-#include "../Entity/PlayerBase.h"
+#include "../Entity/BasePlayer.h"
 #include "../Entity/GoalKeeper.h"		  
 #include "../Goal.h"
-#include "../SoccerTeam.h"
-#include "../SoccerPitch.h"
+#include "../FootBallTeam.h"
+#include "../FootBallPitch.h"
 #include "../Messageing/MessageDispatcher.h"
-#include "../SteeringBehaviors.h"
+#include "../Steering.h"
 #include "../../Public/MsgImpl.h"
 #include "../../Config.h"		
 
@@ -168,7 +168,7 @@ void PutBallBackInPlay::Enter(GoalKeeper* keeper)
 
 void PutBallBackInPlay::Execute(GoalKeeper* keeper)
 {
-	PlayerBase*  receiver = NULL;
+	BasePlayer*  receiver = NULL;
 	Vector2D     BallTarget;
 
 	/// 测试是否有队员在更前场的位置，这样我们可能可以传球给他，如果这样，那么传球
