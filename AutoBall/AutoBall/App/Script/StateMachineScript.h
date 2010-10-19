@@ -65,7 +65,7 @@ public:
 		}
 	}
 
-	bool  HandleMessage(const tagMessage& msg)const
+	bool  OnMessage(const tagMessage& msg)const
 	{
 		
 		try
@@ -73,7 +73,7 @@ public:
 			if (m_CurrentState  )
 			{	
 				m_CurrentState["OnMessage"](m_pOwner,msg);
-				if ( static_cast<FieldPlayer*>(m_pOwner)->GetScriptValue() > 0)
+				if ( static_cast<FootBaller*>(m_pOwner)->GetScriptValue() > 0)
 				{
 					return true;
 				}
@@ -82,7 +82,7 @@ public:
 			if (m_pGlobalState )
 			{
 				m_pGlobalState["OnMessage"](m_pOwner,msg);
-				if ( static_cast<FieldPlayer*>(m_pOwner)->GetScriptValue() > 0)
+				if ( static_cast<FootBaller*>(m_pOwner)->GetScriptValue() > 0)
 				{
 					return true;
 				}

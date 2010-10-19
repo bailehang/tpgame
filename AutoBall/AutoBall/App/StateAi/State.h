@@ -3,10 +3,10 @@
 
 #include "../../Public/MsgImpl.h"
 
-class SoccerTeam;
+class FootBallTeam;
 class GoalKeeper;
-class SoccerPitch;
-class FieldPlayer;
+class FootBall;
+class FootBaller;
 
 #define  DIS(s)		#s
 #define  DISTROY(s) DIS(s)
@@ -53,31 +53,31 @@ public:
 
 
 /// 全局队员状态
-CREATESTATE(GlobalPlayerState,tagMessage,FieldPlayer);
+CREATESTATE(GlobalPlayerState,tagMessage,FootBaller);
 
 /// 追求状态
-CREATESTATE(ChaseBall,tagMessage,FieldPlayer);
+CREATESTATE(ChaseBall,tagMessage,FootBaller);
 
 /// 带球状态
-CREATESTATE(Dribble,tagMessage,FieldPlayer);
+CREATESTATE(Dribble,tagMessage,FootBaller);
 
 /// 回到出生
-CREATESTATE(ReturnToHomeRegion,tagMessage,FieldPlayer);
+CREATESTATE(ReturnToHomeRegion,tagMessage,FootBaller);
 
 /// 等待状态
-CREATESTATE(Wait,tagMessage,FieldPlayer);
+CREATESTATE(Wait,tagMessage,FootBaller);
 
 /// 跟踪球
-CREATESTATE(FollowBall,tagMessage,FieldPlayer);
+CREATESTATE(FollowBall,tagMessage,FootBaller);
 
 /// 踢球
-CREATESTATE(KickBall,tagMessage,FieldPlayer);
+CREATESTATE(KickBall,tagMessage,FootBaller);
 
 ///	接球状态
-CREATESTATE(ReceiveBall,tagMessage,FieldPlayer);
+CREATESTATE(ReceiveBall,tagMessage,FootBaller);
 
 ///	接应状态
-CREATESTATE(SupportAttacker,tagMessage,FieldPlayer);
+CREATESTATE(SupportAttacker,tagMessage,FootBaller);
 
 /// 全局队员状态
 CREATESTATE(GlobalKeeperState,tagMessage,GoalKeeper);
@@ -95,14 +95,14 @@ CREATESTATE(ReturnHome,tagMessage,GoalKeeper);
 CREATESTATE(PutBallBackInPlay,tagMessage,GoalKeeper);
 
 /// 进攻状态
-CREATESTATE(Attacking,tagMessage,SoccerTeam);
+CREATESTATE(Attacking,tagMessage,FootBallTeam);
 
 /// 防御状态
-CREATESTATE(Defending,tagMessage,SoccerTeam);
+CREATESTATE(Defending,tagMessage,FootBallTeam);
 
 /// 准备开球
-CREATESTATE(PrepareForKickOff,tagMessage,SoccerTeam);
+CREATESTATE(PrepareForKickOff,tagMessage,FootBallTeam);
 
 /// 边界球
-CREATESTATE(Throw_In,tagMessage,SoccerTeam);
+CREATESTATE(Throw_In,tagMessage,FootBallTeam);
 

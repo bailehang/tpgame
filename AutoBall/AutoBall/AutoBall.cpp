@@ -7,7 +7,7 @@
 #include <time.h>
 
 #include "Config.h"
-#include "App/SoccerPitch.h"
+#include "App/FootBallPitch.h"
 #include "Public/Timer.h"
 #include "Public/GameSetup.h"
 #include "Public/Singleton.h"
@@ -32,7 +32,7 @@ using namespace std;
 
 const	char*		g_szApplicationName = "FootBall()";
 const	char*		g_szWindowClassName = "MyWindowClass";
-SoccerPitch*		g_SoccerPitch;//全局的
+FootBallPitch*		g_FootBallPitch;//全局的
 HBITMAP				g_Bgmp;		  //位图句柄
 HDC					g_Mdc;		  //
 luabind::object		g_states;	  //全局的luaObject
@@ -163,7 +163,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			if (timer.ReadyForNextFrame() && msg.message != WM_QUIT)
 			{
 
-				g_SoccerPitch->Update(); 
+				g_FootBallPitch->Update(); 
 
 				//render 
 				RedrawWindow(hWnd, NULL, NULL,true);
@@ -173,7 +173,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 		}//end while
 
-		SAFE_DELETE( g_SoccerPitch );
+		SAFE_DELETE( g_FootBallPitch );
 
 		UnregisterClass( g_szWindowClassName, winclass.hInstance );
 
@@ -317,7 +317,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			ReleaseDC(hwnd, hdc); 
 
-			g_SoccerPitch = new SoccerPitch(cxClient, cyClient); 
+			g_FootBallPitch = new FootBallPitch(cxClient, cyClient); 
 
 		}
 
@@ -336,9 +336,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			case 'R':
 				{
-					SAFE_DELETE( g_SoccerPitch );
+					SAFE_DELETE( g_FootBallPitch );
 
-					g_SoccerPitch = new SoccerPitch(cxClient, cyClient);
+					g_FootBallPitch = new FootBallPitch(cxClient, cyClient);
 				}
 				break;
 
@@ -361,7 +361,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			MyPaint(hdcBackBuffer);
 
-			g_SoccerPitch->Render();
+			g_FootBallPitch->Render();
 
 			GetInstObj(CGDI).StopDrawing(hdcBackBuffer);
 

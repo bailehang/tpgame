@@ -1,5 +1,5 @@
-#ifndef TRANSFORMATIONS_H
-#define TRANSFORMATIONS_H
+
+#pragma once 
 
 #include <vector>
 #include "Vector2D.h"
@@ -193,5 +193,3 @@ inline Vector2D* VecAddr(Vector2D& v)
 {
 	return &v;
 }
-
-#endif

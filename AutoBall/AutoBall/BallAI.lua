@@ -670,31 +670,31 @@ State_Dribble["Execute"] = function(player)
 	end
 
 
-	local  dot = player:Team():HomeGoalFacing():Dot( player:Heading() );
+	--local  dot = player:Team():HomeGoalFacing():Dot( player:Heading() );
 
-	if  dot < 0 then
+	--if  dot < 0 then
 
-		local  direction = player:Heading();
+	--	local  direction = player:Heading();
 
-		local  sSign = player:Team():HomeGoalFacing():Sign( player:Heading() ) ;
+	--	local  sSign = player:Team():HomeGoalFacing():Sign( player:Heading() ) ;
 
-		local  angle = 3.1415926/4 * -1 * sSign;
+	--	local  angle = 3.1415926/4 * -1 * sSign;
 
-		Vec2DRotateAroundOrigin( direction , angle );
+	--	Vec2DRotateAroundOrigin( direction , angle );
 
-		local  KickingForce = 0.8;
+	--	local  KickingForce = 0.8;
 
-		player:Ball():Kick( direction , KickingForce , player );
+	--	player:Ball():Kick( direction , KickingForce , player );
 
-		player:Team():SetThrowIn(false);
+	--	player:Team():SetThrowIn(false);
 
-	else
+	--else
 
 		player:Ball():Kick( player:Team():HomeGoalFacing() , 1.5 , player );
 
 		player:Team():SetThrowIn(false);
 
-	end
+	--end
 
 	PrintLuaMsg( player:ID() .. " State_Dribble GlobalPlayer change to State_ChaseBall 1112" );
 
@@ -758,6 +758,7 @@ State_ReceiveBall["Execute"] = function(player)
 		--PrintLuaMsg( player:ID() .. " State_ReceiveBall GlobalPlayer change to State_ChaseBall 111" );
 
 		player:GetFSM():ChangeState(State_ChaseBall);
+		return;
 	end
 
 	if player:Steering():PursuitOn() then

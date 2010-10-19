@@ -1,5 +1,6 @@
-#ifndef C2DMATRIX_H
-#define C2DMATRIX_H
+
+
+#pragma once 
 
 #include <math.h>
 #include <vector>
@@ -196,4 +197,3 @@ inline void C2DMatrix::Rotate(const Vector2D &fwd, const Vector2D &side)
 	//and multiply
 	MatrixMultiply(mat);
 }
-#endif

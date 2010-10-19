@@ -32,7 +32,7 @@ public:
 		if(m_pCurrentState) m_pCurrentState->Execute(m_pOwner);
 	}
 
-	bool  HandleMessage(const tagMessage& msg)const
+	bool  OnMessage(const tagMessage& msg)const
 	{
 		if (m_pCurrentState && m_pCurrentState->OnMessage(m_pOwner, msg))
 		{

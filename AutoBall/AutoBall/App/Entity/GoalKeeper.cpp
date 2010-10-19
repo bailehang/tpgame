@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "PlayerBase.h"
+#include "BasePlayer.h"
 #include "GoalKeeper.h"
 #include "EntityFun.h"
 #include "../Region.h"
-#include "../SoccerTeam.h"
-#include "../SoccerPitch.h"
+#include "../FootBallTeam.h"
+#include "../FootBallPitch.h"
 #include "../Goal.h"
-#include "../SteeringBehaviors.h"			
+#include "../Steering.h"			
 #include "../Messageing/MessageDispatcher.h"
 #include "../StateAi/StateMachine.h"
 #include "../StateAi/State.h"
@@ -16,7 +16,7 @@
 #include "../../Render/MathGeo.h"
 #include "../../Render/Utils.h"
 
-GoalKeeper::GoalKeeper(SoccerTeam*        home_team,
+GoalKeeper::GoalKeeper(FootBallTeam*        home_team,
 					   int                home_region,
 					   State<GoalKeeper>* start_state,
 					   Vector2D           heading,
@@ -25,7 +25,7 @@ GoalKeeper::GoalKeeper(SoccerTeam*        home_team,
 					   double              max_force,
 					   double              max_speed,
 					   double              max_turn_rate,
-					   double              scale): PlayerBase(home_team,
+					   double              scale): BasePlayer(home_team,
 					   home_region,
 					   heading,
 					   velocity,
@@ -34,7 +34,7 @@ GoalKeeper::GoalKeeper(SoccerTeam*        home_team,
 					   max_speed,
 					   max_turn_rate,
 					   scale,
-					   PlayerBase::goal_keeper)
+					   BasePlayer::goal_keeper)
 
 
 {   
@@ -113,13 +113,13 @@ Vector2D GoalKeeper::GetRearInterposeTarget()const
 	return Vector2D(xPosTarget, yPosTarget); 
 }
 
-//-------------------- HandleMessage -------------------------------------
+//-------------------- OnMessage -------------------------------------
 //
 //  routes any messages appropriately
 //------------------------------------------------------------------------
-bool GoalKeeper::HandleMessage(const tagMessage& msg)
+bool GoalKeeper::OnMessage(const tagMessage& msg)
 {
-	return m_pStateMachine->HandleMessage(msg);
+	return m_pStateMachine->OnMessage(msg);
 }
 
 //--------------------------- Render -------------------------------------
@@ -127,7 +127,7 @@ bool GoalKeeper::HandleMessage(const tagMessage& msg)
 //------------------------------------------------------------------------
 void GoalKeeper::Render()                                         
 {
-	if (Team()->Color() == SoccerTeam::blue) 
+	if (Team()->Color() == FootBallTeam::blue) 
 		GetInstObj(CGDI).BluePen();
 	else 
 		GetInstObj(CGDI).RedPen();
