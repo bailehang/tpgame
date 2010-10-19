@@ -77,12 +77,9 @@ public:
 
 	int FrameRate;
 
-
 	double SeparationCoefficient;
 
-	//how close a neighbour must be before an agent perceives it
 	double ViewDistance;
 
-	//zero this to turn the constraint off
 	bool bNonPenetrationConstraint;
 };

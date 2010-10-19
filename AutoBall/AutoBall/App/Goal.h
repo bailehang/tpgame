@@ -3,7 +3,7 @@
 
 #include "Entity/SoccerBall.h"
 #include "../Render/Vector2D.h"
-#include "../Render/Geometry.h"
+#include "../Render/MathGeo.h"
 
 /// «Ú√≈¿‡
 class Goal 

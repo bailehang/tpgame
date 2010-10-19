@@ -11,7 +11,7 @@
 #include "Public/Timer.h"
 #include "Public/GameSetup.h"
 #include "Public/Singleton.h"
-#include "Public/Stream_Utility_Fun.h"
+#include "Public/Stream_Fun.h"
 #include "Render/Vector2D.h"
 #include "Render/VGdi.h"
 #include "Render/Utils.h"
@@ -30,21 +30,14 @@ using namespace std;
 
 #define MAX_LOADSTRING 100
 
-char*   g_szApplicationName = "Simple Soccer";
-char*	g_szWindowClassName = "MyWindowClass";
-
-SoccerPitch* g_SoccerPitch;
-
-//create a timer
-CTimer timer(GetInstObj(CGameSetup).FrameRate);
-
-HBITMAP				bgmp;    //位图句柄
-HDC					mdc;
-luabind::object		g_states;//全局的luaObject
-lua_State*			pLua;
-
-
-extern  void   ReisterAllFun(lua_State* pLua);
+const	char*		g_szApplicationName = "FootBall()";
+const	char*		g_szWindowClassName = "MyWindowClass";
+SoccerPitch*		g_SoccerPitch;//全局的
+HBITMAP				g_Bgmp;		  //位图句柄
+HDC					g_Mdc;		  //
+luabind::object		g_states;	  //全局的luaObject
+lua_State*			g_pLua;		  //g_pLua全局对象
+HDC					g_hWndDC;	  //窗口DC 
 
 // 全局变量:
 HINSTANCE hInst;								// 当前实例
@@ -57,7 +50,8 @@ BOOL				InitInstance(HWND hWnd,int nCmdShow);
 void				MyPaint(HDC hdcc);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
-HDC			g_hWndDC;	 //窗口DC 
+extern  void		ReisterAllFun(lua_State* g_pLua);
+
 int APIENTRY _tWinMain(HINSTANCE hInstance,
 					   HINSTANCE hPrevInstance,
 					   LPTSTR    lpCmdLine,
@@ -86,54 +80,54 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		winclass.lpszMenuName  = MAKEINTRESOURCE(IDC_AUTOBALL);
 		winclass.lpszClassName = g_szWindowClassName;
 		winclass.hIconSm       = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SMALL));
+	
+		CTimer timer(GetInstObj(CGameSetup).FrameRate);
 
 		//create a lua state
-		pLua = lua_open();
+		g_pLua = lua_open();
 
-		//open the lua libaries - new in lua5.1
-		luaL_openlibs(pLua);
+		//open the lua
+		luaL_openlibs(g_pLua);
 
 		//open luabind
-		open(pLua);
+		open(g_pLua);
 
-		ReisterAllFun(pLua);
+		ReisterAllFun(g_pLua);
 
-		if (int error = luaL_dofile(pLua, "BallAI.lua") != 0)
+		if (int error = luaL_dofile(g_pLua, "BallAI.lua") != 0)
 		{
 			throw std::runtime_error("ERROR(" + ttos(error) + "): Problem with lua script file BallAI.lua");
 		}
 
-		g_states = globals(pLua);
+		g_states = globals(g_pLua);
 
 
 		if (type(g_states) != LUA_TTABLE)
 		{
 			throw std::runtime_error("ERROR: runing lua script file BallAI.lua error!");
+			return 0;
 		}
 
-
-		//register the window class
 		if (!RegisterClassEx(&winclass))
 		{
 			MessageBox(NULL, "Registration Failed!", "Error", 0);
 
-			//exit the application
 			return 0;
 		}
 
 		//create the window and assign its ID to hwnd    
-		hWnd = CreateWindowEx (NULL,                 // extended style
-			g_szWindowClassName,  // window class name
-			g_szApplicationName,  // window caption
-			WS_OVERLAPPED | WS_VISIBLE | WS_CAPTION | WS_SYSMENU,
+		hWnd = CreateWindowEx (NULL,
+			g_szWindowClassName, 
+			g_szApplicationName, 
+			WS_OVERLAPPED | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 			GetSystemMetrics(SM_CXSCREEN)/2 - WindowWidth/2,
 			GetSystemMetrics(SM_CYSCREEN)/2 - WindowHeight/2,                    
-			WindowWidth,     // initial x size
-			WindowHeight,    // initial y size
-			NULL,                 // parent window handle
-			NULL,                 // window menu handle
-			hInstance,            // program instance handle
-			NULL);                // creation parameters
+			WindowWidth,          
+			WindowHeight,        
+			NULL,                 
+			NULL,                
+			hInstance,           
+			NULL);
 
 		//make sure the window creation has gone OK
 		if(!hWnd)
@@ -141,38 +135,21 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			MessageBox(NULL, "CreateWindowEx Failed!", "Error!", 0);
 		}
 
-		// Perform application initialization:
 		InitInstance (hWnd,nCmdShow);
-		/*
-		HWND hwndButton  = CreateWindowEx(0,_T("Button"),_T("开始"),WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 
-		50,    
-		10,  
-		30,        
-		30,      
-		hWnd,      
-		NULL,      
-		(HINSTANCE) GetWindowLong(hWnd, GWL_HINSTANCE), 
-		NULL); 
 
-		*/
 		g_hWndDC=GetDC(hWnd);
 
-		//start the timer
 		timer.Start();
 
 		MSG msg;
-
-		//enter the message loop
 		bool bDone = false;
 
 		while(!bDone)
 		{
-
 			while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) ) 
 			{
 				if( msg.message == WM_QUIT ) 
 				{
-					// Stop loop if it's a quit message
 					bDone = true;
 				} 
 
@@ -185,7 +162,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 			if (timer.ReadyForNextFrame() && msg.message != WM_QUIT)
 			{
-				//update game states
+
 				g_SoccerPitch->Update(); 
 
 				//render 
@@ -274,8 +251,8 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 void MyPaint(HDC hdc)
 {
 	//查看本机的操作系统版本
-	SelectObject(mdc,bgmp);
-	BitBlt(hdc,0,0,1050,680,mdc,0,0,SRCCOPY);
+	SelectObject(g_Mdc,g_Bgmp);
+	BitBlt(hdc,0,0,1050,680,g_Mdc,0,0,SRCCOPY);
 }
 
 BOOL InitInstance(HWND hWnd,int nCmdShow)
@@ -284,43 +261,13 @@ BOOL InitInstance(HWND hWnd,int nCmdShow)
 	UpdateWindow(hWnd);
 
 	HDC  hdc_ = GetDC(hWnd);
-	mdc  = CreateCompatibleDC(hdc_);
+	g_Mdc  = CreateCompatibleDC(hdc_);
 
-	SelectObject(mdc,bgmp);
+	SelectObject(g_Mdc,g_Bgmp);
 
-	bgmp = (HBITMAP)LoadImage(NULL,"background.bmp",IMAGE_BITMAP,1050,680,LR_LOADFROMFILE);
+	g_Bgmp = (HBITMAP)LoadImage(NULL,"background.bmp",IMAGE_BITMAP,1050,680,LR_LOADFROMFILE);
 
-	SelectObject(mdc,bgmp);
-	//GetObject(bgmp,sizeof(BITMAP),&bm1);
-
-	//BitBlt(hdc_,0,0,1050,680,mdc,0,0,SRCCOPY);
-
-	/*
-	px2 = new unsigned char [bm1.bmHeight * bm1.bmWidthBytes];
-	GetBitmapBits(bgmp,bm1.bmHeight*bm1.bmWidthBytes,px2);
-
-	int xend,yend;
-	int x,y,i;
-	int rgb_b;
-
-	int pxbytes = bm1.bmBitsPixel / 8;
-	xend = xa +298;
-	yend = ya +329;
-
-	for (y =ya;y<yend;y++)
-	{
-	for (x=xa;x<xend;x++)
-	{
-	rgb_b = y * bm1.bmBitsPixel + x * pxbytes;
-
-	px1[rgb_b]   = px1[rgb_b] * 0.5;
-	px1[rgb_b+1] = px1[rgb_b+1] * 0.5;
-	px1[rgb_b+2] = px1[rgb_b+2] * 0.5;
-	}
-	}
-
-
-	*/
+	SelectObject(g_Mdc,g_Bgmp);
 	ReleaseDC(hWnd,hdc_);
 	DeleteDC(hdc_);
 
@@ -339,21 +286,16 @@ BOOL InitInstance(HWND hWnd,int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	//these hold the dimensions of the client window area
 	static int cxClient, cyClient; 
 
-	//used to create the back buffer
 	static HDC		hdcBackBuffer;
 	static HBITMAP	hBitmap;
 	static HBITMAP	hOldBitmap;
 
 	switch (msg)
 	{
-
-
 	case WM_CREATE:
 		{
-
 			RECT rect;
 
 			GetClientRect(hwnd, &rect);
@@ -361,23 +303,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			cxClient = rect.right;
 			cyClient = rect.bottom;
 
-			//seed random number generator
 			srand((unsigned) time(NULL));
 
-			//get the DC for the front buffer
 			HDC hdc = GetDC(hwnd);
 
-			//create a memory device context
 			hdcBackBuffer = CreateCompatibleDC(hdc);
 
 			hBitmap = CreateCompatibleBitmap(hdc,
 				cxClient,
 				cyClient);
 
-			//select the bitmap into the memory device context
 			hOldBitmap = (HBITMAP)SelectObject(hdcBackBuffer, hBitmap);
 
-			//don't forget to release the DC
 			ReleaseDC(hwnd, hdc); 
 
 			g_SoccerPitch = new SoccerPitch(cxClient, cyClient); 
@@ -385,14 +322,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 
 		break;
-
-	case WM_COMMAND:
-		{
-
-		}
-
-		break;
-
 
 	case WM_KEYUP:
 		{
@@ -411,15 +340,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 					g_SoccerPitch = new SoccerPitch(cxClient, cyClient);
 				}
-
 				break;
 
-			case 'P':
-				{
-					g_SoccerPitch->TogglePause();
-				}
-
-				break;
 
 			}//end switch
 
@@ -438,74 +360,31 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			GetInstObj(CGDI).StartDrawing(hdcBackBuffer);
 
 			MyPaint(hdcBackBuffer);
-			//GetInstObj(CGDI).DrawBground(hdcBackBuffer,bgmp);
 
 			g_SoccerPitch->Render();
 
 			GetInstObj(CGDI).StopDrawing(hdcBackBuffer);
 
-			//now blit backbuffer to front
 			BitBlt(ps.hdc, 0, 0, cxClient, cyClient, hdcBackBuffer, 0, 0, SRCCOPY); 
 
-			//MyPaint(ps.hdc);
 			EndPaint (hwnd, &ps);
 
 		}
 
 		break;
-
-		//has the user resized the client area?
-	case WM_SIZE:
-		{
-			//if so we need to update our variables so that any drawing
-			//we do using cxClient and cyClient is scaled accordingly
-			cxClient = LOWORD(lParam);
-			cyClient = HIWORD(lParam);
-
-			//now to resize the backbuffer accordingly. First select
-			//the old bitmap back into the DC
-			SelectObject(hdcBackBuffer, hOldBitmap);
-
-			//don't forget to do this or you will get resource leaks
-			DeleteObject(hBitmap); 
-
-			//get the DC for the application
-			HDC hdc = GetDC(hwnd);
-
-			//create another bitmap of the same size and mode
-			//as the application
-			hBitmap = CreateCompatibleBitmap(hdc,
-				cxClient,
-				cyClient);
-
-			ReleaseDC(hwnd, hdc);
-
-			//select the new bitmap into the DC
-			SelectObject(hdcBackBuffer, hBitmap);
-
-		}
-
-		break;
-
 	case WM_DESTROY:
 		{
-
-			//clean up our backbuffer objects
 			SelectObject(hdcBackBuffer, hOldBitmap);
 
 			DeleteDC(hdcBackBuffer);
 			DeleteObject(hBitmap); 
 
-			// kill the application, this sends a WM_QUIT message  
 			PostQuitMessage (0);
 		}
 
 		break;
 
-	}//end switch
-
-	//this is where all the messages not specifically handled by our 
-	//winproc are sent to be processed
+	}
 	return DefWindowProc (hwnd, msg, wParam, lParam);
 }
 

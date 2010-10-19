@@ -2,7 +2,7 @@
 #include "SoccerTeam.h"
 #include "SoccerPitch.h"
 #include "Goal.h"
-#include "Regulator.h"
+#include "TimeCount.h"
 #include "SupportSpotCalculator.h"
 #include "SteeringBehaviors.h"
 #include "Entity/PlayerBase.h"
@@ -15,7 +15,7 @@
 #include "../Public/Singleton.h"
 #include "../Render/VGdi.h"
 #include "../Render/Vector2D.h"
-#include "../Render/Geometry.h"
+#include "../Render/MathGeo.h"
 
 SoccerTeam::SoccerTeam(Goal*        home_goal,
 					   Goal*        opponents_goal,
@@ -37,7 +37,6 @@ SoccerTeam::SoccerTeam(Goal*        home_goal,
 	m_pStateMachine->SetPreviousState(&GetInstObj(Defending));
 	m_pStateMachine->SetGlobalState(NULL);
 
-	//create the players and goalkeeper
 	CreatePlayers();
 
 	std::vector<PlayerBase*>::iterator it = m_Players.begin();
@@ -299,8 +298,8 @@ bool SoccerTeam::isPassSafeFromOpponent(Vector2D    from,
 
 	/// 现在计算在这段时间中对手能跑多远
 	double reach = opp->MaxSpeed() * TimeForBall +
-		Pitch()->Ball()->BRadius()+
-		opp->BRadius();
+		Pitch()->Ball()->GetSize()+
+		opp->GetSize();
 
 	/// 如果到对手Y位置的距离小于他的跑动范围加上球半径和对手半径，那么求可以被截掉
 	if ( fabs(LocalPosOpp.y) < reach )
@@ -345,8 +344,8 @@ bool SoccerTeam::CanShoot(Vector2D  BallPos,
 		ShotTarget = OpponentsGoal()->Center();
 
 		/// 射门位置的Y值应该在两个球门柱之间（要考虑球的直径）
-		int MinYVal = (int)(OpponentsGoal()->LeftPost().y + Pitch()->Ball()->BRadius());
-		int MaxYVal = (int)(OpponentsGoal()->RightPost().y - Pitch()->Ball()->BRadius());
+		int MinYVal = (int)(OpponentsGoal()->LeftPost().y + Pitch()->Ball()->GetSize());
+		int MaxYVal = (int)(OpponentsGoal()->RightPost().y - Pitch()->Ball()->GetSize());
 
 		ShotTarget.y = (double)RandInt(MinYVal, MaxYVal);
 
@@ -413,60 +412,6 @@ void SoccerTeam::Render()const
 			GetInstObj(CGDI).TextAtPos(Pitch()->cxClient()-150, 3, "Controlling Player: " + ttos(m_pControllingPlayer->GetID()));
 		}
 	}
-
-	//render the sweet spots
-	if (GetInstObj(CGameSetup).bSupportSpots && InControl())
-	{
-		m_pSupportSpotCalc->Render();
-	}
-
-	//#define SHOW_TEAM_STATE
-#ifdef SHOW_TEAM_STATE
-	if (Color() == red)
-	{
-		GetInstObj(CGDI).TextColor(CGDI::white);
-
-		if (CurrentState() == Attacking::Instance())
-		{
-			GetInstObj(CGDI).TextAtPos(160, 20, "Attacking");
-		}
-		if (CurrentState() == Defending::Instance())
-		{
-			GetInstObj(CGDI).TextAtPos(160, 20, "Defending");
-		}
-		if (CurrentState() == PrepareForKickOff::Instance())
-		{
-			GetInstObj(CGDI).TextAtPos(160, 20, "Kickoff");
-		}
-	}
-	else
-	{
-		if (CurrentState() == Attacking::Instance())
-		{
-			GetInstObj(CGDI).TextAtPos(160, Pitch()->cyClient()-40, "Attacking");
-		}
-		if (CurrentState() == Defending::Instance())
-		{
-			GetInstObj(CGDI).TextAtPos(160, Pitch()->cyClient()-40, "Defending");
-		}
-		if (CurrentState() == PrepareForKickOff::Instance())
-		{
-			GetInstObj(CGDI).TextAtPos(160, Pitch()->cyClient()-40, "Kickoff");
-		}
-	}
-#endif
-
-	//#define SHOW_SUPPORTING_PLAYERS_TARGET
-#ifdef SHOW_SUPPORTING_PLAYERS_TARGET
-	if (m_pSupportingPlayer)
-	{
-		GetInstObj(CGDI).BlueBrush();
-		GetInstObj(CGDI).RedPen();
-		GetInstObj(CGDI).Circle(m_pSupportingPlayer->Steering()->Target(), 4);
-
-	}
-#endif
-
 }
 
 void SoccerTeam::CreatePlayers()
@@ -735,7 +680,7 @@ void SoccerTeam::RequestPass(FieldPlayer* requester)const
 			requester->GetID(),
 			ControllingPlayer()->GetID(),
 			Msg_PassToMe,
-			requester); 
+			&requester->Pos()); 
 
 	}
 }

@@ -2,7 +2,7 @@
 #include "SoccerPitch.h"
 #include "SoccerTeam.h"
 #include "Goal.h"
-#include "Regulator.h"
+#include "TimeCount.h"
 #include "SupportSpotCalculator.h"
 #include "SteeringBehaviors.h"
 #include "Entity/PlayerBase.h"
@@ -15,7 +15,7 @@
 #include "../Public/Singleton.h"
 #include "../Render/VGdi.h"
 #include "../Render/Vector2D.h"
-#include "../Render/Geometry.h"
+#include "../Render/MathGeo.h"
 
 const int NumRegionsHorizontal = 12; 
 const int NumRegionsVertical   = 4;
@@ -27,14 +27,11 @@ SoccerPitch::SoccerPitch(int cx, int cy):m_cxClient(cx),
 	m_Regions(NumRegionsHorizontal*NumRegionsVertical),
 	m_bGameOn(true)
 {
-	//define the playing area
 	m_pPlayingArea = new Region(60, 30, cx-60, cy-30);
 
-	//create the regions  
 	CreateRegions(PlayingArea()->Width() / (double)NumRegionsHorizontal,
 		PlayingArea()->Height() / (double)NumRegionsVertical);
 
-	//create the goals
 	m_pRedGoal  = new Goal(Vector2D( m_pPlayingArea->Left(), (cy-GetInstObj(CGameSetup).GoalWidth)/2),
 		Vector2D(m_pPlayingArea->Left(), cy - (cy-GetInstObj(CGameSetup).GoalWidth)/2),
 		Vector2D(1,0));
@@ -44,23 +41,17 @@ SoccerPitch::SoccerPitch(int cx, int cy):m_cxClient(cx),
 		Vector2D(m_pPlayingArea->Right(), cy - (cy-GetInstObj(CGameSetup).GoalWidth)/2),
 		Vector2D(-1,0));
 
-
-	//create the soccer ball
 	m_pBall = new SoccerBall(Vector2D((double)m_cxClient/2.0, (double)m_cyClient/2.0),
 		GetInstObj(CGameSetup).BallSize,
 		GetInstObj(CGameSetup).BallMass,
 		m_vecWalls);
 
-
-	//create the teams 
 	m_pRedTeam  = new SoccerTeam(m_pRedGoal, m_pBlueGoal, this, SoccerTeam::red);
 	m_pBlueTeam = new SoccerTeam(m_pBlueGoal, m_pRedGoal, this, SoccerTeam::blue);
 
-	//make sure each team knows who their opponents are
 	m_pRedTeam->SetOpponents(m_pBlueTeam);
 	m_pBlueTeam->SetOpponents(m_pRedTeam); 
 
-	//create the walls
 	Vector2D TopLeft(m_pPlayingArea->Left(), m_pPlayingArea->Top());                                        
 	Vector2D TopRight(m_pPlayingArea->Right(), m_pPlayingArea->Top());
 	Vector2D BottomRight(m_pPlayingArea->Right(), m_pPlayingArea->Bottom());
@@ -73,7 +64,6 @@ SoccerPitch::SoccerPitch(int cx, int cy):m_cxClient(cx),
 	m_vecWalls.push_back(Wall2D(m_pBlueGoal->RightPost(), BottomRight));
 	m_vecWalls.push_back(Wall2D(BottomRight, BottomLeft));
 
-	//ParamLoader* p = ParamLoader::Instance();
 }
 
 SoccerPitch::~SoccerPitch()

@@ -33,7 +33,6 @@ public:
 
 	virtual ~PlayerBase();
 
-
 	/// 玩家监控范围内是否有对方球员
 	bool        isThreatened()const;
 
@@ -74,8 +73,6 @@ public:
 	/// 是否是队伍离球最近的队员
 	bool        isClosestTeamMemberToBall()const;
 
-	//returns true if the point specified by 'position' is located in
-	//front of the player
 	///	 查看position是否在队员前面
 	bool        PositionInFrontOfPlayer(Vector2D position)const;
 
@@ -97,7 +94,7 @@ public:
 	double       DistToOppGoal()const;
 	double       DistToHomeGoal()const;
 
-	void        SetDefaultHomeRegion(){m_iHomeRegion = m_iDefaultRegion;}
+	void         SetDefaultHomeRegion(){m_iHomeRegion = m_iDefaultRegion;}
 
 	SoccerBall*  const       Ball()const;
 	Vector2D				 BallPos() const;

@@ -81,15 +81,8 @@ void SoccerBall::Render()
 {
 	GetInstObj(CGDI).GreyBrush();
 
-	GetInstObj(CGDI).Circle(m_vPosition, m_dBoundingRadius);
+	GetInstObj(CGDI).Circle(m_vPosition, m_dSize);
 
-	/*
-	GetInstObj(CGDI).GreenBrush();
-	for (int i=0; i<IPPoints.size(); ++i)
-	{
-	GetInstObj(CGDI).Circle(IPPoints[i], 3);
-	}
-	*/
 }
 
 
@@ -110,7 +103,7 @@ void SoccerBall::TestCollisionWithWalls(const std::vector<Wall2D>& walls)
 
 	for (unsigned int w=0; w<walls.size(); ++w)
 	{
-		Vector2D ThisCollisionPoint = Pos() - (walls[w].Normal() * BRadius());
+		Vector2D ThisCollisionPoint = Pos() - (walls[w].Normal() * GetSize());
 
 		if (WhereIsPoint(ThisCollisionPoint,
 			walls[w].From(),

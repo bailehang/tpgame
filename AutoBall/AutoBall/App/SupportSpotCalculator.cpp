@@ -10,7 +10,7 @@
 
 SupportSpotCalculator::~SupportSpotCalculator()
 {
-	SAFE_DELETE( m_pRegulator );
+	SAFE_DELETE( m_pPassTimer );
 }
 
 
@@ -21,8 +21,6 @@ SupportSpotCalculator::SupportSpotCalculator(int           numX,
 {
 	const Region* PlayingField = team->Pitch()->PlayingArea();
 
-	//calculate the positions of each sweet spot, create them and 
-	//store them in m_Spots
 	double HeightOfSSRegion = PlayingField->Height() * 0.8;
 	double WidthOfSSRegion  = PlayingField->Width() * 0.9;
 	double SliceX = WidthOfSSRegion / numX ;
@@ -48,13 +46,13 @@ SupportSpotCalculator::SupportSpotCalculator(int           numX,
 		}
 	}
 
-	m_pRegulator = new Regulator(GetInstObj(CGameSetup).SupportSpotUpdateFreq);
+	m_pPassTimer = new TimeCount(GetInstObj(CGameSetup).SupportSpotUpdateFreq);
 }
 
 
 Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 {
-	if (!m_pRegulator->isReady() && m_pBestSupportingSpot)
+	if (!m_pPassTimer->isReadyOK() && m_pBestSupportingSpot)
 	{
 		return m_pBestSupportingSpot->m_vPos;
 	}
@@ -113,7 +111,6 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 
 			m_pBestSupportingSpot = &(*curSpot);
 		}    
-
 	}
 
 	return m_pBestSupportingSpot->m_vPos;

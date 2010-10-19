@@ -11,9 +11,6 @@
 #include "../../Public/MsgImpl.h"
 #include "../../Config.h"		
 
-//uncomment to send state info to debug window
-//#define GOALY_STATE_INFO_ON
-
 
 EmptyFun(void,GlobalKeeperState,Enter,GoalKeeper);
 EmptyFun(void,GlobalKeeperState,Execute,GoalKeeper);
@@ -123,10 +120,6 @@ EmptyMsg(bool,InterceptBall,OnMessage,GoalKeeper);
 void InterceptBall::Enter(GoalKeeper* keeper)
 {
 	keeper->Steering()->PursuitOn();  
-
-#ifdef GOALY_STATE_INFO_ON
-	debug_con << "Goaly " << keeper->ID() << " enters InterceptBall" <<  "";
-#endif
 }
 
 void InterceptBall::Execute(GoalKeeper* keeper)

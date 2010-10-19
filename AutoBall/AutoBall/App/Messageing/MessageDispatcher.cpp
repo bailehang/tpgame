@@ -19,9 +19,7 @@ void MessageDispatcher::Discharge(CBaseEntity* pReceiver, const tagMessage& tele
 {
 	if (!pReceiver->HandleMessage(telegram))
 	{
-#ifdef SHOW_MESSAGING_INFO
-		debug_con << "Message not handled" << "";
-#endif
+
 	}
 }
 

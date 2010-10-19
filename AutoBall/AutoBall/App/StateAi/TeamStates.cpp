@@ -21,12 +21,6 @@ EmptyMsg(bool,Attacking,OnMessage,SoccerTeam);
 
 void Attacking::Enter(SoccerTeam* team)
 {
-#ifdef DEBUG_TEAM_STATES
-	debug_con << team->Name() << " entering Attacking state" << "";
-#endif
-
-	//these define the home regions for this state of each of the players
-	//these define the home regions for this state of each of the players
 	const int BlueRegions[TeamSize] = {1,22,19,16,11,8,6};
 	const int RedRegions[TeamSize]  = {45,25,28,31,32,35,41};
 
@@ -73,10 +67,6 @@ EmptyMsg(bool,Defending,OnMessage,SoccerTeam);
 
 void Defending::Enter(SoccerTeam* team)
 {
-#ifdef DEBUG_TEAM_STATES
-	debug_con << team->Name() << " entering Defending state" << "";
-#endif
-
 	//these define the home regions for this state of each of the players
   const int BlueRegions[TeamSize] = {1,22,19,16,11,8,6};
   const int RedRegions[TeamSize]  = {45,25,28,31,32,35,41};

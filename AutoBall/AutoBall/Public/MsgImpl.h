@@ -42,7 +42,7 @@ public:
 
 
 public:
-
+	int				RevNum()	{	return Receiver;}
 	int				GetMsg()	{	return Msg; }
 	Vector2D		GetVec()	{	return *(Vector2D*)ExtraInfo;}
 };

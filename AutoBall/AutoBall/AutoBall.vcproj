@@ -269,7 +269,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Public\Stream_Utility_Fun.h"
+				RelativePath=".\Public\Stream_Fun.h"
 				>
 			</File>
 			<File
@@ -298,14 +298,6 @@
 			</File>
 			<File
 				RelativePath=".\App\Region.h"
-				>
-			</File>
-			<File
-				RelativePath=".\App\Regulator.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\App\Regulator.h"
 				>
 			</File>
 			<File
@@ -338,6 +330,14 @@
 			</File>
 			<File
 				RelativePath=".\App\SupportSpotCalculator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\App\TimeCount.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\App\TimeCount.h"
 				>
 			</File>
 			<File
@@ -377,10 +377,6 @@
 				</File>
 				<File
 					RelativePath=".\App\Entity\BaseEntity.h"
-					>
-				</File>
-				<File
-					RelativePath=".\App\Entity\EntityFun.h"
 					>
 				</File>
 				<File
@@ -461,15 +457,15 @@
 			Name="Render"
 			>
 			<File
-				RelativePath=".\Render\C2DMatrix.h"
+				RelativePath=".\Render\MathGeo.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Render\Geometry.h"
+				RelativePath=".\Render\Matrix.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Render\Transformations.h"
+				RelativePath=".\Render\TransFuns.h"
 				>
 			</File>
 			<File

@@ -4,7 +4,7 @@
 
 #include <vector>
 
-#include "Regulator.h"
+#include "TimeCount.h"
 #include "Region.h"
 #include "../Render/Vector2D.h"
 #include "../Render/VGdi.h"
@@ -13,7 +13,7 @@ class PlayerBase;
 class Goal;
 class SoccerBall;
 class SoccerTeam;
-class Regulator;
+class TimeCount;
 
 /// 行为计算类
 class SupportSpotCalculator
@@ -38,7 +38,7 @@ private:
 	SoccerTeam*               m_pTeam;				///> 队
 	std::vector<SupportSpot>  m_Spots;				///> 所有的传送点
 	SupportSpot*              m_pBestSupportingSpot;///> 最佳传送点
-	Regulator*                m_pRegulator;			///> 球传送的过程中，每几帧更新 
+	TimeCount*                m_pPassTimer;			///> 球传送的过程中，每几帧更新 
 
 public:
 

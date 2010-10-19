@@ -6,10 +6,10 @@
 #include "../Goal.h"
 #include "../SteeringBehaviors.h"
 #include "../Messageing/MessageDispatcher.h"
-#include "../../Render/Transformations.h"
+#include "../../Render/TransFuns.h"
 #include "../../Render/Vector2D.h"
 #include "../../Render/VGdi.h"
-#include "../../Render/Geometry.h"
+#include "../../Render/MathGeo.h"
 #include "../../Render/Utils.h"
 
 PlayerBase::~PlayerBase()
@@ -56,14 +56,14 @@ CMoveEntity(home_team->Pitch()->GetRegionFromIndex(home_region)->Center(),
 	{
 		m_vecPlayerVB.push_back(player[vtx]);
 
-		if (abs(player[vtx].x) > m_dBoundingRadius)
+		if (abs(player[vtx].x) > m_dSize)
 		{
-			m_dBoundingRadius = abs(player[vtx].x);
+			m_dSize = abs(player[vtx].x);
 		}
 
-		if (abs(player[vtx].y) > m_dBoundingRadius)
+		if (abs(player[vtx].y) > m_dSize)
 		{
-			m_dBoundingRadius = abs(player[vtx].y);
+			m_dSize = abs(player[vtx].y);
 		}
 	}
 
@@ -119,7 +119,6 @@ bool PlayerBase::isThreatened()const
 
 	for (curOpp; curOpp != Team()->Opponents()->Members().end(); ++curOpp)
 	{
-		/// 如果curOpp在前面，而且在我的视野范围内
 		if (PositionInFrontOfPlayer((*curOpp)->Pos()) &&
 			(Vec2DDistanceSq(Pos(), (*curOpp)->Pos()) < GetInstObj(CGameSetup).PlayerComfortZoneSq))
 		{        

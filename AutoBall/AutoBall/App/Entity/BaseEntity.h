@@ -5,7 +5,7 @@
 #pragma once 
 
 #include "../../Render/Vector2D.h"
-#include "../../Render/Geometry.h"
+#include "../../Render/MathGeo.h"
 #include "../../Render/Utils.h"
 #include "../../Public/BaseDef.h"
 #include "../../Public/MsgImpl.h"
@@ -28,8 +28,8 @@ public:
 	Vector2D		Pos()const			    {return m_vPosition;}
 	void			SetPos(Vector2D new_pos){m_vPosition = new_pos;}
 
-	double			BRadius()const			{return m_dBoundingRadius;}
-	void			SetBRadius(double r)	{m_dBoundingRadius = r;}
+	double			GetSize()const			{return m_dSize;}
+	void			SetSize(double r)		{m_dSize = r;}
 	long			GetID()const			{return m_id;}
 
 	bool			IsTagged()const			{return m_bTag;}
@@ -39,12 +39,12 @@ public:
 	Vector2D		Scale()const			{return m_vScal;}
 	void			SetScale(Vector2D val)
 	{
-		m_dBoundingRadius *= MaxOf(val.x, val.y)/MaxOf(m_vScal.x, m_vScal.y); 
+		m_dSize *= MaxOf(val.x, val.y)/MaxOf(m_vScal.x, m_vScal.y); 
 		m_vScal = val;	
 	}
 	void			SetScale(double val)
 	{	
-		m_dBoundingRadius *= (val/MaxOf(m_vScal.x, m_vScal.y)); 
+		m_dSize *= (val/MaxOf(m_vScal.x, m_vScal.y)); 
 		m_vScal = Vector2D(val, val);	
 	} 
 
@@ -55,7 +55,7 @@ protected:
 
 	Vector2D	  m_vPosition;		///> 实体坐标
 	Vector2D	  m_vScal;			///> 实体比例
-	double		  m_dBoundingRadius;///> 边界比例
+	double		  m_dSize;			///> 大小
 	static int    m_iNextValidID;	///> 下一个有效的ID
 
 private:
