@@ -7,7 +7,7 @@
 #include "../Render/VGdi.h"
 #include "../Render/Utils.h"
 #include "../Public/Singleton.h"
-#include "../Public/Stream_Utility_Fun.h"
+#include "../Public/Stream_Fun.h"
 
 class Region
 {

@@ -11,10 +11,10 @@
 #include "../Messageing/MessageDispatcher.h"
 #include "../StateAi/StateMachine.h"
 #include "../StateAi/State.h"
-#include "../../Render/Transformations.h"
+#include "../../Render/TransFuns.h"
 #include "../../Render/Vector2D.h"
 #include "../../Render/VGdi.h"
-#include "../../Render/Geometry.h"
+#include "../../Render/MathGeo.h"
 #include "../../Render/Utils.h"
 
 
@@ -64,7 +64,7 @@ FieldPlayer::FieldPlayer(SoccerTeam* home_team,
 	m_pSteering->SeparationOn();
 
 	//set up the kick regulator
-	m_pKickLimiter = new Regulator(GetInstObj(CGameSetup).PlayerKickFrequency);
+	m_pKickLimiter = new TimeCount(GetInstObj(CGameSetup).PlayerKickFrequency);
 }
 
 FieldPlayer::FieldPlayer(SoccerTeam*    home_team,
@@ -102,7 +102,7 @@ FieldPlayer::FieldPlayer(SoccerTeam*    home_team,
 	 m_pSteering->SeparationOn();
 
 	//set up the kick regulator
-	m_pKickLimiter = new Regulator(GetInstObj(CGameSetup).PlayerKickFrequency);
+	m_pKickLimiter = new TimeCount(GetInstObj(CGameSetup).PlayerKickFrequency);
 }
 
 void FieldPlayer::Update()
@@ -144,11 +144,6 @@ void FieldPlayer::Update()
 	m_vVelocity.Truncate(m_dMaxSpeed);
 	m_vPosition += m_vVelocity;
 
-	//enforce a non-penetration constraint if desired
-	if(GetInstObj(CGameSetup).bNonPenetrationConstraint)
-	{
-		EnforceNonPenetrationContraint(this, CAutoList<PlayerBase>::GetAllMembers());
-	}
 }
 
 
@@ -160,6 +155,12 @@ bool FieldPlayer::HandleMessage(const tagMessage& msg)
 		return m_pStateMachine->HandleMessage(msg);
 }
 
+long FieldPlayer::GetScriptValue()
+{
+	long temp = m_ScriptValue;
+	SetScriptValue( 0 );
+	return temp;
+}
 void FieldPlayer::Render()                                         
 {
 	GetInstObj(CGDI).TransparentText();
@@ -175,14 +176,6 @@ void FieldPlayer::Render()
 		GetInstObj(CGDI).RedPen();
 	}
 
-	//render the player's body
-	m_vecPlayerVBTrans = WorldTransform(m_vecPlayerVB,
-										Pos(),
-										Heading(),
-										Side(),
-										Scale());  
-	GetInstObj(CGDI).ClosedShape(m_vecPlayerVBTrans); /**/ 
-
 	//and 'is 'ead
 	GetInstObj(CGDI).BrownBrush();
 	if (GetInstObj(CGameSetup).bHighlightIfThreatened && 
@@ -190,20 +183,16 @@ void FieldPlayer::Render()
 		isThreatened() ) 
 		GetInstObj(CGDI).YellowBrush();
 
-	GetInstObj(CGDI).Circle(Pos(), 5);
+	GetInstObj(CGDI).Circle(Pos(), 7 );
 
-	/**
-		GetInstObj(CGDI).TextColor(255, 0, 0);
-		GetInstObj(CGDI).TextAtPos(Pos().x-3, Pos().y-5, ttos(GetID()) );
-	 */
 
 	//render the state
-	if (GetInstObj(CGameSetup).bStates)
-	{  
-		GetInstObj(CGDI).TextColor(0, 170, 0);
-		if( Team()->Color() != SoccerTeam::blue )
-			GetInstObj(CGDI).TextAtPos(m_vPosition.x, m_vPosition.y -20, std::string(m_pStateMachine->GetNameOfCurrentState()));
-	}
+// 	if (GetInstObj(CGameSetup).bStates)
+// 	{  
+// 		GetInstObj(CGDI).TextColor(0, 170, 0);
+// 		if( Team()->Color() != SoccerTeam::blue )
+// 			GetInstObj(CGDI).TextAtPos(m_vPosition.x, m_vPosition.y -20, std::string(m_pStateMachine->GetNameOfCurrentState()));
+// 	}
 
 	//show IDs
 	if (GetInstObj(CGameSetup).bIDs)
@@ -212,11 +201,10 @@ void FieldPlayer::Render()
 		GetInstObj(CGDI).TextAtPos(Pos().x-20, Pos().y-20, ttos(GetID()));
 	}
 
-
-	if (GetInstObj(CGameSetup).bViewTargets)
-	{
-		GetInstObj(CGDI).RedBrush();
-		GetInstObj(CGDI).Circle(Steering()->Target(), 3);
-		GetInstObj(CGDI).TextAtPos(Steering()->Target(), ttos(GetID()));
-	} 
+// 	if (GetInstObj(CGameSetup).bViewTargets)
+// 	{
+// 		GetInstObj(CGDI).RedBrush();
+// 		GetInstObj(CGDI).Circle(Steering()->Target(), 3);
+// 		GetInstObj(CGDI).TextAtPos(Steering()->Target(), ttos(GetID()));
+// 	} 
 }

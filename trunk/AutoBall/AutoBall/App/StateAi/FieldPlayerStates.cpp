@@ -92,33 +92,18 @@ bool GlobalPlayerState::OnMessage(FieldPlayer* player, const tagMessage& telegra
 	case Msg_PassToMe:
 		{  
 			/// 得到请求传球的队员位置
-			//get the position of the player requesting the pass 
 			FieldPlayer* receiver = static_cast<FieldPlayer*>(telegram.ExtraInfo);
-
-#ifdef PLAYER_STATE_INFO_ON
-			// debug_con << "Player " << player->GetID() << " received request from " <<
-			//              receiver->ID() << " to make pass" << "";
-#endif
 
 			/// 如果球不在球员可触及的范围，或请求队员不具备射门的条件，改队员不能传球给请求队员
 			if (player->Team()->Receiver() != NULL ||
 				!player->BallWithinKickingRange() )
 			{
-#ifdef PLAYER_STATE_INFO_ON
-				//debug_con << "Player " << player->GetID() << " cannot make requested pass <cannot kick ball>" << "";
-#endif
-
 				return true;
 			}
 
-			//make the pass   传球
+			//传球
 			player->Ball()->Kick(receiver->Pos() - player->Ball()->Pos(),
 				GetInstObj(CGameSetup).MaxPassingForce,player);
-
-
-#ifdef PLAYER_STATE_INFO_ON
-			//debug_con << "Player " << player->GetID() << " Passed ball to requesting player" << "";
-#endif
 
 			///通知接球队员，开始传球
 			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
@@ -161,12 +146,8 @@ void ChaseBall::Enter(FieldPlayer* player)
 	    sprintf_s(str,"Player Enter 2 ChaseBall x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
-
 	player->Steering()->SeekOn();
 
-#ifdef PLAYER_STATE_INFO_ON
-	// debug_con << "Player " << player->GetID() << " enters chase state" << "";
-#endif
 }
 
 void ChaseBall::Execute(FieldPlayer* player)                                     
@@ -216,9 +197,6 @@ void SupportAttacker::Enter(FieldPlayer* player)
 
 	player->Steering()->SetTarget(player->Team()->GetSupportSpot());
 
-#ifdef PLAYER_STATE_INFO_ON
-	//  debug_con << "Player " << player->GetID() << " enters support state" << "";
-#endif
 }
 
 EmptyMsg(bool,SupportAttacker,OnMessage,FieldPlayer);
@@ -298,9 +276,6 @@ void ReturnToHomeRegion::Enter(FieldPlayer* player)
 		player->Steering()->SetTarget(player->GetHomeCenter());
 	}
 
-#ifdef PLAYER_STATE_INFO_ON
-	//  debug_con << "Player " << player->GetID() << " enters ReturnToHome state" << "";
-#endif
 }
 
 
@@ -357,9 +332,6 @@ void Wait::Enter(FieldPlayer* player)
 	    sprintf_s(str,"Player Enter 2 Wait x=%f,y=%f",player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
-#ifdef PLAYER_STATE_INFO_ON
-	//  debug_con << "Player " << player->GetID() << " enters wait state" << "";
-#endif
 
 	if (!player->Pitch()->GameOn())
 	{
@@ -514,16 +486,12 @@ void KickBall::Enter(FieldPlayer* player)
 	/// 使球队直到该队员正在控制球
 	player->Team()->SetControllingPlayer(player);
 
-	/// 该队员每秒只能惊喜有限次数的踢球
+	/// 该队员每秒只能进行有限次数的踢球
 	if (!player->isReadyForNextKick()) 
 	{
 		player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
 	}
 
-
-#ifdef PLAYER_STATE_INFO_ON
-	//  debug_con << "Player " << player->GetID() << " enters kick state" << "";
-#endif
 }
 
 EmptyFun(void,KickBall,Exit,FieldPlayer);
@@ -546,10 +514,6 @@ void KickBall::Execute(FieldPlayer* player)
 		player->Pitch()->GoalKeeperHasBall() ||
 		(dot < 0) ) 
 	{
-#ifdef PLAYER_STATE_INFO_ON
-		//    debug_con << "Goaly has ball / ball behind player" << "";
-#endif
-
 		player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
 
 		return;
@@ -567,10 +531,6 @@ void KickBall::Execute(FieldPlayer* player)
 		BallTarget)                   || 
 		(RandFloat() < GetInstObj(CGameSetup).ChancePlayerAttemptsPotShot))
 	{
-#ifdef PLAYER_STATE_INFO_ON
-		// debug_con << "Player " << player->GetID() << " attempts a shot at " << BallTarget << "";
-#endif
-
 		/// 给射门增加一些干扰，我们不想让队员踢得太准，
 		/// 通过改变PlayerKickingAccuracy值可以调整干扰数值
 		BallTarget = AddNoiseToKick(player->Ball()->Pos(), BallTarget);
@@ -611,12 +571,6 @@ void KickBall::Execute(FieldPlayer* player)
 		player->Ball()->Kick(KickDirection, power,player);
 
 		player->Team()->SetThrowIn(false);
-
-#ifdef PLAYER_STATE_INFO_ON
-		//    debug_con << "Player " << player->GetID() << " passes the ball with force " << power << "  to player " 
-		//             << receiver->ID() << "  Target is " << BallTarget << "";
-#endif
-
 
 		/// 让接球队员知道要传球
 		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
@@ -667,9 +621,6 @@ void Dribble::Enter(FieldPlayer* player)
 	/// 玩家正在控球
 	player->Team()->SetControllingPlayer(player);
 
-#ifdef PLAYER_STATE_INFO_ON
-	//  debug_con << "Player " << player->GetID() << " enters dribble state" << "";
-#endif
 }
 
 void Dribble::Execute(FieldPlayer* player)
@@ -753,17 +704,10 @@ void ReceiveBall::Enter(FieldPlayer* player)
 	{
 		player->Steering()->ArriveOn();
 
-#ifdef PLAYER_STATE_INFO_ON
-		//    debug_con << "Player " << player->GetID() << " enters receive state (Using Arrive)" << "";
-#endif
 	}
 	else
 	{
 		player->Steering()->PursuitOn();
-
-#ifdef PLAYER_STATE_INFO_ON
-		//    debug_con << "Player " << player->GetID() << " enters receive state (Using Pursuit)" << "";
-#endif
 	}
 }
 

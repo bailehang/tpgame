@@ -5,7 +5,7 @@
 #pragma  once 
 
 #include "../../Render/Vector2D.h"
-#include "../../Render/Geometry.h"
+#include "../../Render/MathGeo.h"
 #include "BaseEntity.h"
 
 class  CMoveEntity : public CBaseEntity
@@ -23,7 +23,7 @@ public:
 	{
 		 m_vPosition=position;
 		 m_vScal=scale;
-		 m_dBoundingRadius=radius;		
+		 m_dSize=radius;		
 	}
 
 	virtual ~CMoveEntity() {}

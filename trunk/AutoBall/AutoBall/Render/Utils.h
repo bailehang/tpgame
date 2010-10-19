@@ -8,6 +8,7 @@
 #include <limits>
 #include <cassert>
 #include <iomanip>
+#include "../Public/Log.h"
 
 #define  SAFE_DELETE( ARR )		{ if(ARR) { delete ARR; ARR=NULL;} }
 #define  SAFE_DELETE_ARRAY(ARR)	{ if(ARR) { delete ARR[];ARR=NULL;}}
@@ -35,16 +36,11 @@ inline double DegsToRads(double degs)
 	return TwoPi * (degs/360.0);
 }
 
-
-
-//returns true if the parameter is equal to zero
 inline bool IsZero(double val)
 {
 	return ( (-MinDouble < val) && (val < MinDouble) );
 }
 
-//returns true is the third parameter is in the range described by the
-//first two
 inline bool InRange(double start, double end, double val)
 {
 	if (start < end)
@@ -96,7 +92,7 @@ inline double RandGaussian(double mean = 0.0, double standard_deviation = 1.0)
 	static double y2;
 	static int use_last = 0;
 
-	if (use_last)		        /* use value from previous call */
+	if (use_last)		       
 	{
 		y1 = y2;
 		use_last = 0;
@@ -125,23 +121,18 @@ inline double Sigmoid(double input, double response = 1.0)
 	return ( 1.0 / ( 1.0 + exp(-input / response)));
 }
 
-
-//returns the maximum of two values
 template <class T>
 inline T MaxOf(const T& a, const T& b)
 {
 	if (a>b) return a; return b;
 }
 
-//returns the minimum of two values
 template <class T>
 inline T MinOf(const T& a, const T& b)
 {
 	if (a<b) return a; return b;
 }
 
-
-//clamps the first argument between the second two
 template <class T, class U, class V>
 inline void Clamp(T& arg, const U& minVal, const V& maxVal)
 {
@@ -159,7 +150,6 @@ inline void Clamp(T& arg, const U& minVal, const V& maxVal)
 }
 
 
-//rounds a double up or down depending on its value
 inline int Rounded(double val)
 {
 	int    integral = (int)val;
@@ -176,8 +166,7 @@ inline int Rounded(double val)
 	}
 }
 
-//rounds a double up or down depending on whether its 
-//mantissa is higher or lower than offset
+/// 四舍五入，offset舍的大小
 inline int RoundUnderOffset(double val, double offset)
 {
 	int    integral = (int)val;
@@ -194,7 +183,6 @@ inline int RoundUnderOffset(double val, double offset)
 	}
 }
 
-//compares two real numbers. Returns true if they are equal
 inline bool isEqual(float a, float b)
 {
 	if (fabs(a-b) < 1E-12)
@@ -264,6 +252,39 @@ inline void DeleteSTLMap(map& m)
 		SAFE_DELETE( it->second );
 		it->second = NULL;
 	}
+}
+
+/**
+*  判断2个实体是否重叠
+*/
+template <class T, class conT>
+bool Overlapped(const T* ob, const conT& conOb, double MinDistBetweenObstacles = 40.0)
+{
+	typename conT::const_iterator it;
+
+	for (it=conOb.begin(); it != conOb.end(); ++it)
+	{
+		if (TwoCirclesOverlapped(ob->Pos(),
+			ob->GetSize()+MinDistBetweenObstacles,                             
+			(*it)->Pos(),
+			(*it)->GetSize()))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+inline void PrintLuaMsg( const char* pInfo )
+{
+	char  str[128];
+
+	sprintf_s<128>( str , "%s" , pInfo );
+
+	CLog log( "cs.txt" );
+	log << str ;
 }
 
 #endif

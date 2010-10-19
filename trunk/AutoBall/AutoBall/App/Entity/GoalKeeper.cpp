@@ -10,10 +10,10 @@
 #include "../Messageing/MessageDispatcher.h"
 #include "../StateAi/StateMachine.h"
 #include "../StateAi/State.h"
-#include "../../Render/Transformations.h"
+#include "../../Render/TransFuns.h"
 #include "../../Render/Vector2D.h"
 #include "../../Render/VGdi.h"
-#include "../../Render/Geometry.h"
+#include "../../Render/MathGeo.h"
 #include "../../Render/Utils.h"
 
 GoalKeeper::GoalKeeper(SoccerTeam*        home_team,
@@ -73,13 +73,6 @@ void GoalKeeper::Update()
 
 	//update the position
 	m_vPosition += m_vVelocity;
-
-
-	//enforce a non-penetration constraint if desired
-	if(GetInstObj(CGameSetup).bNonPenetrationConstraint)
-	{
-		EnforceNonPenetrationContraint(this, CAutoList<PlayerBase>::GetAllMembers());
-	}
 
 	//update the heading if the player has a non zero velocity
 	if ( !m_vVelocity.IsZero())

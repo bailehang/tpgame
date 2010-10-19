@@ -147,8 +147,6 @@ public:
 	void  LightBlueBrush() {if(m_hdc)SelectObject(m_hdc, m_lightblueBrush);}
 	void  DarkGreenBrush() {if(m_hdc)SelectObject(m_hdc, m_darkgreenBrush);}
 	void  OrangeBrush()  {if(m_hdc)SelectObject(m_hdc, m_orangeBrush);}
-	//void  WhiteBrush()   {if(m_hdc)SelectObject(m_hdc, GetStockObject(WHITE_BRUSH));} 
-
 
 	///  all menthods 
 public:
@@ -255,15 +253,12 @@ public:
 		//calculate where the arrow is attached
 		Vector2D CrossingPoint = to - (norm * size);
 
-		//calculate the two extra points required to make the arrowhead
 		Vector2D ArrowPoint1 = CrossingPoint + (norm.Perp() * 0.4f * size); 
 		Vector2D ArrowPoint2 = CrossingPoint - (norm.Perp() * 0.4f * size); 
 
-		//draw the line
 		MoveToEx(m_hdc, (int)from.x, (int)from.y, NULL);
 		LineTo(m_hdc, (int)CrossingPoint.x, (int)CrossingPoint.y);
 
-		//draw the arrowhead (filled with the currently selected brush)
 		POINT p[3];
 
 		p[0] = VectorToPOINT(ArrowPoint1);
@@ -280,9 +275,6 @@ public:
 		Line((int)pos.x-diameter,(int)pos.y-diameter,(int)pos.x+diameter, (int)pos.y+diameter);
 		Line((int)pos.x-diameter,(int)pos.y+diameter,(int)pos.x+diameter, (int)pos.y-diameter);
 	}
-
-
-	//---------------------Geometry drawing methods
 
 	void Rect(int left, int top, int right, int bot)
 	{

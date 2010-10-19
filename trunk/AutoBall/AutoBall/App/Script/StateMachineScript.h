@@ -53,8 +53,8 @@ public:
 	{
 		try
 		{
-			if (m_pPreviousState.is_valid())
-				m_pPreviousState["Execute"](m_pOwner);
+			if (m_CurrentState.is_valid())
+				m_CurrentState["Execute"](m_pOwner);
 
  			if (m_pGlobalState.is_valid())
  				m_pGlobalState["Execute"](m_pOwner);
@@ -72,8 +72,8 @@ public:
 		{
 			if (m_CurrentState  )
 			{	
-				int result = call_function<int>(m_CurrentState.interpreter(),"OnMessage",m_pOwner, msg);
-				if ( result > 0 )
+				m_CurrentState["OnMessage"](m_pOwner,msg);
+				if ( static_cast<FieldPlayer*>(m_pOwner)->GetScriptValue() > 0)
 				{
 					return true;
 				}
@@ -81,8 +81,8 @@ public:
 
 			if (m_pGlobalState )
 			{
-				int result = call_function<int>(m_pGlobalState.interpreter(),"OnMessage",m_pOwner, msg);
-				if ( result > 0 )
+				m_pGlobalState["OnMessage"](m_pOwner,msg);
+				if ( static_cast<FieldPlayer*>(m_pOwner)->GetScriptValue() > 0)
 				{
 					return true;
 				}
@@ -92,20 +92,20 @@ public:
 		{
 		   __asm int 3
 		}
-		
-		
-	
 		return false;
 	}
 
 	void  ChangeState(const luabind::object& s)
 	{
-		//m_pPreviousState = m_CurrentState;
+		Sleep(10);
+
+		m_pPreviousState = m_CurrentState;
 
 		m_CurrentState["Exit"](m_pOwner);
 
 		m_CurrentState   = s;
-		m_pPreviousState = s;
+
+		Sleep(30);
 
 		m_CurrentState["Enter"](m_pOwner);
 	}

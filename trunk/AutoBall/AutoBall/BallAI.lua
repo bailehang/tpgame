@@ -8,7 +8,7 @@ end
 
 State_GlobalPlayer["Execute"] = function(player)
 
-	PrintLuaMsg( player:ID() .. " State_GlobalPlayer Execute " );
+	--PrintLuaMsg( player:ID() .. " State_GlobalPlayer Execute " );
 
 	if not player:IsChaseBall() then
 
@@ -30,25 +30,31 @@ State_GlobalPlayer["OnMessage"] = function(player,Msg)
 
 	if Msg:GetMsg() == 0 then
 
+		PrintLuaMsg( player:ID() .. " Msg:GetMsg() == 0 " );
+
 		player:SetSteeringTarget( Msg:GetVec() );
 
-		PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_ReceiveBall 26" );
+		--PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_ReceiveBall 26" );
 		player:GetFSM():ChangeState( State_ReceiveBall );
 
-		return 1;
+		player:SetScriptValue( 1 );
+		return;
 
 	elseif Msg:GetMsg() == 1 then
 
+		PrintLuaMsg( player:ID() .. " Msg:GetMsg() == 1 " );
 
-		local receiver = GetExtraInfoField(Msg) ;
+		local RevPos = Msg:GetVec();
+
+		local RevId  = GetGlobalEntityID( Msg:RevNum() );
 
 		if player:Team():IsReceiver() or not player:BallWithinKickingRange() then
 
-			return 1;
-
+			player:SetScriptValue( 1 );
+			return;
 		end
 
-		local subvec = Vec2DSub(receiver:Pos(),player():Ball():Pos());
+		local subvec = Vec2DSub(RevPos,player():Ball():Pos());
 
 
 		player:Ball():Kick( subvec , 3 , player ) ;
@@ -56,9 +62,9 @@ State_GlobalPlayer["OnMessage"] = function(player,Msg)
 
 		local Dispatcher = MsgDispatcher();
 
-		local addrvec =  VecAddr(receiver:Pos());
+		local addrvec =  VecAddr(RevPos);
 
-		Dispatcher:DispatchMsg( 0,player:ID(),receiver:ID(), addrvec );
+		Dispatcher:DispatchMsg( 0,player:ID(),RevId, addrvec );
 
 		PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_Wait 25" );
 
@@ -66,10 +72,13 @@ State_GlobalPlayer["OnMessage"] = function(player,Msg)
 
 		player:FindSupport();
 
-		return 1;
+		player:SetScriptValue( 1 );
+		return;
 
 
 	elseif Msg:GetMsg() == 2 then
+
+		PrintLuaMsg( player:ID() .. " Msg:GetMsg() == 2 " );
 
 		if player:GetFSM():IsInState ( State_SupportAttacker ) then
 			return 1;
@@ -81,9 +90,12 @@ State_GlobalPlayer["OnMessage"] = function(player,Msg)
 
 		player:GetFSM():ChangeState( State_SupportAttacker );
 
-		return 1;
+		player:SetScriptValue( 1 );
+		return;
 
 	elseif Msg:GetMsg() == 3 then
+
+		PrintLuaMsg( player:ID() .. " Msg:GetMsg() == 3 " );
 
 		player:SetDefaultHomeRegion();
 
@@ -91,14 +103,18 @@ State_GlobalPlayer["OnMessage"] = function(player,Msg)
 
 		player:GetFSM():ChangeState( State_ReturnGoHome );
 
-		return 1;
+		player:SetScriptValue( 1 );
+		return;
 
 	elseif Msg:GetMsg() == 4 then
+
+		PrintLuaMsg( player:ID() .. " Msg:GetMsg() == 4 " );
 
 		PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_Wait 22" );
 		player:GetFSM():ChangeState( State_Wait );
 
-		return 1;
+		player:SetScriptValue( 1 );
+		return;
 
 	end
 end
@@ -124,11 +140,11 @@ State_ChaseBall["Execute"] = function(player)
 
 	--PrintLuaMsg( player:ID() .. " State_ChaseBall Execute 123 " );
 
-	PrintLuaMsg( player:ID() .. " State_ChaseBall Execute " );
+	--PrintLuaMsg( player:ID() .. " State_ChaseBall Execute " );
 
 	if player:BallWithinKickingRange() then
 
-		--PrintLuaMsg( player:ID() .. " State_ChaseBall GlobalPlayer change to State_KickBall 21" );
+		PrintLuaMsg( player:ID() .. " State_ChaseBall GlobalPlayer change to State_KickBall 21" );
 
 		player:GetFSM():ChangeState(State_KickBall)
 
@@ -152,7 +168,8 @@ end
 
 State_ChaseBall["OnMessage"] = function(player,Msg)
 
-	return 0;
+	player:SetScriptValue( 0 );
+	return;
 
 end
 
@@ -168,7 +185,8 @@ State_SupportAttacker = { }
 
 State_SupportAttacker["OnMessage"] = function(player,Msg)
 
-	return 0;
+	player:SetScriptValue( 0 );
+	return;
 
 end
 
@@ -183,7 +201,7 @@ end
 
 State_SupportAttacker["Execute"] = function(player)
 
-	PrintLuaMsg( player:ID() .. " State_SupportAttacker Execute " );
+	--PrintLuaMsg( player:ID() .. " State_SupportAttacker Execute " );
 
 	if player:IsChaseBall() then
 		return;
@@ -191,7 +209,7 @@ State_SupportAttacker["Execute"] = function(player)
 
 	if  player:Team():IsControl() then
 
-		PrintLuaMsg( player:ID() .. " State_SupportAttacker GlobalPlayer change to State_ReturnGoHome 19" );
+		--PrintLuaMsg( player:ID() .. " State_SupportAttacker GlobalPlayer change to State_ReturnGoHome 19" );
 
 		player:GetFSM():ChangeState(State_ReturnGoHome);
 
@@ -246,7 +264,8 @@ State_ReturnGoHome = {}
 
 State_ReturnGoHome["OnMessage"] = function(player,Msg)
 
-	return 0;
+	player:SetScriptValue( 0 );
+	return;
 
 end
 
@@ -278,7 +297,7 @@ State_ReturnGoHome["Execute"] = function(player)
 
 		if player:isClosestTeamMemberToBall() and player:Team():IsReceiver() and  not player:Pitch():GoalKeeperHasBall() then
 
-			PrintLuaMsg( player:ID() .. " State_ReturnGoHome GlobalPlayer change to State_ChaseBall 18" );
+			--PrintLuaMsg( player:ID() .. " State_ReturnGoHome GlobalPlayer change to State_ChaseBall 18" );
 
 			player:GetFSM():ChangeState(State_ChaseBall);
 
@@ -319,7 +338,8 @@ State_Wait = { }
 
 State_Wait["OnMessage"] = function(player,Msg)
 
-	return 0;
+	player:SetScriptValue( 0 );
+	return;
 
 end
 
@@ -359,6 +379,8 @@ State_Wait["Execute"] = function(player)
 
 
 	if not player:isControllingPlayer()  and player:Team():IsControl() and  player:isAheadOfAttacker()  then
+				
+				PrintLuaMsg( player:ID() .. " RequestPass Ball() " );
 
 				player:Team():RequestPass(player);
 
@@ -370,7 +392,7 @@ State_Wait["Execute"] = function(player)
 
 		if player:isClosestTeamMemberToBall() and player:Team():IsReceiver() and  not player:Pitch():GoalKeeperHasBall() then
 
-			PrintLuaMsg( player:ID() .. " State_Wait GlobalPlayer change to State_ChaseBall 15" );
+			--PrintLuaMsg( player:ID() .. " State_Wait GlobalPlayer change to State_ChaseBall 15" );
 
 			player:GetFSM():ChangeState( State_ChaseBall )
 
@@ -384,7 +406,7 @@ State_Wait["Execute"] = function(player)
 
 				player:SetSteeringTarget( player:GetHomeCenter() );
 
-				PrintLuaMsg( player:ID() .. " State_Wait GlobalPlayer change to State_ReturnGoHome 14" );
+				--PrintLuaMsg( player:ID() .. " State_Wait GlobalPlayer change to State_ReturnGoHome 14" );
 
 				player:GetFSM():ChangeState( State_ReturnGoHome );
 
@@ -396,7 +418,7 @@ State_Wait["Execute"] = function(player)
 
 			player:SetSteeringTarget( player:BallPos() )
 
-			PrintLuaMsg( player:ID() .. " State_Wait GlobalPlayer change to State_FollowBall 13" );
+			--PrintLuaMsg( player:ID() .. " State_Wait GlobalPlayer change to State_FollowBall 13" );
 
 			player:GetFSM():ChangeState( State_FollowBall )
 
@@ -419,7 +441,8 @@ State_FollowBall = { }
 
 State_FollowBall["OnMessage"] = function(player,Msg)
 
-	return 0;
+	player:SetScriptValue( 0 );
+	return;
 
 end
 
@@ -431,7 +454,7 @@ end
 
 State_FollowBall["Execute"] = function(player)
 
-	PrintLuaMsg( player:ID() .. " State_FollowBall Execute " );
+	--PrintLuaMsg( player:ID() .. " State_FollowBall Execute " );
 
 	if not player:IsChaseBall() then
 
@@ -444,7 +467,7 @@ State_FollowBall["Execute"] = function(player)
 		if  player:Team():IsControl() or player:FollowReturn() then
 
 			player:SetSteeringTarget( player:GetHomeCenter() )
-			PrintLuaMsg( player:ID() .. " State_FollowBall GlobalPlayer change to State_ReturnGoHome 12" );
+			--PrintLuaMsg( player:ID() .. " State_FollowBall GlobalPlayer change to State_ReturnGoHome 12" );
 			player:GetFSM():ChangeState( State_ReturnGoHome )
 		end
 
@@ -456,14 +479,14 @@ State_FollowBall["Execute"] = function(player)
 
 		if player:isClosestTeamMemberToBall() and player:Team():IsThrowIn() then
 
-			PrintLuaMsg( player:ID() .. " State_FollowBall GlobalPlayer change to State_ChaseBall 11" );
+			--PrintLuaMsg( player:ID() .. " State_FollowBall GlobalPlayer change to State_ChaseBall 11" );
 			player:GetFSM():ChangeState( State_ChaseBall );
 
 		end
 
 		if player:isClosestTeamMemberToBall() and player:Team():IsReceiver() and not player:Pitch():GoalKeeperHasBall() then
 
-			PrintLuaMsg( player:ID() .. " State_FollowBall GlobalPlayer change to State_ChaseBall 10" );
+			--PrintLuaMsg( player:ID() .. " State_FollowBall GlobalPlayer change to State_ChaseBall 10" );
 
 			player:GetFSM():ChangeState( State_ChaseBall );
 		end
@@ -486,7 +509,8 @@ State_KickBall = { }
 
 State_KickBall["OnMessage"] = function(player,Msg)
 
-	return 0;
+	player:SetScriptValue( 0 );
+	return;
 
 end
 
@@ -525,7 +549,7 @@ State_KickBall["Execute"] = function(player)
 
 	if player:Team():IsReceiver() or player:Pitch():GoalKeeperHasBall() or dot < 0 then
 
-		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_ChaseBall 7" );
+		--PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_ChaseBall 7" );
 
 		player:GetFSM():ChangeState( State_ChaseBall );
 
@@ -546,7 +570,7 @@ State_KickBall["Execute"] = function(player)
 
 		player:Ball():Kick( kickDirection , power , player );
 
-		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_Wait 6" );
+		--PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_Wait 6" );
 
 		player:GetFSM():ChangeState( State_Wait )
 
@@ -561,6 +585,7 @@ State_KickBall["Execute"] = function(player)
 
 	power = 3 * dot;
 
+	PrintLuaMsg( player:ID() .. " State_KickBall player FindPass! " );
 
 	if player:isThreatened() and player:Team():FindPass( player, receiver, BallTarget,power,100 ) then
 
@@ -608,9 +633,9 @@ State_KickBall["Exit"] = function(player)
 
 	if not player:isReadyForNextKick() then
 
-		player:GetFSM():ChangeState( State_ChaseBall )
-
 		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_ChaseBall 3" );
+
+		player:GetFSM():ChangeState( State_ChaseBall )
 
 	end
 
@@ -620,7 +645,8 @@ State_Dribble = {}
 
 State_Dribble["OnMessage"] = function(player,Msg)
 
-	return 0;
+	player:SetScriptValue( 0 );
+	return;
 
 end
 
@@ -687,7 +713,8 @@ State_ReceiveBall  = { }
 
 State_ReceiveBall["OnMessage"] = function(player,Msg)
 
-	return 0;
+	player:SetScriptValue( 0 );
+	return;
 
 end
 
@@ -728,7 +755,7 @@ State_ReceiveBall["Execute"] = function(player)
 
 	if  player:BallWithinReceivingRange() or not player:Team():IsControl() then
 
-		PrintLuaMsg( player:ID() .. " State_ReceiveBall GlobalPlayer change to State_ChaseBall 111" );
+		--PrintLuaMsg( player:ID() .. " State_ReceiveBall GlobalPlayer change to State_ChaseBall 111" );
 
 		player:GetFSM():ChangeState(State_ChaseBall);
 	end

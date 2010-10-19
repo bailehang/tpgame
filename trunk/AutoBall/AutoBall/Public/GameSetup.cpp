@@ -66,8 +66,7 @@ CGameSetup::CGameSetup()
 			 >> str >>  bHighlightIfThreatened
 			 >> str >>  FrameRate
 			 >> str >>  SeparationCoefficient
-			 >> str >>  ViewDistance
-			 >> str >>  bNonPenetrationConstraint;
+			 >> str >>  ViewDistance;
 
 	}
 	BallWithinReceivingRangeSq = BallWithinReceivingRange * BallWithinReceivingRange;

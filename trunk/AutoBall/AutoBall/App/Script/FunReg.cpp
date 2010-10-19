@@ -30,6 +30,7 @@ void  ReisterTagMsg(lua_State* pLua)
 
 			.def("GetMsg",&tagMessage::GetMsg)
 			.def("GetVec",&tagMessage::GetVec)
+			.def("RevNum",&tagMessage::RevNum)
 		];
 }
 
@@ -132,6 +133,8 @@ void  ReisterFieldPlayer(lua_State* pLua)
 
 			.def("isReadyForNextKick",&FieldPlayer::isReadyForNextKick)
 			.def("GetFSM",&FieldPlayer::GetScriptFSM)
+			.def("GetScriptValue",&FieldPlayer::GetScriptValue)
+			.def("SetScriptValue",&FieldPlayer::SetScriptValue)
 		];
 }
 
@@ -200,7 +203,8 @@ void   ReisterAllFun(lua_State* pLua)
 			def("Vec2DSub",&Vec2DSub),
 			def("GetField",&GetExtraInfoField),
 			def("VecAddr",&VecAddr),
-			def("PrintLuaMsg",&PrintLuaMsg)
+			def("PrintLuaMsg",&PrintLuaMsg),
+			def("GetGlobalEntityID",&GetGlobalEntityID)
 
 		];
 
