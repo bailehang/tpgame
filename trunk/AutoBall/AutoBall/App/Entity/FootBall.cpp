@@ -36,9 +36,12 @@ void FootBall::Update()
 		//update heading
 		m_vHeading = Vec2DNormalize(m_vVelocity);
 	}
+
+#ifdef _PUT_LOG_
 	char  str[256];
 	sprintf_s(str,"Ball Position x=%f,y=%f",m_vPosition.x,m_vPosition.y);
 	PutLog("ball.txt",str);
+#endif
 }
 
 double FootBall::TimeToCoverDistance(Vector2D A,

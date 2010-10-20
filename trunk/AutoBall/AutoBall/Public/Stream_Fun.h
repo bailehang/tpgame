@@ -29,7 +29,7 @@ inline T GetValueFromStream(std::ifstream& stream)
 	stream >> val;
 	if (!stream)
 	{
-		throw std::runtime_error("retrieve wrong type from stream");
+		throw std::runtime_error("Attempting to retrieve wrong type from stream");
 	}
 
 	return val;

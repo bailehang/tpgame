@@ -8,13 +8,13 @@
 #include "../Public/GameSetup.h"
 
 
-SupportSpotCalculator::~SupportSpotCalculator()
+SpotCalculator::~SpotCalculator()
 {
 	SAFE_DELETE( m_pPassTimer );
 }
 
 
-SupportSpotCalculator::SupportSpotCalculator(int           numX,
+SpotCalculator::SpotCalculator(int           numX,
 											 int           numY,
 											 FootBallTeam*   team):m_pBestSupportingSpot(NULL),
 											 m_pTeam(team)
@@ -36,12 +36,12 @@ SupportSpotCalculator::SupportSpotCalculator(int           numX,
 		{      
 			if (m_pTeam->Color() == FootBallTeam::blue)
 			{
-				m_Spots.push_back(SupportSpot(Vector2D(left+x*SliceX, top+y*SliceY), 0.0));
+				m_Spots.push_back(BestSpot(Vector2D(left+x*SliceX, top+y*SliceY), 0.0));
 			}
 
 			else
 			{
-				m_Spots.push_back(SupportSpot(Vector2D(right-x*SliceX, top+y*SliceY), 0.0));
+				m_Spots.push_back(BestSpot(Vector2D(right-x*SliceX, top+y*SliceY), 0.0));
 			}
 		}
 	}
@@ -50,7 +50,7 @@ SupportSpotCalculator::SupportSpotCalculator(int           numX,
 }
 
 
-Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
+Vector2D SpotCalculator::BestSupportingPosition()
 {
 	if (!m_pPassTimer->isReadyOK() && m_pBestSupportingSpot)
 	{
@@ -62,7 +62,7 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 
 	double BestScoreSoFar = 0.0;
 
-	std::vector<SupportSpot>::iterator curSpot;
+	std::vector<BestSpot>::iterator curSpot;
 
 	for (curSpot = m_Spots.begin(); curSpot != m_Spots.end(); ++curSpot)
 	{
@@ -116,7 +116,7 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 	return m_pBestSupportingSpot->m_vPos;
 }
 
-Vector2D SupportSpotCalculator::GetBestSupportingSpot()
+Vector2D SpotCalculator::GetBestSupportingSpot()
 {
 	if (m_pBestSupportingSpot)
 	{
@@ -125,11 +125,11 @@ Vector2D SupportSpotCalculator::GetBestSupportingSpot()
 
 	else
 	{ 
-		return DetermineBestSupportingPosition();
+		return BestSupportingPosition();
 	}
 }
 
-void SupportSpotCalculator::Render()const
+void SpotCalculator::Render()const
 {
 	GetInstObj(CGDI).HollowBrush();
 	GetInstObj(CGDI).GreyPen();

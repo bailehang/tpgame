@@ -16,42 +16,37 @@ class FootBallTeam;
 class TimeCount;
 
 /// 行为计算类
-class SupportSpotCalculator
+class SpotCalculator
 {
-private:
-
 	/// 计算最佳接应点
-	struct SupportSpot
+	struct BestSpot
 	{
-
 		Vector2D  m_vPos;
-
 		double    m_dScore;
-
-		SupportSpot(Vector2D pos, double value):m_vPos(pos),
-			m_dScore(value)
+		BestSpot(Vector2D pos, double value):m_vPos(pos),
+				m_dScore(value)
 		{}
 	};
 
 private:
 
 	FootBallTeam*             m_pTeam;				///> 队
-	std::vector<SupportSpot>  m_Spots;				///> 所有的传送点
-	SupportSpot*              m_pBestSupportingSpot;///> 最佳传送点
+	std::vector<BestSpot>  m_Spots;				///> 所有的传送点
+	BestSpot*              m_pBestSupportingSpot;///> 最佳传送点
 	TimeCount*                m_pPassTimer;			///> 球传送的过程中，每几帧更新 
 
 public:
 
-	SupportSpotCalculator(int numX,
+	SpotCalculator(int numX,
 						  int numY,
 						  FootBallTeam* team);
 
-	~SupportSpotCalculator();
+	~SpotCalculator();
 
 	void       Render()const;
 			
 	/// 决定哪个点是最佳的传射点，接应队员到达那个位置，等待传球
-	Vector2D  DetermineBestSupportingPosition();
+	Vector2D  BestSupportingPosition();
 
 	/// 返回最佳传送点
 	Vector2D  GetBestSupportingSpot();

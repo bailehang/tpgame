@@ -20,7 +20,7 @@ public:
 	{}
 
 
-	Region(double left,
+	Region( double left,
 			double top,
 			double right,
 			double bottom,
@@ -35,8 +35,6 @@ public:
 		m_dWidth  = fabs(right-left);
 		m_dHeight = fabs(bottom-top);
 	}
-
-	virtual ~Region(){}
 
 	virtual inline void     Render(bool ShowID)const;
 
