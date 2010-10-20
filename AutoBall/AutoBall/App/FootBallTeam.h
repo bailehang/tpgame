@@ -10,10 +10,10 @@ class BasePlayer;
 class FootBaller;
 class FootBallPitch;
 class GoalKeeper;
-class SupportSpotCalculator;
+class SpotCalculator;
 template<class T>
 class StateMachine;
-class SupportSpotCalculator;
+class SpotCalculator;
 	  
 class FootBallTeam 
 {
@@ -132,9 +132,9 @@ public:
 
 
 	void SetPlayerHomeRegion(int plyr, int region)const;
-	void DetermineBestSupportingPosition()const
+	void BestSupportingPosition()const
 	{
-		m_pSupportSpotCalc->DetermineBestSupportingPosition();
+		m_pSupportSpotCalc->BestSupportingPosition();
 	}
 
 	void UpdateTargetsOfWaitingPlayers()const;
@@ -164,19 +164,19 @@ private:
 
 private:
 
-	StateMachine<FootBallTeam>*  m_pStateMachine;	 ///> 当前队伍的状态机
-	team_color                m_Color;				 ///> 队伍颜色
-	std::vector<BasePlayer*>  m_Players;			 ///> 队伍所有的成员
-	GoalKeeper*				  m_GoalKeeper;			 ///> 守门员
-	FootBallPitch*            m_pPitch;				 ///> 指向的球场指针
-	Goal*                     m_pOpponentsGoal;		 ///> 对方球门
-	Goal*                     m_pHomeGoal;			 ///> 自己球门
-	FootBallTeam*             m_pOpponents;			 ///> 敌对队伍指针
-	BasePlayer*               m_pControllingPlayer;	 ///> 控球队员
-	BasePlayer*               m_pSupportingPlayer;	 ///> 接应队员
-	BasePlayer*               m_pReceivingPlayer;	 ///> 指向接球队员
-	BasePlayer*               m_pPlayerClosestToBall;///> 指向离球最近的队员
-	SupportSpotCalculator*    m_pSupportSpotCalc;	 ///>  用来决策队员的行为类
+	StateMachine<FootBallTeam>*  m_pStateMachine;		 ///> 当前队伍的状态机
+	team_color					 m_Color;				 ///> 队伍颜色
+	std::vector<BasePlayer*>	 m_Players;				 ///> 队伍所有的成员
+	GoalKeeper*					 m_GoalKeeper;			 ///> 守门员
+	FootBallPitch*				 m_pPitch;				 ///> 指向的球场指针
+	Goal*						 m_pOpponentsGoal;		 ///> 对方球门
+	Goal*						 m_pHomeGoal;			 ///> 自己球门
+	FootBallTeam*				 m_pOpponents;			 ///> 敌对队伍指针
+	BasePlayer*                  m_pControllingPlayer;	 ///> 控球队员
+	BasePlayer*					 m_pSupportingPlayer;	 ///> 接应队员
+	BasePlayer*					 m_pReceivingPlayer;	 ///> 指向接球队员
+	BasePlayer*					 m_pPlayerClosestToBall; ///> 指向离球最近的队员
+	SpotCalculator*       m_pSupportSpotCalc;	 ///>  用来决策队员的行为类
 
 	double                    m_dDistSqToBallOfClosestPlayer;///> 离最近球员最近的距离
 

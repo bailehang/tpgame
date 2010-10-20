@@ -46,7 +46,7 @@ FootBallTeam::FootBallTeam(Goal*    home_goal,
 		(*it)->Steering()->SeparationOn();   
 	}
 
-	m_pSupportSpotCalc = new SupportSpotCalculator(GetInstObj(CGameSetup).NumSupportSpotsX,
+	m_pSupportSpotCalc = new SpotCalculator(GetInstObj(CGameSetup).NumSupportSpotsX,
 							GetInstObj(CGameSetup).NumSupportSpotsY,
 							this);
 
@@ -681,7 +681,6 @@ void FootBallTeam::RequestPass(FootBaller* requester)const
 			ControllingPlayer()->GetID(),
 			Msg_PassToMe,
 			&requester->Pos()); 
-
 	}
 }
 

@@ -312,16 +312,10 @@ EmptyFun(void,Wait,Exit,FootBaller);
 
 void Wait::Enter(FootBaller* player)
 {
-	if( player->GetID() == 9 )
-	{
-		char  str[256];
-	    sprintf_s(str,"Player Enter 9 Wait x=%f,y=%f",player->Pos().x,player->Pos().y);
-		PutFileLog(str);
-	}
 	if( player->GetID() == 2 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter 2 Wait x=%f,y=%f",player->Pos().x,player->Pos().y);
+	    sprintf_s(str,"Player Enter %d Wait x=%f,y=%f",player->GetID(),player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 
@@ -547,7 +541,6 @@ void KickBall::Execute(FootBaller* player)
 	power = GetInstObj(CGameSetup).MaxPassingForce * dot;
 
 	/// 测试是否有任何潜在的候选人可以接球
-	//test if there are any potential candidates available to receive a pass
 	if (player->isThreatened()  &&
 		player->Team()->FindPass(player,
 		receiver,
@@ -570,7 +563,6 @@ void KickBall::Execute(FootBaller* player)
 			receiver->GetID(),
 			Msg_ReceiveBall,
 			&BallTarget);                            
-
 
 		/// 该队员应该等在他的当前位置，除非另有指示
 		player->GetFSM()->ChangeState(&GetInstObj(Wait));
@@ -645,7 +637,6 @@ void Dribble::Execute(FootBaller* player)
 	}
 
 	/// 踢球
-	//kick the ball down the field
 	else
 	{
 		player->Ball()->Kick(player->Team()->HomeGoalFacing(),
@@ -654,7 +645,6 @@ void Dribble::Execute(FootBaller* player)
 	}
 
 	/// 改队员已经踢球了，所以他必须改变状态去追球
-	//the player has kicked the ball so he must now change state to follow it
 	player->GetFSM()->ChangeState(&GetInstObj(ChaseBall));
 
 	return;  
@@ -665,16 +655,10 @@ EmptyMsg(bool,ReceiveBall,OnMessage,FootBaller);
 
 void ReceiveBall::Enter(FootBaller* player)
 {
-	if( player->GetID() == 9 )
-	{
-		char  str[256];
-	    sprintf_s(str,"Player Enter 9 ReceiveBall x=%f,y=%f",player->Pos().x,player->Pos().y);
-		PutFileLog(str);
-	}
 	if( player->GetID() == 2 )
 	{
 		char  str[256];
-	    sprintf_s(str,"Player Enter 2 ReceiveBall x=%f,y=%f",player->Pos().x,player->Pos().y);
+	    sprintf_s(str,"Player Enter %d ReceiveBall x=%f,y=%f",player->GetID(),player->Pos().x,player->Pos().y);
 		PutFileLog(str);
 	}
 
@@ -684,15 +668,18 @@ void ReceiveBall::Enter(FootBaller* player)
 	/// 该队员现在也是控球队员
 	player->Team()->SetControllingPlayer(player);
 
+	/// 
 	/// 有2类控球行为，1.用arrive指导接球队员到达传球队员发送的消息中制定的位置。
 	/// 2.用Pursuit行为来追逐球
-	/// 这个语句依据ChanceOfUsingArriveTypeReceiveBehavior的可能性选择其一，判断是否有对方队员靠近接球队员
+	/// 这个语句依据ChanceOfUsingArriveTypeReceiveBehavior的可能性选择其一，
+	/// 判断是否有对方队员靠近接球队员
 	/// 是否接球队员在对方的热区（所有队员中离对方球门第三近的）
+	/// 
 	const double PassThreatRadius = 70.0;
 
 	if (( player->InHotRegion() ||
-		RandFloat() < GetInstObj(CGameSetup).ChanceOfUsingArriveTypeReceiveBehavior) &&
-		!player->Team()->isOpponentWithinRadius(player->Pos(), PassThreatRadius))
+		  RandFloat()    < GetInstObj(CGameSetup).ChanceOfUsingArriveTypeReceiveBehavior) &&
+		  !player->Team()->isOpponentWithinRadius(player->Pos(), PassThreatRadius))
 	{
 		player->Steering()->ArriveOn();
 

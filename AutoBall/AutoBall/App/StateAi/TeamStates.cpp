@@ -52,7 +52,7 @@ void Attacking::Execute(FootBallTeam* team)
 
 	/// 给接应队员计算最佳位置
 	//calculate the best position for any supporting attacker to move to
-	team->DetermineBestSupportingPosition();
+	team->BestSupportingPosition();
 }
 
 void Attacking::Exit(FootBallTeam* team)
