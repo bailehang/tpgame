@@ -31,12 +31,7 @@ public:
 	double			GetSize()const			{return m_dSize;}
 	void			SetSize(double r)		{m_dSize = r;}
 	long			GetID()const			{return m_id;}
-
-	bool			IsTagged()const			{return m_bTag;}
-	void			Tag()					{m_bTag = true;}
-	void			UnTag()					{m_bTag = false;}
-
-	Vector2D		Scale()const			{return m_vScal;}
+	Vector2D		Scale()const				{return m_vScal;}
 	void			SetScale(Vector2D val)
 	{
 		m_dSize *= MaxOf(val.x, val.y)/MaxOf(m_vScal.x, m_vScal.y); 
@@ -58,9 +53,7 @@ protected:
 	double		  m_dSize;			///> 大小
 	static int    m_iNextValidID;	///> 下一个有效的ID
 
-private:
-
-	bool		  m_bTag;			///> 实体是否有目标 
+private: 
 	long	      m_id;				///> 实体id
 	ePlayerType	  m_itype;			///> 实体类型
 	

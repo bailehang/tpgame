@@ -5,7 +5,7 @@ enum	eEntityType
 {
 	Ent_InValid	=	-1,
 	Ent_Goal  ,			 /// 守门员
-	Ent_FieldPlayer		 /// 球员
+	Ent_FootBaller		 /// 球员
 };
 
 enum   ePlayerType

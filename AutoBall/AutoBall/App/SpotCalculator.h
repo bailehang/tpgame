@@ -35,7 +35,7 @@ private:
 
 private:
 
-	FootBallTeam*               m_pTeam;				///> 队
+	FootBallTeam*             m_pTeam;				///> 队
 	std::vector<SupportSpot>  m_Spots;				///> 所有的传送点
 	SupportSpot*              m_pBestSupportingSpot;///> 最佳传送点
 	TimeCount*                m_pPassTimer;			///> 球传送的过程中，每几帧更新 

@@ -52,6 +52,6 @@ public:
 private:
 	
 	StateMachine<GoalKeeper>*  m_pStateMachine;/// 状态机
-	Vector2D				   m_vLookAt;	   /// 视野向量
+	Vector2D				   m_vLookAt;	   /// 视野
 
 };

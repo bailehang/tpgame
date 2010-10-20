@@ -83,7 +83,7 @@ private:
 
 };
 
-inline FootBaller*	GetExtraInfoField(const tagMessage* msg)	
+inline FootBaller*	GetExtraInfoFootBall(const tagMessage* msg)	
 {	
 	return (FootBaller*)msg->ExtraInfo;
 }

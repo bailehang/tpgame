@@ -2,7 +2,6 @@
 #include "BasePlayer.h"
 #include "FootBaller.h"
 #include "GoalKeeper.h"
-#include "EntityFun.h"
 #include "../Region.h"
 #include "../FootBallTeam.h"
 #include "../FootBallPitch.h"

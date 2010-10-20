@@ -13,19 +13,6 @@ using namespace std;
 
 class Wall2D 
 {
-protected:
-
-	Vector2D    m_vA,
-		m_vB,
-		m_vN;
-
-	void CalculateNormal()
-	{
-		Vector2D temp = Vec2DNormalize(m_vB - m_vA);
-
-		m_vN.x = -temp.y;
-		m_vN.y = temp.x;
-	}
 
 public:
 
@@ -44,7 +31,6 @@ public:
 		GetInstObj(CGDI).Line(m_vA, m_vB);
 		GetInstObj(CGDI).Line(m_vA-Vector2D(1,1), m_vB-Vector2D(1,1));
 
-		//render the normals if rqd
 		if (RenderNormals)
 		{
 			int MidX = (int)((m_vA.x+m_vB.x)/2);
@@ -65,4 +51,17 @@ public:
 
 	Vector2D Center()const{return (m_vA+m_vB)/2.0;}
 
+private:
+
+	Vector2D    m_vA,
+				m_vB,
+				m_vN;
+
+	void CalculateNormal()
+	{
+		Vector2D temp = Vec2DNormalize(m_vB - m_vA);
+
+		m_vN.x = -temp.y;
+		m_vN.y = temp.x;
+	}
 };

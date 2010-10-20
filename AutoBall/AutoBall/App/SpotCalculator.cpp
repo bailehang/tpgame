@@ -19,16 +19,16 @@ SupportSpotCalculator::SupportSpotCalculator(int           numX,
 											 FootBallTeam*   team):m_pBestSupportingSpot(NULL),
 											 m_pTeam(team)
 {
-	const Region* PlayingField = team->Pitch()->PlayingArea();
+	const Region* Playinger = team->Pitch()->PlayingArea();
 
-	double HeightOfSSRegion = PlayingField->Height() * 0.8;
-	double WidthOfSSRegion  = PlayingField->Width() * 0.9;
+	double HeightOfSSRegion = Playinger->Height() * 0.8;
+	double WidthOfSSRegion  = Playinger->Width() * 0.9;
 	double SliceX = WidthOfSSRegion / numX ;
 	double SliceY = HeightOfSSRegion / numY;
 
-	double left  = PlayingField->Left() + (PlayingField->Width()-WidthOfSSRegion)/2.0 + SliceX/2.0;
-	double right = PlayingField->Right() - (PlayingField->Width()-WidthOfSSRegion)/2.0 - SliceX/2.0;
-	double top   = PlayingField->Top() + (PlayingField->Height()-HeightOfSSRegion)/2.0 + SliceY/2.0;
+	double left  = Playinger->Left() + (Playinger->Width()-WidthOfSSRegion)/2.0 + SliceX/2.0;
+	double right = Playinger->Right() - (Playinger->Width()-WidthOfSSRegion)/2.0 - SliceX/2.0;
+	double top   = Playinger->Top() + (Playinger->Height()-HeightOfSSRegion)/2.0 + SliceY/2.0;
 
 	for (int x=0; x<(numX/2)-1; ++x)
 	{
@@ -79,7 +79,7 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 		}
 
 		/// 可以在这个位置射门
-		if( m_pTeam->CanShoot(curSpot->m_vPos,            
+		if( m_pTeam->CanShootGoal(curSpot->m_vPos,            
 			GetInstObj(CGameSetup).MaxShootingForce))
 		{
 			curSpot->m_dScore += GetInstObj(CGameSetup).Spot_CanScoreFromPositionScore;
@@ -104,7 +104,7 @@ Vector2D SupportSpotCalculator::DetermineBestSupportingPosition()
 			}
 		}
 
-		/// 检查到目前位置这个店是否是最高分
+		/// 检查到目前位置这个点是否是最高分
 		if (curSpot->m_dScore > BestScoreSoFar)
 		{
 			BestScoreSoFar = curSpot->m_dScore;

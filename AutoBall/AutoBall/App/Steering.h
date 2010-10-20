@@ -28,18 +28,12 @@ public:
 
 	Vector2D Calculate();
 
-	//calculates the component of the steering force that is parallel
-	//with the vehicle heading
 	double    ForwardComponent();
 
-	//calculates the component of the steering force that is perpendicuar
-	//with the vehicle heading
 	double    SideComponent();
 
 	Vector2D Force()const{return m_vSteeringForce;}
 
-	//renders visual aids and info for seeing how each behavior is
-	//calculated
 	void      RenderInfo();
 	void      RenderAids();
 
@@ -81,24 +75,16 @@ private:
 
 	FootBall*   m_pBall;
 
-	//the steering force created by the combined effect of all
-	//the selected behaviors
 	Vector2D     m_vSteeringForce;
 
-	//the current target (usually the ball or predicted ball position)
 	Vector2D     m_vTarget;
 
-	//the distance the player tries to interpose from the target
 	double        m_dInterposeDist;
 
-	//multipliers. 
 	double        m_dMultSeparation;
 
-	//how far it can 'see'
 	double        m_dViewDistance;
 
-
-	//binary flags to indicate whether or not a behavior should be active
 	int           m_iFlags;
 
 	enum behavior_type
@@ -111,46 +97,30 @@ private:
 		interpose          = 0x0010
 	};
 
-	//used by group behaviors to tag neighbours
 	bool         m_bTagged;
 
-	//Arrive makes use of these to determine how quickly a vehicle
-	//should decelerate to its target
 	enum Deceleration{slow = 3, normal = 2, fast = 1};
 
-
-	//this behavior moves the agent towards a target position
 	Vector2D Seek(Vector2D target);
 
-	//this behavior is similar to seek but it attempts to arrive 
-	//at the target with a zero velocity
 	Vector2D Arrive(Vector2D target, Deceleration decel);
 
-	//This behavior predicts where its prey will be and seeks
-	//to that location
 	Vector2D Pursuit(const FootBall* ball);
 
 	Vector2D Separation();
 
-	//this attempts to steer the agent to a position between the opponent
-	//and the object
 	Vector2D Interpose(const FootBall* ball,
 		Vector2D pos,
 		double    DistFromTarget);
 
-
-	//finds any neighbours within the view radius
 	void      FindNeighbours();
 
-
-	//this function tests if a specific bit of m_iFlags is set
 	bool      On(behavior_type bt){return (m_iFlags & bt) == bt;}
 
 	bool      AccumulateForce(Vector2D &sf, Vector2D ForceToAdd);
 
 	Vector2D  SumForces();
 
-	//a vertex buffer to contain the feelers rqd for dribbling
 	std::vector<Vector2D> m_Antenna;
 
 };
