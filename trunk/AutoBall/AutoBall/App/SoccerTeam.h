@@ -34,7 +34,7 @@ public:
 	void        Update();
 
 	/// 让所有的队员归位
-	void        ReturnAllFieldPlayersToHome()const;
+	void        ReturnAllFootBallerToHome()const;
 
 	///  计算是否能射门进球
 	bool        CanShoot(Vector2D  BallPos,

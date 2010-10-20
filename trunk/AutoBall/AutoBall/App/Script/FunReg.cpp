@@ -126,7 +126,7 @@ void  ReisterSoccerBall(lua_State* pLua)
 		];
 }
 
-void  ReisterFieldPlayer(lua_State* pLua)
+void  ReisterFootBaller(lua_State* pLua)
 {
 	module(pLua)
 		[
@@ -163,7 +163,7 @@ void  ReisterTeam(lua_State* pLua)
 		[
 			class_<FootBallTeam>("FootBallTeam")
 
-			.def("CanShoot",&FootBallTeam::CanShoot)
+			.def("CanShootGoal",&FootBallTeam::CanShootGoal)
 			.def("InControl",&FootBallTeam::InControl)
 			.def("IsControl",&FootBallTeam::IsControl)
 			.def("GetSupportSpot",&FootBallTeam::GetSupportSpot)
@@ -202,7 +202,7 @@ void   ReisterAllFun(lua_State* pLua)
 			def("MsgDispatcher",&MsgDispatcher),
 			def("Vec2DNormalize",&Vec2DNormalize),
 			def("Vec2DSub",&Vec2DSub),
-			def("GetField",&GetExtraInfoField),
+			def("GetField",&GetExtraInfoFootBall),
 			def("VecAddr",&VecAddr),
 			def("PrintLuaMsg",&PrintLuaMsg),
 			def("GetGlobalEntityID",&GetGlobalEntityID)
@@ -219,7 +219,7 @@ void   ReisterAllFun(lua_State* pLua)
 	ReisterMoveEntity(pLua);
 	ReisterPlayerBase(pLua);
 	ReisterSoccerBall(pLua);
-	ReisterFieldPlayer(pLua);
+	ReisterFootBaller(pLua);
 	ReisterSteering(pLua);
 	ReisterTeam(pLua);
 	ReisterPitch(pLua);

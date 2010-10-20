@@ -111,7 +111,7 @@ void PrepareForKickOff::Enter(FootBallTeam* team)
 	team->SetPlayerClosestToBall(NULL);
 
 	//send Msg_GoHome to each player.
-	team->ReturnAllFieldPlayersToHome();
+	team->ReturnAllFootBallerToHome();
 }
 
 void PrepareForKickOff::Execute(FootBallTeam* team)

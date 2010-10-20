@@ -11,7 +11,6 @@ CBaseEntity::CBaseEntity(long id)
 
 	m_id = id ;
 	m_dSize=0.0;
-	m_bTag= false;
 	m_vScal= Vector2D(1.0,1.0);
 	m_iNextValidID = m_id + 1;
 }

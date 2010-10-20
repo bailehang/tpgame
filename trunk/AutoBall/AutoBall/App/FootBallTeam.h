@@ -34,10 +34,10 @@ public:
 	void        Update();
 
 	/// 让所有的队员归位
-	void        ReturnAllFieldPlayersToHome()const;
+	void        ReturnAllFootBallerToHome()const;
 
 	///  计算是否能射门进球
-	bool        CanShoot(Vector2D  BallPos,
+	bool        CanShootGoal(Vector2D  BallPos,
 						 double    power, 
 						 Vector2D& ShotTarget = Vector2D())const;
 
@@ -167,7 +167,7 @@ private:
 	StateMachine<FootBallTeam>*  m_pStateMachine;	 ///> 当前队伍的状态机
 	team_color                m_Color;				 ///> 队伍颜色
 	std::vector<BasePlayer*>  m_Players;			 ///> 队伍所有的成员
-	GoalKeeper*				  m_GoalKeeper;			 ///> blue守门员
+	GoalKeeper*				  m_GoalKeeper;			 ///> 守门员
 	FootBallPitch*            m_pPitch;				 ///> 指向的球场指针
 	Goal*                     m_pOpponentsGoal;		 ///> 对方球门
 	Goal*                     m_pHomeGoal;			 ///> 自己球门

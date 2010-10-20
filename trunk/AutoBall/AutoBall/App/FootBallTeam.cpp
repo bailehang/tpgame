@@ -330,7 +330,7 @@ bool FootBallTeam::isPassSafeFromAllOpponents(Vector2D                from,
 	return true;
 }
 
-bool FootBallTeam::CanShoot(Vector2D  BallPos,
+bool FootBallTeam::CanShootGoal(Vector2D  BallPos,
 						  double     power, 
 						  Vector2D& ShotTarget)const
 {
@@ -368,7 +368,7 @@ bool FootBallTeam::CanShoot(Vector2D  BallPos,
 }
 
 
-void FootBallTeam::ReturnAllFieldPlayersToHome()const
+void FootBallTeam::ReturnAllFootBallerToHome()const
 {
 	std::vector<BasePlayer*>::const_iterator it = m_Players.begin();
 

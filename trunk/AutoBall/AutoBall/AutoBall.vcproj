@@ -348,7 +348,7 @@
 				Name="StateAi"
 				>
 				<File
-					RelativePath=".\App\StateAi\GoalKeeperStates.cpp"
+					RelativePath=".\App\StateAi\KeeperStates.cpp"
 					>
 				</File>
 				<File

@@ -8,7 +8,7 @@ end
 
 State_GlobalPlayer["Execute"] = function(player)
 
-	--PrintLuaMsg( player:ID() .. " State_GlobalPlayer Execute " );
+	PrintLuaMsg( player:ID() .. " State_GlobalPlayer Execute " );
 
 	if not player:IsChaseBall() then
 
@@ -34,7 +34,7 @@ State_GlobalPlayer["OnMessage"] = function(player,Msg)
 
 		player:SetSteeringTarget( Msg:GetVec() );
 
-		--PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_ReceiveBall 26" );
+		PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_ReceiveBall 26" );
 		player:GetFSM():ChangeState( State_ReceiveBall );
 
 		player:SetScriptValue( 1 );
@@ -140,7 +140,7 @@ State_ChaseBall["Execute"] = function(player)
 
 	--PrintLuaMsg( player:ID() .. " State_ChaseBall Execute 123 " );
 
-	--PrintLuaMsg( player:ID() .. " State_ChaseBall Execute " );
+	PrintLuaMsg( player:ID() .. " State_ChaseBall Execute " );
 
 	if player:BallWithinKickingRange() then
 
@@ -152,7 +152,7 @@ State_ChaseBall["Execute"] = function(player)
 
 	elseif  player:isClosestTeamMemberToBall() then
 
-		--PrintLuaMsg( player:ID() .. " State_ChaseBall Execute 345 " );
+		PrintLuaMsg( player:ID() .. " State_ChaseBall Execute 345 " );
 
 		player:SetSteeringTarget( player:BallPos() )
 
@@ -160,7 +160,7 @@ State_ChaseBall["Execute"] = function(player)
 
 	end
 
-	--PrintLuaMsg( player:ID() .. " State_ChaseBall GlobalPlayer change to State_ReturnGoHome 20" );
+	PrintLuaMsg( player:ID() .. " State_ChaseBall GlobalPlayer change to State_ReturnGoHome 20" );
 
 	player:GetFSM():ChangeState(State_ReturnGoHome);
 
@@ -201,7 +201,7 @@ end
 
 State_SupportAttacker["Execute"] = function(player)
 
-	--PrintLuaMsg( player:ID() .. " State_SupportAttacker Execute " );
+	PrintLuaMsg( player:ID() .. " State_SupportAttacker Execute " );
 
 	if player:IsChaseBall() then
 		return;
@@ -223,7 +223,7 @@ State_SupportAttacker["Execute"] = function(player)
 
 	end
 
-	if  player:Team():CanShoot(player:Pos(),6) then
+	if  player:Team():CanShootGoal(player:Pos(),6) then
 
 		player:Team():RequestPass(player)
 
@@ -454,7 +454,7 @@ end
 
 State_FollowBall["Execute"] = function(player)
 
-	--PrintLuaMsg( player:ID() .. " State_FollowBall Execute " );
+	PrintLuaMsg( player:ID() .. " State_FollowBall Execute " );
 
 	if not player:IsChaseBall() then
 
@@ -562,7 +562,7 @@ State_KickBall["Execute"] = function(player)
 
 	local  power = 6 * dot;
 
-	if player:Team():CanShoot( player:BallPos() , power , BallTarget ) or  RandFloat() <  0.005 then
+	if player:Team():CanShootGoal( player:BallPos() , power , BallTarget ) or  RandFloat() <  0.005 then
 
 		BallTarget = AddNoiseToKick( player:BallPos() , BallTarget );
 

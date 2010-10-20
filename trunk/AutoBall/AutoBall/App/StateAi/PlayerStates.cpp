@@ -39,10 +39,8 @@ bool GlobalPlayerState::OnMessage(FootBaller* player, const tagMessage& telegram
 	{
 	case Msg_ReceiveBall:
 		{
-			//set the target
 			player->Steering()->SetTarget(*(static_cast<Vector2D*>(telegram.ExtraInfo)));
 
-			//change state 
 			player->GetFSM()->ChangeState(&GetInstObj(ReceiveBall));
 
 			return true;
@@ -112,19 +110,14 @@ bool GlobalPlayerState::OnMessage(FootBaller* player, const tagMessage& telegram
 				Msg_ReceiveBall,
 				&receiver->Pos());
 
-
-
-			//change state   
 			player->GetFSM()->ChangeState(&GetInstObj(Wait));
 
 			player->FindSupport();
 
 			return true;
 		}
-
 		break;
-
-	}//end switch
+	}
 
 	return false;
 }
@@ -147,7 +140,6 @@ void ChaseBall::Enter(FootBaller* player)
 		PutFileLog(str);
 	}
 	player->Steering()->SeekOn();
-
 }
 
 void ChaseBall::Execute(FootBaller* player)                                     
@@ -220,7 +212,7 @@ void SupportAttacker::Execute(FootBaller* player)
 	}
 
 	/// 如果这么球员可以射门，切进攻队员可以把球传给他，那么把球传给该队员
-	if( player->Team()->CanShoot(player->Pos(),
+	if( player->Team()->CanShootGoal(player->Pos(),
 		GetInstObj(CGameSetup).MaxShootingForce))
 	{
 		player->Team()->RequestPass(player);
@@ -526,7 +518,7 @@ void KickBall::Execute(FootBaller* player)
 	double power = GetInstObj(CGameSetup).MaxShootingForce * dot;
 
 	/// 如果确认该队员可以在这个位置射门，或者无论如何他都改该踢一下球，那该队员则试图射门
-	if (player->Team()->CanShoot(player->Ball()->Pos(),
+	if (player->Team()->CanShootGoal(player->Ball()->Pos(),
 		power,
 		BallTarget)                   || 
 		(RandFloat() < GetInstObj(CGameSetup).ChancePlayerAttemptsPotShot))
@@ -746,11 +738,5 @@ void ReceiveBall::Exit(FootBaller* player)
 
 	player->Team()->SetReceiver(NULL);
 }
-
-
-
-
-
-
 
 
