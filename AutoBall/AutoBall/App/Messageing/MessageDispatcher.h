@@ -8,6 +8,7 @@
 
 #include "../../Public/MsgImpl.h"
 #include "../../Public/Singleton.h"
+#include "../../Render/Vector2D.h"
 
 class  CBaseEntity;
 class  EntityManager;
@@ -16,26 +17,23 @@ class MessageDispatcher;
 
 #define Dispatcher MsgDispatcher()
 
-const double SEND_MSG_IMMEDIATELY = 0.0;
-const int    NO_ADDITIONAL_INFO   = 0;
-const int    SENDER_ID_IRRELEVANT = -1;
+const long SEND_MSG_IMMEDIATELY = 0;
 
 class MessageDispatcher
 {
 public:
 
-	void DispatchMsg(double delay,
-					 int    sender,
+	void DispatchMsg(int    sender,
 					 int    receiver,
 					 int    msg,
-					 void*  ExtraData);
-public:
+					 void*  Data);
+	void DispatchVctMsg(int     sender,
+					 int		receiver,
+					 int        msg,
+					 Vector2D   Data);
+private:
 
 	void Discharge(CBaseEntity* pReceiver, const tagMessage& msg);
-
-private:  
-
-	std::set<tagMessage> PriorityQ;
 
 };
 

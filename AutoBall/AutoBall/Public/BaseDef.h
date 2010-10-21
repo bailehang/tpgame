@@ -19,7 +19,7 @@ enum   ePlayerType
 // ×´Ì¬ÀàĞÍ
 enum	eStateAi
 {
-	Ent_InValidState=-1,
+	Ent_InValidState= -1,
 	Ent_PeaceState	   ,
 	Ent_FleeState	   ,
 	Ent_FightState	   ,

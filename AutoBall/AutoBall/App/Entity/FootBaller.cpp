@@ -48,7 +48,6 @@ FootBaller::FootBaller(FootBallTeam* home_team,
 						 scale,
 						 role)                                    
 {
-	//set up the state machine
 	m_pStateMachine =  new StateMachine<FootBaller>(this);
 	m_pStateMachineScript = NULL;
 	if (start_state)
@@ -62,7 +61,6 @@ FootBaller::FootBaller(FootBallTeam* home_team,
 
 	m_pSteering->SeparationOn();
 
-	//set up the kick regulator
 	m_pKickLimiter = new TimeCount(GetInstObj(CGameSetup).PlayerKickFrequency);
 }
 

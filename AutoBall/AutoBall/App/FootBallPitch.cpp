@@ -90,22 +90,17 @@ void FootBallPitch::Update()
 
 	static int tick = 0;
 
-	//update the balls
 	m_pBall->Update();
 
-	//update the teams
 	m_pRedTeam->Update();
 	m_pBlueTeam->Update();
 
-	//if a goal has been detected reset the pitch ready for kickoff
 	if (m_pBlueGoal->Scored(m_pBall) || m_pRedGoal->Scored(m_pBall))
 	{
 		m_bGameOn = false;
 
-		//reset the ball                                                      
 		m_pBall->PlaceAtPosition(Vector2D((double)m_cxClient/2.0, (double)m_cyClient/2.0));
 
-		//get the teams ready for kickoff
 		m_pRedTeam->GetFSM()->ChangeState(&GetInstObj(PrepareForKickOff));
 		m_pBlueTeam->GetFSM()->ChangeState(&GetInstObj(PrepareForKickOff));
 	}

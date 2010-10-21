@@ -17,21 +17,24 @@ void MessageDispatcher::Discharge(CBaseEntity* pReceiver, const tagMessage& tele
 	}
 }
 
-void MessageDispatcher::DispatchMsg(double       delay,
-									int          sender,
+void MessageDispatcher::DispatchMsg(int          sender,
 									int          receiver,
 									int          msg,
-									void*        ExtraData = NULL)
+									void*        Data = NULL)
 {
 
 	CBaseEntity* pReceiver = GetInstObj(EntityManager).FindEntity(receiver);
 
 	if (pReceiver != NULL)
 	{
-		Discharge(pReceiver, tagMessage(0, sender, receiver, msg, ExtraData));
+		Discharge(pReceiver, tagMessage(0, sender, receiver, msg, Data));
 		return;
-	}                  
-	
+	}                  	
+}
+
+void  MessageDispatcher::DispatchVctMsg(int sender, int receiver, int msg, Vector2D Data)
+{
+	DispatchMsg(sender,receiver,msg,&Data);
 }
 
 

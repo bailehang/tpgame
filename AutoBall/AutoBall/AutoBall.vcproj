@@ -257,6 +257,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Public\locks.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Public\locks.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Public\Log.h"
 				>
 			</File>
@@ -278,6 +286,10 @@
 			</File>
 			<File
 				RelativePath=".\Public\Timer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Public\Tool.h"
 				>
 			</File>
 			<Filter

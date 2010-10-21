@@ -64,7 +64,7 @@ State_GlobalPlayer["OnMessage"] = function(player,Msg)
 
 		local addrvec =  VecAddr(RevPos);
 
-		Dispatcher:DispatchMsg( 0,player:ID(),RevId, addrvec );
+		Dispatcher:DispatchVctMsg( player:ID(),RevId, 0 , addrvec );
 
 		PrintLuaMsg( player:ID() .. " ChangeState GlobalPlayer change to State_Wait 25" );
 
@@ -547,9 +547,9 @@ State_KickBall["Execute"] = function(player)
 
 	local dot    = player:Heading():Dot(Vec2D);
 
-	if player:Team():IsReceiver() or player:Pitch():GoalKeeperHasBall() or dot < 0 then
+	if  player:Team():IsReceiver() or player:Pitch():GoalKeeperHasBall() then
 
-		--PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_ChaseBall 7" );
+		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_ChaseBall 7" );
 
 		player:GetFSM():ChangeState( State_ChaseBall );
 
@@ -562,7 +562,7 @@ State_KickBall["Execute"] = function(player)
 
 	local  power = 6 * dot;
 
-	if player:Team():CanShootGoal( player:BallPos() , power , BallTarget ) or  RandFloat() <  0.005 then
+	if player:Team():CanShootGoal( player:BallPos() , power , BallTarget ) or  RandFloat() <  0.05 then
 
 		BallTarget = AddNoiseToKick( player:BallPos() , BallTarget );
 
@@ -576,7 +576,7 @@ State_KickBall["Execute"] = function(player)
 
 		player:FindSupport();
 
-		player:Team():SetThrowIn( false );
+		player:Team():SetThrow( 0 );
 
 	end
 
@@ -587,28 +587,34 @@ State_KickBall["Execute"] = function(player)
 
 	PrintLuaMsg( player:ID() .. " State_KickBall player FindPass! " );
 
-	if player:isThreatened() and player:Team():FindPass( player, receiver, BallTarget,power,100 ) then
+	if player:isThreatened() then
+		
+		receiver = player:Team():FindRecvPass( player,BallTarget,power,100 );
+
+		if receiver == 0 then 
+
+			return;
+		end
+
+		PrintLuaMsg(receiver .." receiver id " );
 
 		BallTarget = AddNoiseToKick( player:BallPos() , BallTarget );
 
 		local  kickDirection = Vec2DSub( BallTarget , player:BallPos() );
 
 		player:Ball():Kick( kickDirection , power , player );
-
-
-		player:Team():SetThrowIn( false );
-
-		local  Dispatcher = MsgDispatcher();
+		
+		player:Team():SetThrow( 0 );
 
 		local  addrvec    = VecAddr( BallTarget );
 
-		Dispatcher:DispatchMsg( 0 , player:ID() , receiver:ID() , 0 , addrvec );
+		local  Dispatcher = MsgDispatcher();
+
+		--Dispatcher:DispatchVctMsg(player:ID() , receiver , 0 , addrvec );
 
 		-- 传球消息公告
 
 		player:GetFSM():ChangeState( State_Wait )
-
-		PrintLuaMsg( player:ID() .. " State_KickBall GlobalPlayer change to State_Wait 5" );
 
 		player:FindSupport();
 
@@ -629,7 +635,7 @@ end
 
 State_KickBall["Exit"] = function(player)
 
-	PrintLuaMsg( player:ID() .. " leave State_KickBall " );
+	--PrintLuaMsg( player:ID() .. " leave State_KickBall " );
 
 	if not player:isReadyForNextKick() then
 
@@ -686,13 +692,13 @@ State_Dribble["Execute"] = function(player)
 
 	--	player:Ball():Kick( direction , KickingForce , player );
 
-	--	player:Team():SetThrowIn(false);
+	--	player:Team():SetThrow(0);
 
 	--else
 
 		player:Ball():Kick( player:Team():HomeGoalFacing() , 1.5 , player );
 
-		player:Team():SetThrowIn(false);
+		player:Team():SetThrow(0);
 
 	--end
 

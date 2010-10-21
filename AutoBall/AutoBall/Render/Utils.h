@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+
+#pragma  once 
 
 #include <math.h>
 #include <sstream>
@@ -8,7 +8,7 @@
 #include <limits>
 #include <cassert>
 #include <iomanip>
-#include "../Public/Log.h"
+
 
 #define  SAFE_DELETE( ARR )		{ if(ARR) { delete ARR; ARR=NULL;} }
 #define  SAFE_DELETE_ARRAY(ARR)	{ if(ARR) { delete ARR[];ARR=NULL;}}
@@ -276,15 +276,3 @@ bool Overlapped(const T* ob, const conT& conOb, double MinDistBetweenObstacles =
 	return false;
 }
 
-
-inline void PrintLuaMsg( const char* pInfo )
-{
-	char  str[128];
-
-	sprintf_s<128>( str , "%s" , pInfo );
-
-	CLog log( "cs.txt" );
-	log << str ;
-}
-
-#endif

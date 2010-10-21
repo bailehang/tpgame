@@ -135,18 +135,17 @@ void BasePlayer::FindSupport()const
 	/// 查找最近玩家，让其转换为接应状态
 	if (Team()->SupportingPlayer() == NULL)
 	{
-		BasePlayer* BestSupportPly = Team()->DetermineBestSupportingAttacker();
+		BasePlayer* BestSupportPly = Team()->CalcBestSupportingAttacker();
 
 		Team()->SetSupportingPlayer(BestSupportPly);
 
-		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-			GetID(),
+		Dispatcher->DispatchMsg(GetID(),
 			Team()->SupportingPlayer()->GetID(),
 			Msg_SupportAttacker,
 			NULL);
 	}
 
-	BasePlayer* BestSupportPly = Team()->DetermineBestSupportingAttacker();
+	BasePlayer* BestSupportPly = Team()->CalcBestSupportingAttacker();
 
 	
 	/// 如果当前位置适合让带球队员给自己传球，请求发球
@@ -154,8 +153,7 @@ void BasePlayer::FindSupport()const
 	{
 		if (Team()->SupportingPlayer())
 		{
-			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-				GetID(),
+			Dispatcher->DispatchMsg(GetID(),
 				Team()->SupportingPlayer()->GetID(),
 				Msg_GoHome,
 				NULL);
@@ -163,8 +161,7 @@ void BasePlayer::FindSupport()const
 
 		Team()->SetSupportingPlayer(BestSupportPly);
 
-		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-			GetID(),
+		Dispatcher->DispatchMsg(GetID(),
 			Team()->SupportingPlayer()->GetID(),
 			Msg_SupportAttacker,
 			NULL);

@@ -51,6 +51,12 @@ public:
 						 double        power,
 						 double        MinPassingDistance)const;
 
+	/// 
+	int		    FindRecvPass(const BasePlayer*const passer,
+							 Vector2D& PassTarget,
+							 double power,
+							 double MinPassingDistance);
+
 	/// 给定一个传球者和一个接应者，这个方法测试接球者附近的若干不同位置，
 	/// 判断是否可以安全的传球，如果可以传球，
 	/// 那么该方法把最佳传球保存在参数PassTarget中
@@ -79,7 +85,7 @@ public:
 	void        RequestPass(FootBaller* requester)const;
 
 	/// 计算最佳传球位置，并查找最合适的对方队员前往这个地点
-	BasePlayer* DetermineBestSupportingAttacker();
+	BasePlayer* CalcBestSupportingAttacker();
 
 	/// 得到所有的队内成员
 	const std::vector<BasePlayer*>& Members()const{return m_Players;}  
@@ -103,9 +109,9 @@ public:
 	BasePlayer*          SupportingPlayer()const{return m_pSupportingPlayer;}
 	void                 SetSupportingPlayer(BasePlayer* plyr=NULL){m_pSupportingPlayer = plyr;}
 
-	BasePlayer*          Receiver()const{return m_pReceivingPlayer;}
+	BasePlayer*          Receiver()const	{ return m_pReceivingPlayer;	   }
+	bool				 IsReceiver() const { return m_pReceivingPlayer!=NULL; }
 
-	bool				 IsReceiver() const { return m_pReceivingPlayer ==NULL; }
 	void                 SetReceiver(BasePlayer* plyr=NULL){m_pReceivingPlayer = plyr;}
 
 	BasePlayer*          ControllingPlayer()const{return m_pControllingPlayer;}
@@ -137,7 +143,7 @@ public:
 		m_pSupportSpotCalc->BestSupportingPosition();
 	}
 
-	void UpdateTargetsOfWaitingPlayers()const;
+	void UpdateWaitingPlayers()const;
 
 	std::string Name() const 
 	{
@@ -150,6 +156,9 @@ public:
 	void  SetChaseBall(bool chase) { m_IsChase = chase;}
 	bool  IsThrowIn() const	       { return m_IsThrowIn; }
 	void  SetThrowIn(bool throwin) { m_IsThrowIn = throwin;}
+
+	void  SetThrow(int value)      { SetThrowIn(false);}
+
 	Vector2D  HomeGoalFacing()	   { return m_pHomeGoal->Facing();}
 
 private:

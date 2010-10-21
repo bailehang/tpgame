@@ -21,7 +21,7 @@ void GlobalPlayerState::Execute(FootBaller* player)
 {
 	if( !player->Team()->IsChaseBall() ) return;
 
-	/// 如果球员占有并接近球，那么降低他的最大速度
+	/// 在控球范围内
 	if((player->BallWithinReceivingRange()) && (player->isControllingPlayer()))
 	{
 		player->SetMaxSpeed(GetInstObj(CGameSetup).PlayerMaxSpeedWithBall);
@@ -92,7 +92,7 @@ bool GlobalPlayerState::OnMessage(FootBaller* player, const tagMessage& telegram
 			/// 得到请求传球的队员位置
 			FootBaller* receiver = static_cast<FootBaller*>(telegram.ExtraInfo);
 
-			/// 如果球不在球员可触及的范围，或请求队员不具备射门的条件，改队员不能传球给请求队员
+			/// 如果没有控制球，且不能提到球则不能传球
 			if (player->Team()->Receiver() != NULL ||
 				!player->BallWithinKickingRange() )
 			{
@@ -104,8 +104,7 @@ bool GlobalPlayerState::OnMessage(FootBaller* player, const tagMessage& telegram
 				GetInstObj(CGameSetup).MaxPassingForce,player);
 
 			///通知接球队员，开始传球
-			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-				player->GetID(),
+			Dispatcher->DispatchMsg(player->GetID(),
 				receiver->GetID(),
 				Msg_ReceiveBall,
 				&receiver->Pos());
@@ -558,8 +557,7 @@ void KickBall::Execute(FootBaller* player)
 		player->Team()->SetThrowIn(false);
 
 		/// 让接球队员知道要传球
-		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-			player->GetID(),
+		Dispatcher->DispatchMsg(player->GetID(),
 			receiver->GetID(),
 			Msg_ReceiveBall,
 			&BallTarget);                            

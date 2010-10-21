@@ -14,8 +14,6 @@ void CMoveEntity::SetHeading(Vector2D new_heading)
 	}
 
 	m_vHeading = new_heading;
-
-	//the side vector must always be perpendicular to the heading
 	m_vSide = m_vHeading.Perp();
 }
 
@@ -35,7 +33,6 @@ bool CMoveEntity::RotateHeadingToFacePosition(Vector2D target)
 
 	C2DMatrix RotationMatrix;
 
-	//int vec = m_vHeading.Sign(toTarget);
 	RotationMatrix.Rotate(angle * m_vHeading.Sign(toTarget));	
 	if( GetID() == 2 )
 	{

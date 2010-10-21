@@ -23,6 +23,7 @@ public:
 
 	Vector2D(const Vector2D& rhs )	{  x = rhs.x  , y = rhs.y ; }
 
+	/// ¡„œÚ¡ø
 	void  Zero();
 
 	bool  IsZero() const ;
