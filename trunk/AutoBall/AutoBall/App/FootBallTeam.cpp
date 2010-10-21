@@ -72,7 +72,6 @@ void FootBallTeam::Update()
 
 	m_pStateMachine->Update();
 
-	//now update each player
 	std::vector<BasePlayer*>::iterator it = m_Players.begin();
 
 	for (it; it != m_Players.end(); ++it)
@@ -104,7 +103,7 @@ void FootBallTeam::CalculateClosestPlayerToBall()
 	m_dDistSqToBallOfClosestPlayer = ClosestSoFar;
 }
 
-BasePlayer* FootBallTeam::DetermineBestSupportingAttacker()
+BasePlayer* FootBallTeam::CalcBestSupportingAttacker()
 {
 
 	/// 对所有队员进行遍历一次，求出基本值就Ok....
@@ -131,6 +130,21 @@ BasePlayer* FootBallTeam::DetermineBestSupportingAttacker()
 
 	return BestPlayer;
 }
+
+
+int  FootBallTeam::FindRecvPass(const BasePlayer*const passer,
+								Vector2D& PassTarget, double power,
+								double MinPassingDistance)
+{
+   BasePlayer*  player =  NULL;
+
+   if ( FindPass(passer,player,PassTarget,power,MinPassingDistance) )
+   {
+	   return player->GetID();
+   }
+   return 0;
+}
+
 
 bool FootBallTeam::FindPass(const BasePlayer*const passer,
 						  BasePlayer*&           receiver,
@@ -376,11 +390,7 @@ void FootBallTeam::ReturnAllFootBallerToHome()const
 	{
 		if ((*it)->Role() != BasePlayer::goal_keeper)
 		{
-			Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-				1,
-				(*it)->GetID(),
-				Msg_GoHome,
-				NULL);
+			Dispatcher->DispatchMsg(1,(*it)->GetID(),Msg_GoHome,NULL);
 		}
 	}
 }
@@ -631,7 +641,7 @@ void FootBallTeam::SetPlayerHomeRegion(int plyr, int region)const
 	m_Players[plyr]->SetHomeRegion(region);
 }
 
-void FootBallTeam::UpdateTargetsOfWaitingPlayers()const
+void FootBallTeam::UpdateWaitingPlayers()const
 {
 	std::vector<BasePlayer*>::const_iterator it = m_Players.begin();
 
@@ -667,7 +677,6 @@ bool FootBallTeam::AllPlayersAtHome()const
 
 void FootBallTeam::RequestPass(FootBaller* requester)const
 {
-	//maybe put a restriction here
 	if (RandFloat() > 0.1) return;
 
 	if (isPassSafeFromAllOpponents(ControllingPlayer()->Pos(),
@@ -676,8 +685,7 @@ void FootBallTeam::RequestPass(FootBaller* requester)const
 		GetInstObj(CGameSetup).MaxPassingForce))
 	{
 
-		Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-			requester->GetID(),
+		Dispatcher->DispatchMsg(requester->GetID(),
 			ControllingPlayer()->GetID(),
 			Msg_PassToMe,
 			&requester->Pos()); 

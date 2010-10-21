@@ -10,15 +10,9 @@ TimeCount::TimeCount(double NumUpdatesPerSecondRqd)
 	{
 		m_dUpdatePeriod = 1000.0 / NumUpdatesPerSecondRqd; 
 	}
-
-	else if (isEqual(0.0, NumUpdatesPerSecondRqd))
+	else
 	{
-		m_dUpdatePeriod = 0.0;
-	}
-
-	else if (NumUpdatesPerSecondRqd < 0)
-	{
-		m_dUpdatePeriod = -1;
+		m_dUpdatePeriod = 100;
 	}
 }
 
@@ -26,7 +20,7 @@ bool TimeCount::isReadyOK()
 {
 	if (isEqual(0.0, m_dUpdatePeriod)) return true;
 
-	if (m_dUpdatePeriod < 0) return false;
+	if (m_dUpdatePeriod < 0)		   return false;
 
 	DWORD CurrentTime = timeGetTime();
 

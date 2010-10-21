@@ -41,7 +41,7 @@ void  ReisterMessageDispatcher(lua_State* pLua)
 		[
 			class_<MessageDispatcher>("MessageDispatcher")
 
-			.def("DispatchMsg",&MessageDispatcher::DispatchMsg)
+			.def("DispatchVctMsg",&MessageDispatcher::DispatchVctMsg)
 		];
 }
 
@@ -173,10 +173,12 @@ void  ReisterTeam(lua_State* pLua)
 			.def("InControl",&FootBallTeam::InControl)
 			.def("SetControllingPlayer",&FootBallTeam::SetControllingPlayer)
 			.def("SetThrowIn",&FootBallTeam::SetThrowIn)
+			.def("SetThrow",&FootBallTeam::SetThrow)
 			.def("HomeGoalFacing",&FootBallTeam::HomeGoalFacing)
 			.def("IsReceiver",&FootBallTeam::IsReceiver)
 			.def("IsThrowIn",&FootBallTeam::IsThrowIn)
 			.def("SetThrowIn",&FootBallTeam::SetThrowIn)
+			.def("FindRecvPass",&FootBallTeam::FindRecvPass)
 			.def("isOpponentWithinRadius",&FootBallTeam::isOpponentWithinRadius)
 		];
 }

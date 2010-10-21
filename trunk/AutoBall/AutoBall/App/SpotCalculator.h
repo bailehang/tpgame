@@ -1,5 +1,5 @@
-#ifndef SUPPORTSPOTCALCULATOR
-#define SUPPORTSPOTCALCULATOR
+
+#pragma once 
 #pragma warning (disable:4786)
 
 #include <vector>
@@ -28,13 +28,6 @@ class SpotCalculator
 		{}
 	};
 
-private:
-
-	FootBallTeam*             m_pTeam;				///> 队
-	std::vector<BestSpot>  m_Spots;				///> 所有的传送点
-	BestSpot*              m_pBestSupportingSpot;///> 最佳传送点
-	TimeCount*                m_pPassTimer;			///> 球传送的过程中，每几帧更新 
-
 public:
 
 	SpotCalculator(int numX,
@@ -50,7 +43,15 @@ public:
 
 	/// 返回最佳传送点
 	Vector2D  GetBestSupportingSpot();
+
+
+
+private:
+
+	FootBallTeam*             m_pTeam;				    ///> 队
+	std::vector<BestSpot>     m_Spots;				    ///> 所有的传送点
+	BestSpot*                 m_pBestSupportingSpot;    ///> 最佳传送点
+	TimeCount*                m_pPassTimer;			    ///> 球传送的过程中，每几帧更新 
+
+
 };
-
-
-#endif

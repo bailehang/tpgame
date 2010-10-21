@@ -37,7 +37,6 @@ GoalKeeper::GoalKeeper(FootBallTeam*        home_team,
 
 
 {   
-	//set up the state machine
 	m_pStateMachine = new StateMachine<GoalKeeper>(this);
 
 	m_pStateMachine->SetCurrentState(start_state);
@@ -48,32 +47,21 @@ GoalKeeper::GoalKeeper(FootBallTeam*        home_team,
 }
 
 
-
-//-------------------------- Update --------------------------------------
-
 void GoalKeeper::Update()
 { 
-	//run the logic for the current state
 	m_pStateMachine->Update();
 
-	//calculate the combined force from each steering behavior 
 	Vector2D SteeringForce = m_pSteering->Calculate();
 
-
-
-	//Acceleration = Force/Mass
 	Vector2D Acceleration = SteeringForce / m_dMass;
 
-	//update velocity
+	/// 更新速度
 	m_vVelocity += Acceleration;
 
-	//make sure player does not exceed maximum velocity
 	m_vVelocity.Truncate(m_dMaxSpeed);
 
-	//update the position
 	m_vPosition += m_vVelocity;
 
-	//update the heading if the player has a non zero velocity
 	if ( !m_vVelocity.IsZero())
 	{    
 		m_vHeading = Vec2DNormalize(m_vVelocity);
@@ -81,7 +69,7 @@ void GoalKeeper::Update()
 		m_vSide = m_vHeading.Perp();
 	}
 
-	//look-at vector always points toward the ball
+	/// 是否控制了球
 	if (!Pitch()->GoalKeeperHasBall())
 	{
 		m_vLookAt = Vec2DNormalize(Ball()->Pos() - Pos());

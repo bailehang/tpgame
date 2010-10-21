@@ -24,7 +24,6 @@ void Attacking::Enter(FootBallTeam* team)
 	const int BlueRegions[TeamSize] = {1,22,19,16,11,8,6};
 	const int RedRegions[TeamSize]  = {45,25,28,31,32,35,41};
 
-	//set up the player's home regions
 	if (team->Color() == FootBallTeam::blue)
 	{
 		ChangePlayerHomeRegions(team, BlueRegions);
@@ -34,30 +33,24 @@ void Attacking::Enter(FootBallTeam* team)
 		ChangePlayerHomeRegions(team, RedRegions);
 	}
 
-	//if a player is in either the Wait or ReturnToHomeRegion states, its
-	//steering target must be updated to that of its new home region to enable
-	//it to move into the correct position.
-	team->UpdateTargetsOfWaitingPlayers();
+	team->UpdateWaitingPlayers();
 }
 
 
 void Attacking::Execute(FootBallTeam* team)
 {
 	/// 如果队伍不在控球，改变状态
-	//if this team is no longer in control change states
 	if (!team->InControl())
 	{
 		team->GetFSM()->ChangeState(&GetInstObj(Defending)); return;
 	}
 
 	/// 给接应队员计算最佳位置
-	//calculate the best position for any supporting attacker to move to
 	team->BestSupportingPosition();
 }
 
 void Attacking::Exit(FootBallTeam* team)
 {
-	//there is no supporting player for defense
 	team->SetSupportingPlayer(NULL);
 }
 
@@ -67,11 +60,9 @@ EmptyMsg(bool,Defending,OnMessage,FootBallTeam);
 
 void Defending::Enter(FootBallTeam* team)
 {
-	//these define the home regions for this state of each of the players
-  const int BlueRegions[TeamSize] = {1,22,19,16,11,8,6};
-  const int RedRegions[TeamSize]  = {45,25,28,31,32,35,41};
+    const int BlueRegions[TeamSize] = {1,22,19,16,11,8,6};
+    const int RedRegions[TeamSize]  = {45,25,28,31,32,35,41};
 
-	//set up the player's home regions
 	if (team->Color() == FootBallTeam::blue)
 	{
 		ChangePlayerHomeRegions(team, BlueRegions);
@@ -81,14 +72,11 @@ void Defending::Enter(FootBallTeam* team)
 		ChangePlayerHomeRegions(team, RedRegions);
 	}
 
-	//if a player is in either the Wait or ReturnToHomeRegion states, its
-	//steering target must be updated to that of its new home region
-	team->UpdateTargetsOfWaitingPlayers();
+	team->UpdateWaitingPlayers();
 }
 
 void Defending::Execute(FootBallTeam* team)
 {
-	//if in control change states
 	if (team->InControl())
 	{
 		team->GetFSM()->ChangeState(&GetInstObj(Attacking)); return;
@@ -104,19 +92,16 @@ EmptyMsg(bool,PrepareForKickOff,OnMessage,FootBallTeam);
 void PrepareForKickOff::Enter(FootBallTeam* team)
 {
 	/// 重置关键队伍的指针
-	//reset key player pointers
 	team->SetControllingPlayer(NULL);
 	team->SetSupportingPlayer(NULL);
 	team->SetReceiver(NULL);
 	team->SetPlayerClosestToBall(NULL);
 
-	//send Msg_GoHome to each player.
 	team->ReturnAllFootBallerToHome();
 }
 
 void PrepareForKickOff::Execute(FootBallTeam* team)
 {
-	//if both teams in position, start the game
 	if (team->AllPlayersAtHome() && team->Opponents()->AllPlayersAtHome())
 	{
 		team->GetFSM()->ChangeState(&GetInstObj(Defending));
@@ -138,7 +123,6 @@ void Throw_In::Enter(FootBallTeam* team)
 
 void Throw_In::Execute(FootBallTeam* team)
 {
-	//if both teams in position, start the game
 	if ( !team->IsThrowIn() )
 	{
 		team->GetFSM()->ChangeState(&GetInstObj(Attacking));
