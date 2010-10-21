@@ -73,7 +73,7 @@ private:
 inline Vector2D AddNoiseToKick(Vector2D BallPos, Vector2D BallTarget)
 {
 
-	double displacement = (Pi - Pi*GetInstObj(CGameSetup).PlayerKickingAccuracy) * RandomClamped();
+	double displacement = (Pi - Pi*0.99) * RandomClamped();
 
 	Vector2D toTarget = BallTarget - BallPos;
 

@@ -101,7 +101,7 @@ public:
 	FootBallPitch* const     Pitch()const;
 	SteeringBehaviors*const  Steering()const{return m_pSteering;}
 	const Region* const      HomeRegion()const;
-	bool					 InsideHomeRegion(Vector2D pos, Region::region_modifier r)const;
+	bool					 InsideHomeRegion(Vector2D pos, int r)const;
 	void                     SetHomeRegion(int NewRegion){m_iHomeRegion = NewRegion;}
 	FootBallTeam*const       Team()const{return m_pTeam;}
 

@@ -350,7 +350,7 @@ bool FootBallTeam::CanShootGoal(Vector2D  BallPos,
 {
 
 	/// 这个方法要测试的随机选取的射门目标的数量
-	int NumAttempts = GetInstObj(CGameSetup).NumAttemptsToFindValidStrike;
+	int NumAttempts = 5;
 
 	while (NumAttempts--)
 	{
@@ -436,7 +436,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale));
  
@@ -447,7 +447,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                                BasePlayer::attacker));
@@ -460,7 +460,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                                BasePlayer::attacker));
@@ -474,7 +474,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                                BasePlayer::attacker));
@@ -487,7 +487,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                               BasePlayer::defender));
@@ -499,7 +499,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                                BasePlayer::defender));
@@ -511,7 +511,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                                BasePlayer::defender));
@@ -529,7 +529,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale));
 
@@ -542,7 +542,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                                BasePlayer::attacker));
@@ -555,7 +555,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                                BasePlayer::attacker));
@@ -567,7 +567,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                                BasePlayer::attacker));
@@ -580,7 +580,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                                BasePlayer::defender));
@@ -592,7 +592,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                                BasePlayer::defender));
@@ -604,7 +604,7 @@ void FootBallTeam::CreatePlayers()
                                Vector2D(0.0, 0.0),
                                GetInstObj(CGameSetup).PlayerMass,
                                GetInstObj(CGameSetup).PlayerMaxForce,
-                               GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall,
+                               1.6,
                                GetInstObj(CGameSetup).PlayerMaxTurnRate,
                                GetInstObj(CGameSetup).PlayerScale,
                                BasePlayer::defender));
@@ -682,7 +682,7 @@ void FootBallTeam::RequestPass(FootBaller* requester)const
 	if (isPassSafeFromAllOpponents(ControllingPlayer()->Pos(),
 		requester->Pos(),
 		requester,
-		GetInstObj(CGameSetup).MaxPassingForce))
+		3))
 	{
 
 		Dispatcher->DispatchMsg(requester->GetID(),

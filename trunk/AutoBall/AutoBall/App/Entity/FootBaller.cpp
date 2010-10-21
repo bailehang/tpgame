@@ -61,7 +61,7 @@ FootBaller::FootBaller(FootBallTeam* home_team,
 
 	m_pSteering->SeparationOn();
 
-	m_pKickLimiter = new TimeCount(GetInstObj(CGameSetup).PlayerKickFrequency);
+	m_pKickLimiter = new TimeCount( 5 );
 }
 
 FootBaller::FootBaller(FootBallTeam*    home_team,
@@ -99,7 +99,7 @@ FootBaller::FootBaller(FootBallTeam*    home_team,
 	 m_pSteering->SeparationOn();
 
 	//set up the kick regulator
-	m_pKickLimiter = new TimeCount(GetInstObj(CGameSetup).PlayerKickFrequency);
+	m_pKickLimiter = new TimeCount( 5 );
 }
 
 void FootBaller::Update()

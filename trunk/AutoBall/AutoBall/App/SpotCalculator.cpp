@@ -46,7 +46,7 @@ SpotCalculator::SpotCalculator(int           numX,
 		}
 	}
 
-	m_pPassTimer = new TimeCount(GetInstObj(CGameSetup).SupportSpotUpdateFreq);
+	m_pPassTimer = new TimeCount(1);
 }
 
 
@@ -73,16 +73,15 @@ Vector2D SpotCalculator::BestSupportingPosition()
 		if(m_pTeam->isPassSafeFromAllOpponents(m_pTeam->ControllingPlayer()->Pos(),
 			curSpot->m_vPos,
 			NULL,
-			GetInstObj(CGameSetup).MaxPassingForce))
+			3))
 		{
-			curSpot->m_dScore += GetInstObj(CGameSetup).Spot_PassSafeScore;
+			curSpot->m_dScore += 2.0;
 		}
 
 		/// 可以在这个位置射门
-		if( m_pTeam->CanShootGoal(curSpot->m_vPos,            
-			GetInstObj(CGameSetup).MaxShootingForce))
+		if( m_pTeam->CanShootGoal(curSpot->m_vPos,6))
 		{
-			curSpot->m_dScore += GetInstObj(CGameSetup).Spot_CanScoreFromPositionScore;
+			curSpot->m_dScore += 1.0;
 		}   
 
 		/// 这个点离控球队员多远,越远分数越高
@@ -99,8 +98,7 @@ Vector2D SpotCalculator::BestSupportingPosition()
 			if (temp < OptimalDistance)
 			{
 				/// 标准化距离，把它加到分数中
-				curSpot->m_dScore += GetInstObj(CGameSetup).Spot_DistFromControllingPlayerScore *
-					(OptimalDistance-temp)/OptimalDistance;  
+				curSpot->m_dScore += 2.0 *(OptimalDistance-temp)/OptimalDistance;  
 			}
 		}
 

@@ -42,3 +42,12 @@ inline MessageDispatcher*  MsgDispatcher()
 {
 	return	&GetInstObj(MessageDispatcher);
 }
+
+
+inline void DispatchVctMessage(int     sender,
+						  int		receiver,
+					      int        msg,
+					      Vector2D   Data)
+{
+	  Dispatcher->DispatchVctMsg(sender,receiver,msg,Data);
+}

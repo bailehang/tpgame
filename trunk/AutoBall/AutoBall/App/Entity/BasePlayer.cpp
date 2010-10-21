@@ -185,12 +185,12 @@ bool BasePlayer::isControllingPlayer()const
 
 bool BasePlayer::BallWithinKeeperRange()const
 {
-	return (Vec2DDistanceSq(Pos(), Ball()->Pos()) < GetInstObj(CGameSetup).KeeperInBallRangeSq);
+	return (Vec2DDistanceSq(Pos(), Ball()->Pos()) < 100 );
 }
 
 bool BasePlayer::BallWithinReceivingRange()const
 {
-	return (Vec2DDistanceSq(Pos(), Ball()->Pos()) < GetInstObj(CGameSetup).BallWithinReceivingRangeSq);
+	return (Vec2DDistanceSq(Pos(), Ball()->Pos()) < 100);
 }
 
 bool BasePlayer::BallWithinKickingRange()const
@@ -281,8 +281,8 @@ const Region* const BasePlayer::HomeRegion()const
 	return Pitch()->GetRegionFromIndex(m_iHomeRegion);
 }
 
-bool   BasePlayer::InsideHomeRegion(Vector2D pos, Region::region_modifier r)const
+bool   BasePlayer::InsideHomeRegion(Vector2D pos, int r)const
 {
 	 const Region* HomeRgn = HomeRegion();
-	 return HomeRgn->Inside(pos,r);
+	 return HomeRgn->Inside(pos,(Region::region_modifier)r);
 }

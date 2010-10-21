@@ -108,11 +108,13 @@ public:
 
 	BasePlayer*          SupportingPlayer()const{return m_pSupportingPlayer;}
 	void                 SetSupportingPlayer(BasePlayer* plyr=NULL){m_pSupportingPlayer = plyr;}
+	void                 SetSupportingNULLPlayer()				   {m_pSupportingPlayer = NULL;}
 
 	BasePlayer*          Receiver()const	{ return m_pReceivingPlayer;	   }
 	bool				 IsReceiver() const { return m_pReceivingPlayer!=NULL; }
 
-	void                 SetReceiver(BasePlayer* plyr=NULL){m_pReceivingPlayer = plyr;}
+	void                 SetReceiver(BasePlayer* plyr){m_pReceivingPlayer = plyr;}
+	void				 SetNullReceiver()			  {m_pReceivingPlayer = NULL;}
 
 	BasePlayer*          ControllingPlayer()const{return m_pControllingPlayer;}
 	void                 SetControllingPlayer(BasePlayer* plyr)

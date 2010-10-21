@@ -40,7 +40,8 @@ void  ReisterMessageDispatcher(lua_State* pLua)
 	module(pLua)
 		[
 			class_<MessageDispatcher>("MessageDispatcher")
-
+	
+			.def(constructor<>())
 			.def("DispatchVctMsg",&MessageDispatcher::DispatchVctMsg)
 		];
 }
@@ -170,6 +171,7 @@ void  ReisterTeam(lua_State* pLua)
 			.def("RequestPass",&FootBallTeam::RequestPass)
 			.def("Receiver",&FootBallTeam::Receiver)
 			.def("SetReceiver",&FootBallTeam::SetReceiver)
+			.def("SetNullReceiver",&FootBallTeam::SetNullReceiver)
 			.def("InControl",&FootBallTeam::InControl)
 			.def("SetControllingPlayer",&FootBallTeam::SetControllingPlayer)
 			.def("SetThrowIn",&FootBallTeam::SetThrowIn)
@@ -179,6 +181,7 @@ void  ReisterTeam(lua_State* pLua)
 			.def("IsThrowIn",&FootBallTeam::IsThrowIn)
 			.def("SetThrowIn",&FootBallTeam::SetThrowIn)
 			.def("FindRecvPass",&FootBallTeam::FindRecvPass)
+			.def("SetSupportingNULLPlayer",&FootBallTeam::SetSupportingNULLPlayer)
 			.def("isOpponentWithinRadius",&FootBallTeam::isOpponentWithinRadius)
 		];
 }
@@ -207,7 +210,8 @@ void   ReisterAllFun(lua_State* pLua)
 			def("GetField",&GetExtraInfoFootBall),
 			def("VecAddr",&VecAddr),
 			def("PrintLuaMsg",&PrintLuaMsg),
-			def("GetGlobalEntityID",&GetGlobalEntityID)
+			def("GetGlobalEntityID",&GetGlobalEntityID),
+			def("DispatchVctMessage",DispatchVctMessage)
 
 		];
 
