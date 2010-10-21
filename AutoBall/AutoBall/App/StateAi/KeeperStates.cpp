@@ -47,7 +47,7 @@ EmptyMsg(bool,TendGoal,OnMessage,GoalKeeper);
 void TendGoal::Enter(GoalKeeper* keeper)
 {
 	//激活
-	keeper->Steering()->InterposeOn(GetInstObj(CGameSetup).GoalKeeperTendingDistance);
+	keeper->Steering()->InterposeOn(20);
 
 	/// interpose将使智能体处在球和目标之间，该调用设置目标
 	keeper->Steering()->SetTarget(keeper->GetRearInterposeTarget());
@@ -173,11 +173,11 @@ void PutBallBackInPlay::Execute(GoalKeeper* keeper)
 	if (keeper->Team()->FindPass(keeper,
 		receiver,
 		BallTarget,
-		GetInstObj(CGameSetup).MaxPassingForce,
-		GetInstObj(CGameSetup).GoalkeeperMinPassDist))
+		3,
+		50))
 	{     
 		keeper->Ball()->Kick(Vec2DNormalize(BallTarget - keeper->Ball()->Pos()),
-			GetInstObj(CGameSetup).MaxPassingForce,keeper);
+			3,keeper);
 
 		/// 守门员不在控球
 		keeper->Pitch()->SetGoalKeeperHasBall(false);

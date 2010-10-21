@@ -24,11 +24,11 @@ void GlobalPlayerState::Execute(FootBaller* player)
 	/// 在控球范围内
 	if((player->BallWithinReceivingRange()) && (player->isControllingPlayer()))
 	{
-		player->SetMaxSpeed(GetInstObj(CGameSetup).PlayerMaxSpeedWithBall);
+		player->SetMaxSpeed( 1.2 );
 	}
 	else
 	{
-		player->SetMaxSpeed(GetInstObj(CGameSetup).PlayerMaxSpeedWithoutBall);
+		player->SetMaxSpeed( 1.6 );
 	}
 
 }
@@ -101,7 +101,7 @@ bool GlobalPlayerState::OnMessage(FootBaller* player, const tagMessage& telegram
 
 			//传球
 			player->Ball()->Kick(receiver->Pos() - player->Ball()->Pos(),
-				GetInstObj(CGameSetup).MaxPassingForce,player);
+				3,player);
 
 			///通知接球队员，开始传球
 			Dispatcher->DispatchMsg(player->GetID(),
@@ -211,8 +211,7 @@ void SupportAttacker::Execute(FootBaller* player)
 	}
 
 	/// 如果这么球员可以射门，切进攻队员可以把球传给他，那么把球传给该队员
-	if( player->Team()->CanShootGoal(player->Pos(),
-		GetInstObj(CGameSetup).MaxShootingForce))
+	if( player->Team()->CanShootGoal(player->Pos(),6))
 	{
 		player->Team()->RequestPass(player);
 	}
@@ -508,13 +507,12 @@ void KickBall::Execute(FootBaller* player)
 	Vector2D    BallTarget;
 
 	/// 计算指向球的向量与球员自己的朝向向量的点积
-	double power = GetInstObj(CGameSetup).MaxShootingForce * dot;
+	double power = 6 * dot;
 
 	/// 如果确认该队员可以在这个位置射门，或者无论如何他都改该踢一下球，那该队员则试图射门
 	if (player->Team()->CanShootGoal(player->Ball()->Pos(),
 		power,
-		BallTarget)                   || 
-		(RandFloat() < GetInstObj(CGameSetup).ChancePlayerAttemptsPotShot))
+		BallTarget) || (RandFloat() < 0.005 )   )
 	{
 		/// 给射门增加一些干扰，我们不想让队员踢得太准，
 		/// 通过改变PlayerKickingAccuracy值可以调整干扰数值
@@ -537,7 +535,7 @@ void KickBall::Execute(FootBaller* player)
 	/// 找到接球队员，那么receiver将指向他
 	BasePlayer* receiver = NULL;
 
-	power = GetInstObj(CGameSetup).MaxPassingForce * dot;
+	power = 3 * dot;
 
 	/// 测试是否有任何潜在的候选人可以接球
 	if (player->isThreatened()  &&
@@ -545,7 +543,7 @@ void KickBall::Execute(FootBaller* player)
 		receiver,
 		BallTarget,
 		power,
-		GetInstObj(CGameSetup).MinPassDist))
+		150))
 	{     
 		/// 给踢球增加一些干扰
 		BallTarget = AddNoiseToKick(player->Ball()->Pos(), BallTarget);
@@ -637,8 +635,7 @@ void Dribble::Execute(FootBaller* player)
 	/// 踢球
 	else
 	{
-		player->Ball()->Kick(player->Team()->HomeGoalFacing(),
-			GetInstObj(CGameSetup).MaxDribbleForce,player); 
+		player->Ball()->Kick(player->Team()->HomeGoalFacing(),0.8,player); 
 		player->Team()->SetThrowIn(false);
 	}
 
@@ -676,7 +673,7 @@ void ReceiveBall::Enter(FootBaller* player)
 	const double PassThreatRadius = 70.0;
 
 	if (( player->InHotRegion() ||
-		  RandFloat()    < GetInstObj(CGameSetup).ChanceOfUsingArriveTypeReceiveBehavior) &&
+		  RandFloat()    < 0.5 ) &&
 		  !player->Team()->isOpponentWithinRadius(player->Pos(), PassThreatRadius))
 	{
 		player->Steering()->ArriveOn();

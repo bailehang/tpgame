@@ -56,6 +56,7 @@ public:
 			if (m_CurrentState.is_valid())
 				m_CurrentState["Execute"](m_pOwner);
 
+			PrintLuaMsg("m_pGlobalState Execute!!");
  			if (m_pGlobalState.is_valid())
  				m_pGlobalState["Execute"](m_pOwner);
 		}
@@ -99,15 +100,16 @@ public:
 	{
 		Sleep(10);
 
-		m_pPreviousState = m_CurrentState;
-
 		m_CurrentState["Exit"](m_pOwner);
+
+		Sleep(10);
 
 		m_CurrentState   = s;
 
-		Sleep(30);
+		Sleep(10);
 
 		m_CurrentState["Enter"](m_pOwner);
+		Sleep(10);
 	}
 
 	bool  isInState(const luabind::object& st)const

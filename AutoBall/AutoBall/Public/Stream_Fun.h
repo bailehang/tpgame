@@ -84,5 +84,4 @@ inline void PrintLuaMsg( const char* pInfo )
 	CLog log( "cs.txt" );
 	log << str ;
 
-	Sleep( 1 );
 }
