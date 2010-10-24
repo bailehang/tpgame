@@ -1,0 +1,17 @@
+REGEDIT
+; 此 .REG 文件可能由 SETUP 程序使用。
+;   如果 SETUP 程序不可用，则调用
+;   CWinApp::RegisterShellFileTypes 和 COleObjectFactory::UpdateRegistryAll
+;   在 InitInstance 中对下列项自动进行注册。
+
+
+HKEY_CLASSES_ROOT\SendMail.Application = SendMail Application
+
+
+HKEY_CLASSES_ROOT\SendMail.Application\CLSID = {676DA748-4C70-45F6-A2C5-50F651227F93}
+
+HKEY_CLASSES_ROOT\CLSID\{676DA748-4C70-45F6-A2C5-50F651227F93} = SendMail Application
+HKEY_CLASSES_ROOT\CLSID\{676DA748-4C70-45F6-A2C5-50F651227F93}\ProgId = SendMail.Application
+
+
+HKEY_CLASSES_ROOT\CLSID\{676DA748-4C70-45F6-A2C5-50F651227F93}\LocalServer32 = SendMail.EXE
