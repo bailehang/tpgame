@@ -1,0 +1,29 @@
+// SendMail.idl : SendMail.exe 的类型库源
+
+// 此文件将由 MIDL 编译器处理以产生
+// 类型库(SendMail.tlb)。
+
+[ uuid(67182603-AAB0-47E7-9DA0-2C83177D2C46), version(1.0) ]
+library SendMail
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	//  CSendMailDoc 的主调度接口
+	
+	[ uuid(C5BE5524-3082-42CF-96C2-593FFCD61681) ]
+	dispinterface ISendMail
+	{
+		properties:
+			
+		methods:
+	};
+
+	//  CSendMailDoc 的类信息
+	
+	[ uuid(676DA748-4C70-45F6-A2C5-50F651227F93) ]
+	coclass SendMail
+	{
+		[default] dispinterface ISendMail;
+	};
+};
