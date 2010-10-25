@@ -1,6 +1,6 @@
 #pragma once
 
-#include "lock.h"
+#include "../public/locks.h"
 
 /// Ïß³Ì³Ø
 namespace tp_ipc_peer_namespace

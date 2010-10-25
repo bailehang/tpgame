@@ -286,6 +286,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\App\SendToMail.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\App\SendToMail.h"
+				>
+			</File>
+			<File
 				RelativePath=".\App\Thread.h"
 				>
 			</File>
@@ -313,6 +321,10 @@
 				RelativePath=".\Public\Singleton.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="Message"
+			>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
