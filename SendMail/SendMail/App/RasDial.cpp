@@ -3,12 +3,12 @@
 #include <string>
 using namespace std;
 
-RasDial::RasDial()
+MyRasDial::MyRasDial()
 {
 	hRasConn = NULL;
 }
 
-RasDial::RasDial(CString user, CString pword, CString name)
+MyRasDial::MyRasDial(CString user, CString pword, CString name)
 {
 	m_User = user;
 	m_PassWord = pword;
@@ -16,7 +16,7 @@ RasDial::RasDial(CString user, CString pword, CString name)
 	hRasConn = NULL;
 }
 
-bool RasDial::Listen()
+bool MyRasDial::Listen()
 {
 	RASDIALPARAMS rdParams;							//拨号连接的信息
 	ZeroMemory(&rdParams, sizeof(RASDIALPARAMS));
@@ -44,7 +44,7 @@ bool RasDial::Listen()
 	return true;
 }
 
-void  RasDial::Stop()
+void  MyRasDial::Stop()
 {
 	RASCONNSTATUS rStatus;
 	ZeroMemory(&rStatus, sizeof(RASCONNSTATUS));

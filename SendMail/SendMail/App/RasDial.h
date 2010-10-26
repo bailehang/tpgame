@@ -1,13 +1,13 @@
 
 #pragma once 
 
-class  RasDial
+class  MyRasDial
 {
 
 public:
-	RasDial();
-	RasDial(CString user,CString pword,CString name);
-	~RasDial();
+	MyRasDial();
+	MyRasDial(CString user,CString pword,CString name);
+	~MyRasDial();
 
 	bool  Listen();
 	void  Stop();

@@ -1,6 +1,11 @@
 #pragma once
 
 #include "../public/locks.h"
+#include <list>
+#include <vector>
+#include <process.h>
+
+using namespace std;
 
 /// 线程池
 namespace tp_ipc_peer_namespace
@@ -26,18 +31,24 @@ namespace tp_ipc_peer_namespace
 	public:
 		typedef Functor functor_type;
 
-		task( const functor_type & functor)
+		task( functor_type* functor)
 			: functor_( functor )
 		{ }
+
+		~task()
+		{
+			if( functor_ !=NULL )
+				delete functor_;
+		}
 
 		/// 执行
 		virtual void exec()
 		{
-			functor_();
+			(*functor_)();
 		}
 
 	private:
-		Functor functor_;
+		Functor* functor_;
 		
 	};
 
@@ -49,16 +60,16 @@ namespace tp_ipc_peer_namespace
 		ctpool(void)
 			:tpool_running_( true )
 		{ 
-			_m_start_threads( 1 );
+			pool_Count = 1;
 		}
 		ctpool ( unsigned threadsize )
 			:tpool_running_(true)
 		{
-			_m_start_threads( threadsize );
+			pool_Count = threadsize;
 		}
 
 		template< typename Function>
-		void push( const Function & f)
+		void push( Function * f)
 		{
 			/// 枷锁
 			task_lock_.enter();
@@ -68,8 +79,18 @@ namespace tp_ipc_peer_namespace
 			task_lock_.leave();
 
 		}
+
+		/*void */
 		
+		void Start()
+		{
+			_m_start_threads( pool_Count );
+		}
+
 		~ctpool(void){}
+
+
+		bool   IsExit()		{	return pool_Count <= 0 ; }
 
 	private:
 
@@ -83,9 +104,11 @@ namespace tp_ipc_peer_namespace
 			{
 				tinfo_type tinfo;
 				tinfo.state = 0;
-				tinfo.handle = (HANDLE)::_beginthreadex( 0 , 0 , _m_work_thread , NULL , NULL ,&(tinfo.tid) );
+				tinfo.handle = (HANDLE)::_beginthreadex( 0 , 0 , &ctpool::_m_work_thread , NULL , NULL ,&(tinfo.tid) );
 				threads_.push_back(  tinfo );
 			}
+
+			pool_Count = size ;
 		}
 		
 		/// 唤醒
@@ -169,7 +192,7 @@ namespace tp_ipc_peer_namespace
 		}
 
 	private:
-		static  unsigned __stdcall _m_work_thread(void * arg)
+		static unsigned __stdcall _m_work_thread(void * arg)
 		{
 			
 			self_type & self = *reinterpret_cast<self_type*>(arg);
@@ -190,7 +213,7 @@ namespace tp_ipc_peer_namespace
 				else
 					break;
 			}
-			
+			pool_Count -- ;
 			::_endthreadex( 0 );
 			return 0;
 		}
@@ -215,9 +238,11 @@ namespace tp_ipc_peer_namespace
 		/// 
 		sync::csectionlock			task_lock_;
 		/// 一个回调函数
-		std::vector<task_object* > task_container_;
+		std::vector<task_object* >  task_container_;
+		/// 线程数量
+		static  long				pool_Count;
 
 	};
 
-
+	long  ctpool::pool_Count = 0;
 }
