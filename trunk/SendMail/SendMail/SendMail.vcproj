@@ -286,6 +286,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\App\SendMailApp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\App\SendMailApp.h"
+				>
+			</File>
+			<File
 				RelativePath=".\App\SendToMail.cpp"
 				>
 			</File>
@@ -297,6 +305,10 @@
 				RelativePath=".\App\Thread.h"
 				>
 			</File>
+			<Filter
+				Name="SendRole"
+				>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Public"
@@ -319,6 +331,10 @@
 			</File>
 			<File
 				RelativePath=".\Public\Singleton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Public\STLFun.h"
 				>
 			</File>
 		</Filter>

@@ -1,11 +1,20 @@
 #include "stdafx.h"
 #include "SendToMail.h"
+#include "../Public/Singleton.h"
 
+#import "../mail.dll"
 
-#import "../jmail.dll"
-
-bool  SendToMail::Send()
+bool  SendToMail::Send( size_t index )
 {
+
+	size_t tsize = GetInstObj(MailLoginInfo).m_Vec.size();
+	if ( tsize <= m_SendID )
+	{
+		return false ;
+	}				  
+	tagSend		m_Send     = GetInstObj(MailLoginInfo).m_Vec[ m_SendID ].m_Send;
+	tagSendInfo m_SendInfo = GetInstObj(MailLoginInfo).m_Vec[ m_SendID ].m_SendInfo;
+
 	CoInitialize(NULL); 	// COM的初始化
 
 	try{
@@ -41,7 +50,7 @@ bool  SendToMail::Send()
 		pMessage->ContentType =  m_SendInfo.Formt ? "text/html " : "text/plain ";
 
 		// 正文
-		pMessage->Body    = m_SendInfo.Context.c_str();	
+		pMessage->Body = m_SendInfo.Context.c_str();	
 
 		pMessage->Send(m_Send.stmp.c_str(),VARIANT_FALSE);
 		//pMessage->Send("smtp.qq.com",VARIANT_FALSE);

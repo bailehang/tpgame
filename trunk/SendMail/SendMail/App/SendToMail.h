@@ -4,6 +4,7 @@
 
 #include <string>
 #include <list>
+#include <vector>
 
 using namespace std;
 
@@ -23,29 +24,50 @@ struct  tagSendInfo
 	std::string  Context;   /// 正文内容
 };
 
+struct  tagMailBase
+{							   	
+	/// 当前发送账号信息
+	tagSend			m_Send;
+	tagSendInfo		m_SendInfo;
+};
+
+struct   MailLoginInfo
+{
+public:
+	std::vector<tagMailBase>  m_Vec;
+};
+
+struct  DestList
+{
+	std::list<std::string>    m_SendList;
+};
+
 class  SendToMail
 {
 
 public:
-	SendToMail(tagSend msend,tagSendInfo msendinfo):m_Send(msend),m_SendInfo(msendinfo)
+	SendToMail(size_t size )
 	{
 		m_list.clear();
+		m_SendID = size;
 	}
 
 	void  AppendUser(std::list<std::string>& List)
 	{
 		m_list = List;
+	}			 
+	bool  operator() ( )
+	{
+		return Send( m_SendID );
 	}
 
-	bool  Send();
-
+private:
+	bool  Send( size_t index );
 
 public:
 
-	/// 当前发送账号信息
-	tagSend			m_Send;
-	tagSendInfo		m_SendInfo;
-
+	/// 联系ID 
+	size_t		    m_SendID;
 	/// 发送联系人
 	std::list<std::string>  m_list;
 
