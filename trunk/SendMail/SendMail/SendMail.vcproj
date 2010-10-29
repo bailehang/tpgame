@@ -330,6 +330,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Public\Log.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Public\Singleton.h"
 				>
 			</File>
@@ -352,5 +356,9 @@
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="SendMail.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

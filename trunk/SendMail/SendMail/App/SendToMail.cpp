@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "SendToMail.h"
 #include "../Public/Singleton.h"
+#include "../Public/STLFun.h"
 
-#import "../mail.dll"
+#import "../jmail.dll"
 
 bool  SendToMail::Send( size_t index )
 {
@@ -12,8 +13,10 @@ bool  SendToMail::Send( size_t index )
 	{
 		return false ;
 	}				  
-	tagSend		m_Send     = GetInstObj(MailLoginInfo).m_Vec[ m_SendID ].m_Send;
-	tagSendInfo m_SendInfo = GetInstObj(MailLoginInfo).m_Vec[ m_SendID ].m_SendInfo;
+	
+	tagSend		m_Send     = GetInstObj(MailLoginInfo).m_Vec[ m_SendID ];
+
+	tagSendInfo& m_SendInfo = GetInstObj(tagSendInfo);
 
 	CoInitialize(NULL); 	// COM的初始化
 
@@ -31,7 +34,7 @@ bool  SendToMail::Send( size_t index )
 
 		for ( std::list<std::string>::iterator itr = m_list.begin() ; itr != m_list.end() ; itr ++ )
 		{
-			 pMessage->AddRecipient((*itr).c_str(),"朋友","");	
+			 pMessage->AddRecipient((*itr).c_str(),"friends","");	
 		}
 		
 		pMessage->MailServerUserName=m_Send.user.c_str();
@@ -52,16 +55,20 @@ bool  SendToMail::Send( size_t index )
 		// 正文
 		pMessage->Body = m_SendInfo.Context.c_str();	
 
-		pMessage->Send(m_Send.stmp.c_str(),VARIANT_FALSE);
+		pMessage->Send(m_Send.smtp.c_str(),VARIANT_FALSE);
 		//pMessage->Send("smtp.qq.com",VARIANT_FALSE);
 	}
 	catch(_com_error e)
 	{
 		CString strerr;
-		strerr.Format("错误号:%0x\r\n 错误信息:%s\r\n错误描述是%s",e.Error(),(LPCTSTR)e.ErrorMessage(), (LPCTSTR)e.Description());
+		strerr.Format("错误号:%0x 错误信息:%s错误描述是%s,发送地址:%s",e.Error(),(LPCTSTR)e.ErrorMessage(), (LPCTSTR)e.Description(),m_Send.login.c_str());
+		WriteFile("error.txt",strerr.GetBuffer(strerr.GetLength()));
+
+		Sleep( 10 );
 	    return false;
 	}
-	CoUninitialize();	
+	//CoUninitialize();	
+	Sleep( 1 );
 	return true;
 }
 

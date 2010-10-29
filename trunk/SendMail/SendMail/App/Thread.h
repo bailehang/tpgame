@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "../public/locks.h"
@@ -104,7 +105,8 @@ namespace tp_ipc_peer_namespace
 			{
 				tinfo_type tinfo;
 				tinfo.state = 0;
-				tinfo.handle = (HANDLE)::_beginthreadex( 0 , 0 , &ctpool::_m_work_thread , NULL , NULL ,&(tinfo.tid) );
+				/// (unsigned*)this 
+				tinfo.handle = (HANDLE)::_beginthreadex( 0 , 0 , &ctpool::_m_work_thread , this , NULL ,NULL);
 				threads_.push_back(  tinfo );
 			}
 
@@ -185,8 +187,8 @@ namespace tp_ipc_peer_namespace
 				{
 					return task;
 				}
-				else
-					_m_suspend();
+				
+				break;
 			}
 			return NULL;
 		}
@@ -198,7 +200,7 @@ namespace tp_ipc_peer_namespace
 			self_type & self = *reinterpret_cast<self_type*>(arg);
 			tp_ipc_peer_namespace::task_object * task = 0;
 
-			::SuspendThread(::GetCurrentThread());
+			//::SuspendThread(::GetCurrentThread());
 
 			while( true )
 			{
@@ -244,5 +246,5 @@ namespace tp_ipc_peer_namespace
 
 	};
 
-	long  ctpool::pool_Count = 0;
+	long  tp_ipc_peer_namespace::ctpool::pool_Count = 0;
 }

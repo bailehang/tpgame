@@ -1,62 +1,114 @@
-#include "stdafx.h"
-
+#include "stdafx.h"			  
 #include "GameSetup.h"
+#include "Singleton.h"
+#include "../App/SendToMail.h"
+
 #include <fstream>
 #include <iostream>
 using namespace std;
 
 CGameSetup::CGameSetup()
 {
-	ifstream file("setup.ini");
+	
+}
+
+CGameSetup::~CGameSetup()
+{
+	
+}
+
+void CGameSetup::Load()
+{
+	LoadSendAddr();
+	LoadRecvAddr();
+	LoadContext();
+	//CreateNum();
+}
+
+void CGameSetup::LoadSendAddr()
+{
+	ifstream file("SendAddr.ini");
 
 	if ( !file.is_open() || file.eof() )
 	{
 		return ;
 	}
 
-	char str[100];
-	if ( !file.eof() )
+	std::vector<tagSend>& SendAddr = GetInstObj(MailLoginInfo).m_Vec;
+
+	char addr[100],pword[100],smtp[100];
+
+	while ( !file.eof() )
 	{
+		file >> addr >> pword >> smtp; 
 
-		file >> str >>  GoalWidth 
-			 >> str >>  NumSupportSpotsX
-			 >> str >>  NumSupportSpotsY
-			 >> str >>  BallSize
-			 >> str >>  BallMass
-			 >> str >>  Friction
-			 >> str >>  PlayerMass
-			 >> str >>  PlayerMaxForce 
-			 >> str >>  PlayerMaxTurnRate
-			 >> str >>  PlayerScale
-			 >> str >>  BallWithinReceivingRange
-			 >> str >>  FollowMinDistenRange
-			 >> str >>	FollowMaxDistenRange
-			 >> str >>  bStates
-			 >> str >>  bIDs
-			 >> str >>  bRegions
-			 >> str >>  bShowControllingTeam
-			 >> str >>  bHighlightIfThreatened
-			 >> str >>  FrameRate
-			 >> str >>  SeparationCoefficient
-			 >> str >>  ViewDistance;
+		char user[100];
 
+		char* p = strstr(addr,"@");
+		long  len = p-addr;
+		strncpy( user,addr,len);
+		user[len] ='\0';
+
+		tagSend  base(addr,user,user,pword,smtp);
+
+		SendAddr.push_back( base );
 	}
-	BallWithinReceivingRangeSq = 100;
-	KeeperInBallRangeSq      = 10*10;
-	PlayerInTargetRangeSq    = 100;   
-	PlayerKickingDistance    += BallSize;
-	PlayerKickingDistanceSq  = 100;
-	PlayerComfortZoneSq      = 60*60;
-	GoalKeeperInterceptRangeSq = 100 * 100.0;
-	WithinRangeOfSupportSpotSq = 15*15;
 }
 
-CGameSetup::~CGameSetup()
+void CGameSetup::LoadRecvAddr()
 {
-	memset(this,0,sizeof(CGameSetup) );
+	ifstream file("RecvAddr.ini");
+
+	if ( !file.is_open() || file.eof() )
+	{
+		return ;
+	}
+
+	std::list<std::string>& RsSendList = GetInstObj(DestList).m_SendList;
+
+	char addr[100],tmp[100];
+
+	while ( !file.eof() )
+	{
+		file >> addr >> tmp; 
+
+		RsSendList.push_back( addr );
+	}
 }
 
-void CGameSetup::Reset()
+void  CGameSetup::LoadContext()
 {
+	ifstream file("Context.txt");
 
+	if ( !file.is_open() || file.eof() )
+	{
+		return ;
+	}
+
+	tagSendInfo& SendInfo = GetInstObj(tagSendInfo);
+
+	char str[512];
+	SendInfo.Formt = 1;
+	SendInfo.subject ="很久没联系了，你好!";
+
+	while ( !file.eof() )
+	{
+		file.getline( str, 512,'\n');
+		SendInfo.Context +=str;
+	}
+}
+
+
+void  CGameSetup::CreateNum()
+{
+   ofstream out("txt.txt");
+
+
+   long  BaseValue = 20000001;
+   for ( int i = 0; i < 100 ; i++ )
+   {
+	   out << BaseValue + rand() <<"@qq.com\t" << " aaa " << std::endl;
+   }
+
+   out.close();
 }

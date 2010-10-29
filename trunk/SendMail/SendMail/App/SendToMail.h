@@ -14,7 +14,16 @@ struct  tagSend
 	std::string  name;		/// 名字
 	std::string  user;		/// 登录user
 	std::string  pword;		/// 登录密码
-	std::string  stmp;		/// smtp
+	std::string  smtp;		/// smtp
+
+	tagSend( string login_,string name_,string user_,string pword_,string smtp_)
+	{
+		login = login_;
+		name  = name_;
+		user  = user_;
+		pword = pword_;
+		smtp  = smtp_;
+	}
 };
 
 struct  tagSendInfo
@@ -28,13 +37,12 @@ struct  tagMailBase
 {							   	
 	/// 当前发送账号信息
 	tagSend			m_Send;
-	tagSendInfo		m_SendInfo;
 };
 
 struct   MailLoginInfo
 {
 public:
-	std::vector<tagMailBase>  m_Vec;
+	std::vector<tagSend>  m_Vec;
 };
 
 struct  DestList
