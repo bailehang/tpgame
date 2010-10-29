@@ -3,6 +3,8 @@
 #include <string>
 using namespace std;
 
+#pragma comment(lib,"Rasapi32.lib")
+
 MyRasDial::MyRasDial()
 {
 	hRasConn = NULL;

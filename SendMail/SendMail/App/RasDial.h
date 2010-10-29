@@ -7,7 +7,7 @@ class  MyRasDial
 public:
 	MyRasDial();
 	MyRasDial(CString user,CString pword,CString name);
-	~MyRasDial();
+	~MyRasDial(){}
 
 	bool  Listen();
 	void  Stop();

@@ -3,9 +3,14 @@
 #pragma once 
 
 #include "RasDial.h"
-#include "Thread.h"
 #include "SendToMail.h"
 
+
+namespace tp_ipc_peer_namespace
+{
+	class ctpool;
+}
+//class  tp_ipc_peer_namespace::ctpool;						   
 
 class  SendMailApp
 {
@@ -25,10 +30,4 @@ private:
 	MyRasDial*						m_RasDial;
 	/// 线程池
 	tp_ipc_peer_namespace::ctpool*  m_TPool;
-	/// 一个临界区类
-	sync::csectionlock			    m_Sendlock_;
-	/// 一个临界区类
-	sync::csectionlock			    m_SendTolock_;
-	
-
 };

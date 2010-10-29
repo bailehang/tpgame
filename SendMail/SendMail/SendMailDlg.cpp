@@ -5,6 +5,8 @@
 #include "SendMail.h"
 #include "SendMailDlg.h"
 #include "DlgProxy.h"
+#include "App/SendMailApp.h"
+#include "Public/Singleton.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -76,6 +78,7 @@ BEGIN_MESSAGE_MAP(CSendMailDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_BUTTON1, &CSendMailDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -202,3 +205,11 @@ BOOL CSendMailDlg::CanExit()
 	return TRUE;
 }
 
+
+void CSendMailDlg::OnBnClickedButton1()
+{
+	SendMailApp SendApp;
+	
+	SendApp.Start();
+
+}
