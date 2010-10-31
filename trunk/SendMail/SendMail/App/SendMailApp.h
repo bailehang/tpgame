@@ -3,8 +3,6 @@
 #pragma once 
 
 #include "RasDial.h"
-#include "SendToMail.h"
-
 
 namespace tp_ipc_peer_namespace
 {

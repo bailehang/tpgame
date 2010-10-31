@@ -37,10 +37,63 @@
 
 #include <afxsock.h>            // MFC 套接字扩展
 
+typedef unsigned char      uchar;
+typedef unsigned short     ushort;
+typedef unsigned int       uint;
+typedef unsigned long      ulong;
+typedef unsigned long long ulonglong;
+typedef unsigned long      DWORD;
+
+#ifndef DELETE_SAFE
+#define DELETE_SAFE(x)	do{ delete (x); (x)=NULL; }while(0)
+#endif
+
+#ifndef SAFE_DELETE
+#define SAFE_DELETE(x)	if( (x)!=NULL ) { delete (x); (x)=NULL; }
+#endif
+
+#ifndef SAFE_DECREF
+#define SAFE_DECREF(x)	if( (x)!=NULL ) { (x)->DecRef(); (x)=NULL; }
+#endif
+
+#ifndef SAFE_DELETE_ARRAY
+#define SAFE_DELETE_ARRAY(x)	if( (x)!=NULL ) { delete[] (x); (x)=NULL; }
+#endif
+
+#ifndef SAFE_FREE
+#define SAFE_FREE(x)	if( (x)!=NULL ) { free(x); (x)=NULL; }
+#endif
+
+#ifndef SAFE_RELEASE
+#define SAFE_RELEASE(x)	if( (x)!=NULL ) { (x)->Release(); (x)=NULL; }
+#endif
+
+#ifndef SAFE_DEL_RELEASE
+#define SAFE_DEL_RELEASE(x)	if( (x)!=NULL ) { (x)->Release(); delete (x); (x)=NULL; }
+#endif
+
+#define WCHAR ushort
+
+/// 包含标准模板库文件
+#include <algorithm>
+#include <deque>
+#include <fstream>
+#include <hash_set>
+#include <list>
+#include <map>
+#include <set>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <hash_map>
+#include <queue>
+#include <process.h>
+#include <assert.h>
+
+using namespace std;
 
 
-
-
+#pragma warning(disable:4996)
 
 // 除要将 bMultiInstance 参数的 TRUE 
 // 传递给 COleObjectFactory 构造函数之外，此宏与 IMPLEMENT_OLECREATE 相同。

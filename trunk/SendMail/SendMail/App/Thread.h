@@ -45,7 +45,11 @@ namespace tp_ipc_peer_namespace
 		/// Ö´ÐÐ
 		virtual void exec()
 		{
-			(*functor_)();
+			if( !(*functor_)() )
+			{
+				char szError[10] = "";
+				//std::cout << szError << std::endl;
+			}
 		}
 
 	private:
