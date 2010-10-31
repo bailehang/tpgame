@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "SendMailApp.h"
+#include "SendToMail.h"
+#include "SockSendMail.h"
 #include "Thread.h"
 #include "../Public/Singleton.h"
 #include "../Public/STLFun.h"
 #include "../Public/GameSetup.h"
+
 
 #define  SAFE_DELETE( P ) { if(P!=NULL) { delete P; P=NULL;}}
 
@@ -30,7 +33,7 @@ void  SendMailApp::Start()
 {
 	if ( 1 /*m_RasDial && m_RasDial->Listen()*/ )
 	{
-		m_TPool = new tp_ipc_peer_namespace::ctpool( 2 );
+		m_TPool = new tp_ipc_peer_namespace::ctpool( 1 );
 		
 		std::list<std::string>& RsSendList = GetInstObj(DestList).m_SendList;
 
@@ -39,7 +42,7 @@ void  SendMailApp::Start()
 		/// 发送帐号信息
 		long  AccountCount = GetInstObj( MailLoginInfo ).m_Vec.size();
 		/// 每次发送的联系人数量
-		const long  MTime = 3;
+		const long  MTime = 1;
 
 		size_t  SendNum = (DestCount / MTime) + (DestCount % MTime > 0 ? 1 : 0) ;
 		
@@ -51,7 +54,8 @@ void  SendMailApp::Start()
 
 		for (size_t i = 0 ; i < SendNum ; i ++  )
 		{
-			SendToMail*  mail = new SendToMail( LinkNum % AccountCount );
+			//SendToMail*  mail = new SendToMail( LinkNum % AccountCount );
+			SocketSendToMail*  mail = new SocketSendToMail( LinkNum % AccountCount );
 
 			std::list<std::string>  tmpList;
 
@@ -62,7 +66,8 @@ void  SendMailApp::Start()
 
 			//tp_ipc_peer_namespace::task<SendToMail> *task =  new tp_ipc_peer_namespace::task<SendToMail>( mail );
 
-			m_TPool->push<SendToMail>( mail );
+			//m_TPool->push<SendToMail>( mail );
+			m_TPool->push<SocketSendToMail> ( mail );
 
 			LinkNum ++ ;
 		}
