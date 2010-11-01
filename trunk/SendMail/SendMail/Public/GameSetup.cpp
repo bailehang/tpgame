@@ -89,7 +89,7 @@ void  CGameSetup::LoadContext()
 
 	char str[512];
 	SendInfo.Formt = 1;
-	SendInfo.subject ="很久没联系了，你好!";
+	SendInfo.subject ="你好,friends!";
 
 	while ( !file.eof() )
 	{

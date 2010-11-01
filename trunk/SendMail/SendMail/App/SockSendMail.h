@@ -42,9 +42,9 @@ private:
 
 	bool  CheckResponse(CString RecvCode)
 	{
+		char Buf[1024];
 		try
 		{
-			char Buf[1024];
 			m_Socket.Receive( Buf, 1024 );
 
 			if ( RecvCode[0] == Buf[0] &&

@@ -42,14 +42,13 @@ void  SendMailApp::Start()
 		/// 发送帐号信息
 		long  AccountCount = GetInstObj( MailLoginInfo ).m_Vec.size();
 		/// 每次发送的联系人数量
-		const long  MTime = 1;
+		const long  MTime = 3;
 
 		size_t  SendNum = (DestCount / MTime) + (DestCount % MTime > 0 ? 1 : 0) ;
 		
 		/// 联系人数量
 		long  LinkNum = 0 ;
-
-		
+	
 		std::list<std::string>::iterator BeginItr = RsSendList.begin();
 
 		for (size_t i = 0 ; i < SendNum ; i ++  )

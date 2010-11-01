@@ -81,14 +81,19 @@ bool  SocketSendToMail::Send( size_t index )
 
 	//"Subject: 邮件主题\r\n"
 	strTmp+="Subject:"+m_SendInfo.subject+"\r\n";
-
+	
 	//"MIME_Version:1.0\r\n"
 	strTmp+="MIME_Version:1.0\r\n";
 
+	strTmp+="Content-type: multipart/mixed; boundary=\"==sec-01==\"\r\n" ;
+
 	//	//"X-Mailer:Smtp Client By xxx"//版权信息
-	strTmp+="Y-Mailer:Stmp by:Test!\r\n";
+	strTmp+="X-Mailer: test!!\r\n\r\n";
 
 	strTmp+="Content-type:text/html;Charset=gb2312\r\n";
+
+	strTmp+="Content-Transfer-Encoding:8bit\r\n\r\n";
+
 
 	//"MIME_Version:1.0\r\n"
 	//strTmp+="MIME_Version:1.0\r\n\r\n";
@@ -111,8 +116,17 @@ bool  SocketSendToMail::Send( size_t index )
 // 	strTmp+="Content-type:text/plain;Charset=gb2312\r\n";
 // 	strTmp+="Content-Transfer-Encoding:8bit\r\n\r\n";
 
-	strTmp+=m_SendInfo.Context+"\r\n.\r\n";
+	strTmp+=m_SendInfo.Context;
 
+	//将邮件内容发送出去
+	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
+	{
+		ReleaseSocket();
+
+		return false;	
+	}
+
+	strTmp = "\r\n.\r\n";
 	//将邮件内容发送出去
 	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
 	{
@@ -139,7 +153,7 @@ bool  SocketSendToMail::CheckAccount(std::string ip,std::string name,std::string
 	CBase base64;
 
 	//向服务器发送"HELO "+服务器名
-	string strTmp="HELO SendMail\r\n";
+	string strTmp="HELO MailServer\r\n";
 	if(m_Socket.Send( strTmp.c_str(),strTmp.length() )  == SOCKET_ERROR)	
 	{
 		ReleaseSocket();

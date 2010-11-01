@@ -64,11 +64,11 @@ bool  SendToMail::Send( size_t index )
 		strerr.Format("错误号:%0x 错误信息:%s错误描述是%s,发送地址:%s",e.Error(),(LPCTSTR)e.ErrorMessage(), (LPCTSTR)e.Description(),m_Send.login.c_str());
 		WriteFile("error.txt",strerr.GetBuffer(strerr.GetLength()));
 
-		Sleep( 10 );
+		//Sleep( 10 );
 	    return false;
 	}
 	//CoUninitialize();	
-	Sleep( 1 );
+	//Sleep( 1 );
 	return true;
 }
 
