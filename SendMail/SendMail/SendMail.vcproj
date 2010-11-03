@@ -318,22 +318,6 @@
 				>
 			</Filter>
 			<Filter
-				Name="Net"
-				>
-				<File
-					RelativePath=".\App\Net\Message.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\App\Net\Message.h"
-					>
-				</File>
-				<File
-					RelativePath=".\App\Net\MsgDef.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="DB"
 				>
 			</Filter>
@@ -399,106 +383,6 @@
 			</File>
 			<File
 				RelativePath=".\Public\STLFun.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Message"
-			>
-			<File
-				RelativePath=".\Message\BaseMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\BaseMessage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\Clients.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\Clients.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MapFile.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MapFile.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MemClient.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MemClient.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\memserver.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MemServer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MsgCry.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MsgCry.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MsgDescribe.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MsgDescribe.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MsgQueue.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MsgQueue.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MySocket.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\MySocket.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\ServerClient.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\ServerClient.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\Servers.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\Servers.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\SocketCommands.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Message\SocketCommands.h"
 				>
 			</File>
 		</Filter>
