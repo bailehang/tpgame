@@ -76,33 +76,22 @@ bool  SocketSendToMail::Send( size_t index )
 	}
 	if(!CheckResponse("354")) return false;
 
-	//"Mail From:SenderName<xxx@mail.com>\r\n"
-	strTmp="From:<"+m_Send.login+">\r\n";//"+m_Send.name+"
+	strTmp+="MIME_Version: 1.0\r\n";
 
-	strTmp+="Sender:"+m_Send.name+"\r\n";
+	//"Mail From:SenderName<xxx@mail.com>\r\n"
+	strTmp="From: 'firends'<"+m_Send.login+">\r\n";//"+m_Send.name+"
+
+	strTmp+="To: friends!\r\n";
 
 	//"Subject: 邮件主题\r\n"
-	strTmp+="Subject:"+m_SendInfo.subject+"\r\n";
+	strTmp+="Subject: "+m_SendInfo.subject+"\r\n";
+
+	strTmp+="Content-type:text/html;Charset=gb2312\r\n";
 
 	//"MIME_Version:1.0\r\n"
-	strTmp+="MIME_Version:1.0\r\n";
-
+					  
 	//	//"X-Mailer:Smtp Client By xxx"//版权信息
-	strTmp+="X-Mailer: Microsoft Outlook Express\r\n\r\n";
-
-	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
-	{
-		ReleaseSocket();
-		return false;	
-	}
-
-	//邮件主体
-	strTmp="--";
-	strTmp+="boundary";
-	strTmp+="\r\n";
-	strTmp+="Content-type:text/html;Charset=gb2312\r\n";
-	strTmp+="Content-Transfer-Encoding:8bit\r\n\r\n";
-
+	//strTmp+="X-Mailer: Microsoft Outlook Express\r\n\r\n";
 	//邮件内容
 	strTmp+=m_SendInfo.Context+"\r\n\r\n";
 
@@ -114,10 +103,7 @@ bool  SocketSendToMail::Send( size_t index )
 		return false;	
 	}
 
-	//界尾
-	strTmp="--";
-	strTmp+="boundary";
-	strTmp+="--\r\n.\r\n";
+	strTmp="\r\n.\r\n";
 
 	//将邮件内容发送出去
 	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
