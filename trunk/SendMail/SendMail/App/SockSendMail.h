@@ -40,9 +40,8 @@ private:
 		m_Socket.Close();
 	}
 
-	bool  CheckResponse(CString RecvCode)
+	bool  CheckResponse(std::string RecvCode,char* Buf )
 	{
-		char Buf[1024];
 		try
 		{
 			m_Socket.Receive( Buf, 1024 );
