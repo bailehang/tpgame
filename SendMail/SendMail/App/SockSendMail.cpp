@@ -13,9 +13,11 @@ bool  SocketSendToMail::Send( size_t index )
 		return false ;
 	}				  
 
-	tagSend		m_Send     = GetInstObj(MailLoginInfo).m_Vec[ m_SendID ];
+	tagSend		 m_Send     = GetInstObj(MailLoginInfo).m_Vec[ m_SendID ];
 
 	tagSendInfo& m_SendInfo = GetInstObj(tagSendInfo);
+
+	char	     Buf[1024];
 
 	if( !CreateSocket() )
 		return false;
@@ -26,7 +28,7 @@ bool  SocketSendToMail::Send( size_t index )
 		return FALSE;
 	}
 
-	if( !CheckResponse( "220" ) )
+	if( !CheckResponse( "220" , Buf ) )
 	{
 		m_Socket.Close();
 		return false;
@@ -52,7 +54,7 @@ bool  SocketSendToMail::Send( size_t index )
 		ReleaseSocket();
 		return false;
 	}
-	if(!CheckResponse("250")) return false;
+	if(!CheckResponse("250", Buf )) return false;
 
 	//发送RCPT To:<abc@xyz.com>
 	for ( std::list<std::string>::iterator itr = m_list.begin() ; itr != m_list.end() ; itr ++ )
@@ -65,7 +67,7 @@ bool  SocketSendToMail::Send( size_t index )
 			ReleaseSocket();
 			return false;
 		}
-		if(!CheckResponse("250")) return false;
+		if(!CheckResponse("250", Buf )) return false;
 	}
 
 	//发送"DATA\r\n"
@@ -75,7 +77,7 @@ bool  SocketSendToMail::Send( size_t index )
 		ReleaseSocket();
 		return false;
 	}
-	if(!CheckResponse("354")) return false;
+	if(!CheckResponse("354", Buf )) return false;
 
 
 	strTmp="MIME-Version: 1.0\r\n";
@@ -122,7 +124,7 @@ bool  SocketSendToMail::Send( size_t index )
 
 		return false;	
 	}
-	if(!CheckResponse("250")) return false;
+	if(!CheckResponse("250", Buf )) return false;
 
 	if(m_Socket.Send("QUIT\r\n",strlen("QUIT\r\n") ) == SOCKET_ERROR)
 	{
@@ -130,7 +132,7 @@ bool  SocketSendToMail::Send( size_t index )
 		return false;
 	}
 
-	if(!CheckResponse("221")) return false;
+	if(!CheckResponse("221", Buf )) return false;
 
 	ReleaseSocket();
 	return true;
@@ -140,21 +142,22 @@ bool  SocketSendToMail::CheckAccount(std::string ip,std::string name,std::string
 {
 	CBase base64;
 
+	char Buf[1024];
 	//向服务器发送"HELO "+服务器名
-	string strTmp="HELO Smtp\r\n";
+	string strTmp="HELO SmtpServer\r\n";
 	if(m_Socket.Send( strTmp.c_str(),strTmp.length() )  == SOCKET_ERROR)	
 	{
 		ReleaseSocket();
 		return false;
 	}
-	if(!CheckResponse("250")) return false;
+	if(!CheckResponse("250", Buf )) return false;
 
 	if(m_Socket.Send("AUTH LOGIN\r\n",strlen("AUTH LOGIN\r\n")) == SOCKET_ERROR)
 	{
 		ReleaseSocket();
 		return false;
 	}
-	if(!CheckResponse("334")) return false;
+	if(!CheckResponse("334", Buf )) return false;
 
 	//发送经base64编码的用户名
 	string strUserName=base64.Encode((unsigned char *)name.c_str(),name.length())+"\r\n";
@@ -164,7 +167,7 @@ bool  SocketSendToMail::CheckAccount(std::string ip,std::string name,std::string
 		ReleaseSocket();
 		return false;
 	}
-	if(!CheckResponse("334")) return false;
+	if(!CheckResponse("334", Buf )) return false;
 
 	//发送经base64编码的密码
 	string strPassword=base64.Encode((unsigned char *)pass.c_str(),pass.length())+"\r\n";
@@ -174,7 +177,7 @@ bool  SocketSendToMail::CheckAccount(std::string ip,std::string name,std::string
 		ReleaseSocket();
 		return false;
 	}
-	if(!CheckResponse("235")) return false;
+	if(!CheckResponse("235", Buf )) return false;
 	return true;
 }
 
