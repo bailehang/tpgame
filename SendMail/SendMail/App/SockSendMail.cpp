@@ -57,7 +57,8 @@ bool  SocketSendToMail::Send( size_t index )
 	//发送RCPT To:<abc@xyz.com>
 	for ( std::list<std::string>::iterator itr = m_list.begin() ; itr != m_list.end() ; itr ++ )
 	{
-		strTmp="RCPT To:friends<"+(*itr)+">\r\n";
+		strTmp="RCPT To:<"+(*itr)+">\r\n";
+
 		if(m_Socket.Send(strTmp.c_str(),strTmp.length()) == SOCKET_ERROR)
 		{
 			int elen = WSAGetLastError();
@@ -76,24 +77,26 @@ bool  SocketSendToMail::Send( size_t index )
 	}
 	if(!CheckResponse("354")) return false;
 
-	strTmp+="MIME_Version: 1.0\r\n";
+
+	strTmp="MIME-Version: 1.0\r\n";
 
 	//"Mail From:SenderName<xxx@mail.com>\r\n"
-	strTmp="From: 'firends'<"+m_Send.login+">\r\n";//"+m_Send.name+"
+	strTmp+="From: "+m_Send.name+"<"+m_Send.login+">\r\n";
 
-	strTmp+="To: friends!\r\n";
+	strTmp+="To: ";//friends<"+m_Send.login;
+	//发送RCPT To:<abc@xyz.com>
+	for ( std::list<std::string>::iterator itr = m_list.begin() ; itr != m_list.end() ; itr ++ )
+	{
+		strTmp+="'firends'<"+(*itr)+">,";
+	}
+ 	strTmp+="\r\n";
 
 	//"Subject: 邮件主题\r\n"
 	strTmp+="Subject: "+m_SendInfo.subject+"\r\n";
+	
+	//strTmp+="X-mailer:  Foxmail 6, 14, 103, 24 [cn]\r\n";
 
-	strTmp+="Content-type:text/html;Charset=gb2312\r\n";
-
-	//"MIME_Version:1.0\r\n"
-					  
-	//	//"X-Mailer:Smtp Client By xxx"//版权信息
-	//strTmp+="X-Mailer: Microsoft Outlook Express\r\n\r\n";
-	//邮件内容
-	strTmp+=m_SendInfo.Context+"\r\n\r\n";
+	strTmp+="Content-Type: multipart/mixed;boundary='=====f0g_ftlTZ385rJVM22x_wrf9tPFVaIG5j3_TP====='\r\n\r\n";
 
 	//将邮件内容发送出去
 	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
@@ -103,7 +106,14 @@ bool  SocketSendToMail::Send( size_t index )
 		return false;	
 	}
 
-	strTmp="\r\n.\r\n";
+	strTmp="--=====f0g_ftlTZ385rJVM22x_wrf9tPFVaIG5j3_TP=====\r\n" ;
+	strTmp+="Content-Type: text/html; charset=gb2312\r\n" ;
+
+	strTmp+="Content-Transfer-Encoding: 8bit\r\n\r\n";
+
+	//邮件内容
+	strTmp+=m_SendInfo.Context+"\r\n\r\n";
+	strTmp+="--=====f0g_ftlTZ385rJVM22x_wrf9tPFVaIG5j3_TP=====--\r\n.\r\n";
 
 	//将邮件内容发送出去
 	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)

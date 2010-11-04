@@ -37,17 +37,16 @@ void CGameSetup::LoadSendAddr()
 	std::vector<tagSend>& SendAddr = GetInstObj(MailLoginInfo).m_Vec;
 
 	char addr[100],pword[100],smtp[100];
-
+	char user[100];
 	while ( !file.eof() )
 	{
-		file >> addr >> pword >> smtp; 
-
-		char user[100];
-
+		file >> addr >> user >> pword >> smtp; 
+		/*
 		char* p = strstr(addr,"@");
 		long  len = p-addr;
 		strncpy( user,addr,len);
 		user[len] ='\0';
+		*/
 
 		tagSend  base(addr,user,user,pword,smtp);
 

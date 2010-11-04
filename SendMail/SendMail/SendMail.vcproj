@@ -316,6 +316,14 @@
 			<Filter
 				Name="SendRole"
 				>
+				<File
+					RelativePath=".\App\SendRole\SendRole.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Net"
+				>
 			</Filter>
 			<Filter
 				Name="DB"
@@ -331,30 +339,6 @@
 			</File>
 			<File
 				RelativePath=".\Public\Base.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Public\DataBlock.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Public\DataBlock.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Public\DataBlockAllocator.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Public\DataBlockAllocator.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Public\DataBlockSetWriteRead.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Public\DataBlockSetWriteRead.h"
 				>
 			</File>
 			<File
@@ -385,6 +369,10 @@
 				RelativePath=".\Public\STLFun.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="Message"
+			>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
