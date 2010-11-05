@@ -9,6 +9,8 @@ public:
 	~CGameSetup();
 
 	void  Load();
+
+	void  LoadSetUp();
 	
 private:
 	void  LoadSendAddr();
@@ -17,5 +19,7 @@ private:
 
 	void  LoadContext();
 
-	void  CreateNum();
+	void  LoadSubTxt();
+
+	void  LoadRole();
 };

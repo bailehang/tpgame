@@ -1,0 +1,5 @@
+@# 开启配置，1表示HTML 后一个1表示是否附加文件0表示不附加
+#	1	1	c:\msg.txt
+<DIV>这个是一个测试。。。</DIV>
+<DIV>&nbsp;</DIV>
+<DIV><FONT color=#ff00ff>字体测试。。</FONT></DIV>

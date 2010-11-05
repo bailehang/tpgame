@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SockSendMail.h"
-#include "SendToMail.h"
+#include "../Public/BaseDef.h"
 #include "../Public/Singleton.h"
 #include "../Public/STLFun.h"
 #include "../Public/Base.h"
@@ -94,7 +94,7 @@ bool  SocketSendToMail::Send( size_t index )
  	strTmp+="\r\n";
 
 	//"Subject: ÓÊ¼þÖ÷Ìâ\r\n"
-	strTmp+="Subject: "+m_SendInfo.subject+"\r\n";
+//	strTmp+="Subject: "+m_SendInfo.subject+"\r\n";
 	
 	//strTmp+="X-mailer:  Foxmail 6, 14, 103, 24 [cn]\r\n";
 
