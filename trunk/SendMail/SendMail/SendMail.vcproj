@@ -373,6 +373,10 @@
 				RelativePath=".\Public\STLFun.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Public\Tools.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Message"
