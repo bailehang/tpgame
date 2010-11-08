@@ -19,5 +19,5 @@ inline void  ListCopy(list<std::string>::iterator& begin,
 inline void  WriteFile(const char* file,const char* pStr)
 {
 	CLog log(file);
-	log << pStr ;
+	log << pStr <<"\n";
 }

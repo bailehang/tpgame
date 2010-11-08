@@ -26,6 +26,7 @@ void CGameSetup::Load()
 	LoadRecvAddr();
 	LoadContext();
 	LoadRole();
+	LoadSubTxt();
 }
 
 void CGameSetup::LoadSendAddr()

@@ -209,9 +209,9 @@ BOOL CSendMailDlg::CanExit()
 
 void CSendMailDlg::OnBnClickedButton1()
 {
-	static SendMailApp SendApp;
-	
 	GetInstObj(CGameSetup).Load();
+
+	static SendMailApp SendApp;
 	
 	SendApp.Start();
 

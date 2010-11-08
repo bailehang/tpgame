@@ -73,11 +73,11 @@ void  SendMailApp::Start()
 		/// ·¢ËÍÓÊ¼þ
 		for ( ;  ; )
 		{
-			bool Exit = m_TPool->IsExit();
-			if ( Exit )
-			{
-				break;
-			}
+// 			bool Exit = m_TPool->IsExit();
+// 			if ( Exit )
+// 			{
+// 				break;
+// 			}
 		}
 	}
 

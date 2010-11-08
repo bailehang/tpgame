@@ -5,6 +5,10 @@
 #include <list>
 #include <vector>
 #include <map>
+#include "../Public/log.h"
+
+static CLog logFail("log\\Fail.txt");
+static CLog logSuce("log\\suce.txt");
 
 class  SocketSendToMail
 {
@@ -52,6 +56,8 @@ private:
 			{
 				return true;
 			}
+
+			logFail <<	Buf <<"\n";
 			return false;
 		}
 		catch(...)
