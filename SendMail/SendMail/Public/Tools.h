@@ -4,6 +4,8 @@
 
 #include <string>
 #include <cstdlib>
+#include "Singleton.h"
+#include "BaseDef.h"
 
 using namespace std;
 
@@ -13,7 +15,7 @@ long  Random(long Num)
 	return  rand() % Num;
 }
 
-void  StrReplace( std::string str, std::string sou, std::string des,std::string name="firend")
+void  StrReplace( std::string& str, std::string sou, std::string des,std::string name="firend")
 {
 	char  szText [256],szDay[256];
 
@@ -33,24 +35,21 @@ void  StrReplace( std::string str, std::string sou, std::string des,std::string 
 	int new_str_len = 0;
 	if((pos=str.find(sou,start_index))!=string::npos)
 	{
+		new_str_len = sou.length() ;
 		if (des == "#time")
 		{
-			new_str_len = strlen( szText ) ;
 			str.replace(pos,new_str_len,szText);
 		}
 		else if (des == "#day")
 		{
-			new_str_len = strlen( szDay ) ;
 			str.replace(pos,new_str_len,szDay);
 		}
 		else if (des == "#name")
 		{
-			new_str_len = name.length() ;
 			str.replace(pos,new_str_len,name);
 		}
 		else 
 		{
-			new_str_len = des.length() ;
 			str.replace(pos,new_str_len,des);
 		}
 		start_index=pos+new_str_len;
@@ -72,12 +71,14 @@ std::string   ttos( std::string& str,long max,long sNum,long Rand,long Rand1,lon
 	string  pTmp = str;
 	long  lRand =   Random( 100 );
 	
+	tagSendRole& SendRole	= GetInstObj(tagSendRole);
+
 	/// 
 	if ( lRand <= Rand )
 	{
 		for ( int i = 0 ; i < max ; i++ )
 		{
-			StrReplace(str,"@","");
+			StrReplace(pTmp,"@","");
 		}
 	}
 	/// Ìæ»»Ò»¸ö×Ö·û
@@ -89,9 +90,9 @@ std::string   ttos( std::string& str,long max,long sNum,long Rand,long Rand1,lon
 		for ( int i = 0 ; i < max ; i++ )
 		{
 			if( iNum != i  )
-				StrReplace(str,"@","");//str.replace("@","");
+				StrReplace(pTmp,"@","");//str.replace("@","");
 			else
-				StrReplace(str,"@","\\");
+				StrReplace(pTmp,"@",SendRole.sReplace[iNum]);
 		}
 	}
 	else if ( lRand < Rand2 )
@@ -113,11 +114,11 @@ std::string   ttos( std::string& str,long max,long sNum,long Rand,long Rand1,lon
 		for ( int i = 0 ; i < max ; i++ )
 		{
 			if( iNum1 == i  )
-				StrReplace(str,"@","1");
+				StrReplace(pTmp,"@",SendRole.sReplace[iNum1]);
 			else if( iNum2 = i )
-				StrReplace(str,"@","2");
+				StrReplace(pTmp,"@",SendRole.sReplace[iNum2]);
 			else 
-				StrReplace(str,"@","");
+				StrReplace(pTmp,"@","");
 		}
 	}
 	else if ( lRand < Rand3 )
@@ -145,15 +146,14 @@ std::string   ttos( std::string& str,long max,long sNum,long Rand,long Rand1,lon
 		for ( int i = 0 ; i < max ; i++ )
 		{
 			if( iNum1 == i  )
-				StrReplace(str,"@","1");
+				StrReplace(pTmp,"@",SendRole.sReplace[iNum1]);
 			else if( iNum2 = i )
-				StrReplace(str,"@","2");
+				StrReplace(pTmp,"@",SendRole.sReplace[iNum2]);
 			else if( iNum3 = i )
-				StrReplace(str,"@","3");
+				StrReplace(pTmp,"@",SendRole.sReplace[iNum3]);
 			else 
-				StrReplace(str,"@","");
+				StrReplace(pTmp,"@","");
 		}
 	}
-	pTmp = str;
 	return pTmp;
 }

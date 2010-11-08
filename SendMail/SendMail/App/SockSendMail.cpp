@@ -20,9 +20,13 @@ bool  SocketSendToMail::Send( size_t index )
 
 	tagSendRole& SendRole	= GetInstObj(tagSendRole);
 
-	MailSubNode& MailSub    = GetInstObj(MailSubNode);
+	tagMailSub&  sMailSub    = GetInstObj(tagMailSub);
+	if ( sMailSub.VecMailSub.size() <= 0 )
+		return false;
 
-	char	     Buf[1024];
+	MailSubNode& MailSub     = sMailSub.VecMailSub[ Random( sMailSub.VecMailSub.size() ) ] ;
+
+	char	     Buf[256] = { 0 };
 
 	if( !CreateSocket() )
 		return false;
@@ -72,7 +76,8 @@ bool  SocketSendToMail::Send( size_t index )
 			ReleaseSocket();
 			return false;
 		}
-		if(!CheckResponse("250", Buf )) return false;
+		if(!CheckResponse("250", Buf )) 
+			continue;
 	}
 
 	//·¢ËÍ"DATA\r\n"
@@ -134,6 +139,8 @@ bool  SocketSendToMail::Send( size_t index )
 		return false;	
 	}
 	if(!CheckResponse("250", Buf )) return false;
+		
+	logSuce << " Send Ok.. Mail Addr " << m_Send.login  <<"\n";
 
 	if(m_Socket.Send("QUIT\r\n",strlen("QUIT\r\n") ) == SOCKET_ERROR)
 	{

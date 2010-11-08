@@ -48,7 +48,7 @@ bool  SendToMail::Send( size_t index )
 
 		pMessage->Charset = "GB2312";
 
-		//pMessage->Subject = m_SendInfo.subject.c_str();
+		pMessage->Subject = "this istest!";//m_SendInfo.subject.c_str();
 
 		pMessage->ContentType =  m_SendInfo.Formt ? "text/html " : "text/plain ";
 

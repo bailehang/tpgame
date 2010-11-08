@@ -9,7 +9,7 @@ using namespace std;
 class  CLog
 {
 public:
-	CLog(const char* filename):out(filename,ios_base::app)
+	CLog(const char* filename):out(filename,ios_base::app|ios_base::out)
 	{
 
 	}
@@ -17,7 +17,7 @@ public:
 	template< typename type >
 	CLog& operator  << (const type& v)
 	{
-		 out << v << std::endl;
+		 out << v ;
 
 		 return *this;
 	}
