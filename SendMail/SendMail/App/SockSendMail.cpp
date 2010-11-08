@@ -4,6 +4,7 @@
 #include "../Public/Singleton.h"
 #include "../Public/STLFun.h"
 #include "../Public/Base.h"
+#include "../Public/Tools.h"
 
 bool  SocketSendToMail::Send( size_t index )
 {
@@ -16,6 +17,10 @@ bool  SocketSendToMail::Send( size_t index )
 	tagSend		 m_Send     = GetInstObj(MailLoginInfo).m_Vec[ m_SendID ];
 
 	tagSendInfo& m_SendInfo = GetInstObj(tagSendInfo);
+
+	tagSendRole& SendRole	= GetInstObj(tagSendRole);
+
+	MailSubNode& MailSub    = GetInstObj(MailSubNode);
 
 	char	     Buf[1024];
 
@@ -93,8 +98,12 @@ bool  SocketSendToMail::Send( size_t index )
 	}
  	strTmp+="\r\n";
 
-	//"Subject: 邮件主题\r\n"
-//	strTmp+="Subject: "+m_SendInfo.subject+"\r\n";
+	//"Subject: 邮件主题\r\n"	  subject,SendRole.sReplace.size(),SendRole
+	string  subject = "";
+	subject = ttos( MailSub.sMailSub,MailSub.lReNum,SendRole.sReplace.size(),
+		SendRole.NoChangeRand,SendRole.Rand1,SendRole.Rand2,SendRole.Rand3);
+
+	strTmp+="Subject: "+subject+"\r\n";
 	
 	//strTmp+="X-mailer:  Foxmail 6, 14, 103, 24 [cn]\r\n";
 

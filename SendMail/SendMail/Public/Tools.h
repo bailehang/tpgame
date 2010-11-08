@@ -13,7 +13,7 @@ long  Random(long Num)
 	return  rand() % Num;
 }
 
-void  StrReplace( std::string str, std::string& sou, std::string& des)
+void  StrReplace( std::string str, std::string sou, std::string des,std::string name="firend")
 {
 	char  szText [256],szDay[256];
 
@@ -28,22 +28,35 @@ void  StrReplace( std::string str, std::string& sou, std::string& des)
 	sprintf( szDay, "%d-%d-%d" , p->tm_year+1990,p->tm_mon+1,p->tm_mday);
 	sprintf( szText,"%d:%d:%d" , p->tm_hour,p->tm_min,p->tm_sec);
 
-	if (des == "#time")
+	int pos=string::npos;
+	int start_index=0;
+	int new_str_len = 0;
+	if((pos=str.find(sou,start_index))!=string::npos)
 	{
-		str.replace(sou,szText);
+		if (des == "#time")
+		{
+			new_str_len = strlen( szText ) ;
+			str.replace(pos,new_str_len,szText);
+		}
+		else if (des == "#day")
+		{
+			new_str_len = strlen( szDay ) ;
+			str.replace(pos,new_str_len,szDay);
+		}
+		else if (des == "#name")
+		{
+			new_str_len = name.length() ;
+			str.replace(pos,new_str_len,name);
+		}
+		else 
+		{
+			new_str_len = des.length() ;
+			str.replace(pos,new_str_len,des);
+		}
+		start_index=pos+new_str_len;
 	}
-	else if (des == "#day")
-	{
-		str.replace(sou,szDay);
-	}
-	else if (des == "#name")
-	{
 
-	}
-	else 
-	{
-		str.replace(sou,des);
-	}
+	
 }
 
 /**
@@ -53,8 +66,10 @@ void  StrReplace( std::string str, std::string& sou, std::string& des)
  *		sNum是可替换的数量
  *		Rand不替换字符串的概率
  */
-void   ttos( std::string& str , long max,long sNum,long Rand,long Rand1,long Rand2,long Rand3)
+std::string   ttos( std::string& str,long max,long sNum,long Rand,long Rand1,long Rand2,long Rand3)
 {
+
+	string  pTmp = str;
 	long  lRand =   Random( 100 );
 	
 	/// 
@@ -85,7 +100,7 @@ void   ttos( std::string& str , long max,long sNum,long Rand,long Rand1,long Ran
 
 		long  iNum1,iNum2;
 
-		long  iNum1  =   Random( max );
+		iNum1  =   Random( max );
 
 		while( 1 )
 		{
@@ -109,7 +124,7 @@ void   ttos( std::string& str , long max,long sNum,long Rand,long Rand1,long Ran
 	{
 		long  iNum1,iNum2,iNum3;
 
-		long  iNum1  =   Random( max );
+		iNum1  =   Random( max );
 
 		while( 1 )
 		{
@@ -139,5 +154,6 @@ void   ttos( std::string& str , long max,long sNum,long Rand,long Rand1,long Ran
 				StrReplace(str,"@","");
 		}
 	}
-
+	pTmp = str;
+	return pTmp;
 }
