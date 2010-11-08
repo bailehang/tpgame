@@ -7,6 +7,7 @@
 #include "DlgProxy.h"
 #include "App/SendMailApp.h"
 #include "Public/Singleton.h"
+#include "Public/GameSetup.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -208,7 +209,9 @@ BOOL CSendMailDlg::CanExit()
 
 void CSendMailDlg::OnBnClickedButton1()
 {
-	SendMailApp SendApp;
+	static SendMailApp SendApp;
+	
+	GetInstObj(CGameSetup).Load();
 	
 	SendApp.Start();
 
