@@ -19,11 +19,12 @@ long  Random(long Num)
 
 std::string  nowtime()
 {
-	time_t timep;
 
-	time (&timep);
-
-	return asctime(gmtime(&timep));
+	struct tm *newtime;
+	time_t ltime; /* Get the time in seconds */
+	time (&ltime); /* convert it to the structure tm */
+	newtime = localtime(&ltime);
+	return asctime(newtime);
 }
 
 void  StrReplace( std::string& str, std::string sou, std::string des,std::string name="firend")

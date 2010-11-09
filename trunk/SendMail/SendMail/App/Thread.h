@@ -87,9 +87,12 @@ namespace tp_ipc_peer_namespace
 
 		/*void */
 		
-		void Start()
+		void Start( int size )
 		{
-			_m_start_threads( pool_Count );
+			if( size == 1)
+				_m_start_threads( pool_Count );
+			else
+				_m_start_threads_s(pool_Count);
 		}
 
 		~ctpool(void){}
@@ -118,6 +121,25 @@ namespace tp_ipc_peer_namespace
 			pool_Count = size ;
 		}
 		
+
+		void _m_start_threads_s( unsigned size )
+		{
+			if ( size == 0 )
+				size = 4;
+
+			for ( unsigned i = 0 ; i < size ; i++)
+			{
+				AfxSocketInit();
+				tinfo_type tinfo;
+				tinfo.state = 0;
+				/// (unsigned*)this 
+				tinfo.handle = (HANDLE)::_beginthreadex( 0 , 0 , &ctpool::_m_work_thread_s , this , NULL ,NULL);
+				threads_.push_back(  tinfo );
+			}
+
+			pool_Count = size ;
+		}
+
 		/// »½ÐÑ
 		void _m_wakeup()
 		{
@@ -205,7 +227,30 @@ namespace tp_ipc_peer_namespace
 			self_type & self = *reinterpret_cast<self_type*>(arg);
 			tp_ipc_peer_namespace::task_object * task = 0;
 
-			//::SuspendThread(::GetCurrentThread());
+			while( true )
+			{
+				task = self._m_read_task();
+				if ( task )
+				{
+					task->exec();
+
+					//Sleep( 1 );
+					delete task ;
+					task = 0;
+				}
+				else
+					break;
+			}
+			pool_Count -- ;
+			::_endthreadex( 0 );
+			return 0;
+		}
+
+		static unsigned __stdcall _m_work_thread_s(void * arg)
+		{
+
+			self_type & self = *reinterpret_cast<self_type*>(arg);
+			tp_ipc_peer_namespace::task_object * task = 0;
 
 			while( true )
 			{

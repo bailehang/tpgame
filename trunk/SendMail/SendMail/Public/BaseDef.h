@@ -48,7 +48,8 @@ struct  MailLoginInfo
 struct  DestList
 {
 	/// 发送列表
-	std::list<std::string>    m_SendList;
+	std::list<std::string>    m_SendListOne;
+	std::list<std::string>    m_SendListTwo;
 };
 
 struct  tagGlobalSetup
@@ -96,4 +97,16 @@ struct   tagSendRole
 	long		 Rand3;			///> 随机3个字符串概率
 
 	vector<std::string>  sReplace;
+};
+
+struct	tagSendAddrList
+{
+	std::string			SendList;
+	std::vector<string>	KeyValue;
+};
+
+struct	SendAddrList
+{
+	 tagSendAddrList	SendListOne;
+	 tagSendAddrList	SendListTwo; 
 };
