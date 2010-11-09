@@ -36,7 +36,17 @@ private:
 private:
 	bool  CreateSocket()
 	{
-		return m_Socket.Create() > 0 ? true : false ;
+		try
+		{
+			return m_Socket.Create() > 0 ? true : false ;
+		}
+		catch (...)
+		{
+			long eid = GetLastError();
+			logFail <<" Create Fail Errid= " << eid  <<"\r\n";
+			return false;
+		}
+		
 	}
 
 	void  ReleaseSocket()
@@ -57,7 +67,7 @@ private:
 				return true;
 			}
 
-			logFail <<	Buf <<"\n";
+			logFail <<	Buf ;
 			return false;
 		}
 		catch(...)
@@ -67,6 +77,12 @@ private:
 	}
 
 	bool  CheckAccount(std::string ip,std::string name,std::string pass);
+
+	/// 发送到雅虎
+	bool  SendYahoo(std::string& tmp,std::string & context);
+
+	bool  SendOther(std::string& tmp,std::string & context);
+
 public:
 
 	/// 联系ID 

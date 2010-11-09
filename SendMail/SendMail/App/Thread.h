@@ -107,6 +107,7 @@ namespace tp_ipc_peer_namespace
 
 			for ( unsigned i = 0 ; i < size ; i++)
 			{
+				AfxSocketInit();
 				tinfo_type tinfo;
 				tinfo.state = 0;
 				/// (unsigned*)this 
@@ -191,7 +192,7 @@ namespace tp_ipc_peer_namespace
 				{
 					return task;
 				}
-				
+
 				break;
 			}
 			return NULL;
@@ -213,6 +214,7 @@ namespace tp_ipc_peer_namespace
 				{
 					task->exec();
 
+					//Sleep( 1 );
 					delete task ;
 					task = 0;
 				}
