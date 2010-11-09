@@ -12,7 +12,18 @@ using namespace std;
 
 long  Random(long Num)
 {
+	if( Num <= 0 )
+		Num = 1;
 	return  rand() % Num;
+}
+
+std::string  nowtime()
+{
+	time_t timep;
+
+	time (&timep);
+
+	return asctime(gmtime(&timep));
 }
 
 void  StrReplace( std::string& str, std::string sou, std::string des,std::string name="firend")

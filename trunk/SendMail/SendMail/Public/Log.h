@@ -3,13 +3,14 @@
 
 #include <fstream>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
 class  CLog
 {
 public:
-	CLog(const char* filename):out(filename,ios_base::app|ios_base::out)
+	CLog(const char* filename):file(filename)
 	{
 
 	}
@@ -17,18 +18,19 @@ public:
 	template< typename type >
 	CLog& operator  << (const type& v)
 	{
-		 out << v ;
 
-		 return *this;
-	}
+		ofstream out;
+		out.open( file.c_str(), ios_base::app|ios_base::out);
 
-	~CLog()
-	{
+		out << v ;
+
 		out.close();
+
+		return *this;
 	}
 
 private:
 
-	ofstream out;
+	std::string file;
 
 };

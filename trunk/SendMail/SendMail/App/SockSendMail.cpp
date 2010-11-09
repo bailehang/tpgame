@@ -28,6 +28,9 @@ bool  SocketSendToMail::Send( size_t index )
 
 	char	     Buf[256] = { 0 };
 
+	static long sendnum = 0;
+	sendnum ++;
+
 	if( !CreateSocket() )
 		return false;
 
@@ -109,38 +112,16 @@ bool  SocketSendToMail::Send( size_t index )
 		SendRole.NoChangeRand,SendRole.Rand1,SendRole.Rand2,SendRole.Rand3);
 
 	strTmp+="Subject: "+subject+"\r\n";
+
+	if ( m_Send.login.find("yahoo") != string::npos )
+		SendYahoo( strTmp , m_SendInfo.Context );
+	else
+		SendOther( strTmp , m_SendInfo.Context );
+
 	
-	//strTmp+="X-mailer:  Foxmail 6, 14, 103, 24 [cn]\r\n";
-
-	strTmp+="Content-Type: multipart/mixed;boundary='=====f0g_ftlTZ385rJVM22x_wrf9tPFVaIG5j3_TP====='\r\n\r\n";
-
-	//将邮件内容发送出去
-	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
-	{
-		ReleaseSocket();
-
-		return false;	
-	}
-
-	strTmp="--=====f0g_ftlTZ385rJVM22x_wrf9tPFVaIG5j3_TP=====\r\n" ;
-	strTmp+="Content-Type: text/html; charset=gb2312\r\n" ;
-
-	strTmp+="Content-Transfer-Encoding: 8bit\r\n\r\n";
-
-	//邮件内容
-	strTmp+=m_SendInfo.Context+"\r\n\r\n";
-	strTmp+="--=====f0g_ftlTZ385rJVM22x_wrf9tPFVaIG5j3_TP=====--\r\n.\r\n";
-
-	//将邮件内容发送出去
-	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
-	{
-		ReleaseSocket();
-
-		return false;	
-	}
 	if(!CheckResponse("250", Buf )) return false;
-		
-	logSuce << " Send Ok.. Mail Addr " << m_Send.login  <<"\n";
+
+	logSuce << " Send Ok.. Mail Addr " << m_Send.login  <<"\r\n";
 
 	if(m_Socket.Send("QUIT\r\n",strlen("QUIT\r\n") ) == SOCKET_ERROR)
 	{
@@ -197,3 +178,66 @@ bool  SocketSendToMail::CheckAccount(std::string ip,std::string name,std::string
 	return true;
 }
 
+
+bool  SocketSendToMail::SendYahoo(std::string &strTmp,std::string & context)
+{
+	strTmp+="Content-Type: multipart/mixed;boundary='=====f0g_ftlTZ385rJVM22x_wrf9tPFVaIG5j3_TP====='\r\n\r\n";
+
+	//将邮件内容发送出去
+	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
+	{
+		ReleaseSocket();
+
+		return false;	
+	}
+
+	strTmp="--=====f0g_ftlTZ385rJVM22x_wrf9tPFVaIG5j3_TP=====\r\n" ;
+	strTmp+="Content-Type: text/html; charset=gb2312\r\n" ;
+
+	strTmp+="Content-Transfer-Encoding: 8bit\r\n";
+
+	//邮件内容
+	strTmp+=context+"\r\n";
+	strTmp+="--=====f0g_ftlTZ385rJVM22x_wrf9tPFVaIG5j3_TP=====--\r\n";
+
+	strTmp+="\r\n.\r\n";
+
+	//将邮件内容发送出去
+	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
+	{
+		ReleaseSocket();
+
+		return false;	
+	}
+	return true;
+}
+
+bool  SocketSendToMail::SendOther(std::string& strTmp,std::string & context)
+{	  
+	//strTmp+="Data: "+nowtime();
+	strTmp +="Content-Type: text/html; charset=gb2312\r\n";
+	strTmp +="Content-Transfer-Encoding: bit8\r\n";
+
+	strTmp +=context+"\r\n";
+
+	strTmp +="\r\n.\r\n";
+
+	//将邮件内容发送出去
+	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
+	{
+		ReleaseSocket();
+
+		return false;	
+	}
+	return true;
+	
+// 	strTmp ="\r\n.\r\n";
+// 	//将邮件内容发送出去
+// 	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
+// 	{
+// 		ReleaseSocket();
+// 
+// 		return false;	
+// 	}
+
+}
