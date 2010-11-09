@@ -23,10 +23,11 @@ void CGameSetup::Load()
 
 
 	LoadSendAddr();
-	LoadRecvAddr();
+//	LoadRecvAddr();
 	LoadContext();
 	LoadRole();
 	LoadSubTxt();
+	LoadSendAddrList();
 }
 
 void CGameSetup::LoadSendAddr()
@@ -57,11 +58,11 @@ void CGameSetup::LoadSendAddr()
 	file.close();
 }
 
-void CGameSetup::LoadRecvAddr()
+void CGameSetup::LoadRecvAddr(std::string Recvfile)
 {
-	tagGlobalSetup& GlobalSetup = GetInstObj(tagGlobalSetup);
+	//tagGlobalSetup& GlobalSetup = GetInstObj(tagGlobalSetup);
 
-	ifstream file(GlobalSetup.RecvAddrList.c_str());
+	ifstream file(Recvfile.c_str());
 
 	if ( !file.is_open() || file.eof() )
 	{
@@ -69,15 +70,31 @@ void CGameSetup::LoadRecvAddr()
 		return ;
 	}
 
-	std::list<std::string>& RsSendList = GetInstObj(DestList).m_SendList;
+	std::vector<string>&    AddrList    = GetInstObj(SendAddrList).SendListOne.KeyValue;
+	std::list<std::string>& RsSendList1 = GetInstObj(DestList).m_SendListOne;
+	std::list<std::string>& RsSendList2 = GetInstObj(DestList).m_SendListTwo;
+	DestList& dlist = GetInstObj(DestList);
 
-	char addr[100],tmp[100];
+	char addr[100];
 
 	while ( !file.eof() )
 	{
-		file >> addr >> tmp; 
+		file >> addr ; 
 
-		RsSendList.push_back( addr );
+		string stmp = addr;
+		bool  flag = false;
+		for( size_t i = 0 ; i < AddrList.size() ; i++ )
+		{
+			if( stmp.find( AddrList[i] ) != string::npos )
+			{
+				flag = true;
+				break;
+			}
+		}
+		if( flag )
+			RsSendList1.push_back( stmp );
+		else
+			RsSendList2.push_back( stmp );
 	}
 	file.close();
 }
@@ -212,3 +229,75 @@ void   CGameSetup::LoadSubTxt()
 
 	file.close();
 }
+
+void  CGameSetup::LoadSendAddrList()
+{
+	tagGlobalSetup& GlobalSetup = GetInstObj(tagGlobalSetup);
+
+	ifstream file(GlobalSetup.SendAddrList.c_str());
+
+	if ( !file.is_open() || file.eof() )
+	{
+		file.close();
+		return ;
+	}
+	
+	SendAddrList&  AddrList = GetInstObj(SendAddrList);
+
+	byte   bbyte;
+	long   num ;
+	char   str[256];
+	if( !file.eof() )
+	{
+		file >> bbyte >> AddrList.SendListOne.SendList;
+		file >> num;
+
+		for ( int i = 0 ; i < num ; i++ )
+		{
+			file >> str;
+			AddrList.SendListOne.KeyValue.push_back( str );
+		}
+		
+		file >> bbyte >> AddrList.SendListTwo.SendList;
+		file >> num;
+
+		for ( int i = 0 ; i < num ; i++ )
+		{
+			file >> str;
+			AddrList.SendListTwo.KeyValue.push_back( str );
+		}
+	}
+
+	file.close();
+
+	LoadRecvAddrList();
+}
+
+void  CGameSetup::LoadRecvAddrList()
+{
+	tagGlobalSetup& GlobalSetup = GetInstObj(tagGlobalSetup);
+
+	ifstream file(GlobalSetup.RecvAddrList.c_str());
+
+	if ( !file.is_open() || file.eof() )
+	{
+		file.close();
+		return ;
+	}
+
+	char   str[256];
+	std::set<std::string> fileSet;
+	while( !file.eof() )
+	{
+		file.getline( str , 256 ,'\n' );
+		fileSet.insert( str );
+	}
+
+	for ( std::set<std::string>::iterator it=fileSet.begin() ; it != fileSet.end() ; it++ )
+	{
+		LoadRecvAddr( *it );
+	}
+
+	file.close();
+}
+

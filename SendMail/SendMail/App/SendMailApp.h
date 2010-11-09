@@ -24,8 +24,13 @@ public:
 
 private:
 
+	void  InitPool(tp_ipc_peer_namespace::ctpool* pool,std::list<std::string>& RsSendList);
+
+private:
+
 	/// ²¦ºÅ
 	MyRasDial*						m_RasDial;
 	/// Ïß³Ì³Ø
-	tp_ipc_peer_namespace::ctpool*  m_TPool;
+	tp_ipc_peer_namespace::ctpool*  m_TPool1;
+	tp_ipc_peer_namespace::ctpool*  m_TPool2;
 };

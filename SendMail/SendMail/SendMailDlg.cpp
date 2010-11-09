@@ -211,7 +211,7 @@ void CSendMailDlg::OnBnClickedButton1()
 {
 	srand( time(NULL) );
 
-	GetInstObj(CGameSetup).Load();
+	//GetInstObj(CGameSetup).Load();
 
 	static SendMailApp SendApp;
 	

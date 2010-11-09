@@ -15,11 +15,15 @@ public:
 private:
 	void  LoadSendAddr();
 
-	void  LoadRecvAddr();
+	void  LoadRecvAddr(std::string Recvfile);
 
 	void  LoadContext();
 
 	void  LoadSubTxt();
 
 	void  LoadRole();
+
+	void  LoadSendAddrList();
+
+	void  LoadRecvAddrList();
 };
