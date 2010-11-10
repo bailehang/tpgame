@@ -40,7 +40,7 @@ void  SendMailApp::Start()
 		m_TPool->Start( 1 );
 
 		/// ·¢ËÍÓÊ¼þ
-		for ( ;  m_TPool->IsExit() ; )
+		for ( ;  !m_TPool->IsExit() ; )
 		{
  			if( m_TPool->IsRas() )
 			{

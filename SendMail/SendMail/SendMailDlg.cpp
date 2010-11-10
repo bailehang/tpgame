@@ -218,7 +218,7 @@ unsigned __stdcall _m_main_thread(void * arg)
 	long end = (long)time(NULL);
 
 	char szText[256];
-	_snprintf( szText , 256 ,"时间 %d ", end-star );
+	_snprintf( szText , 256 ,"发送时间 %d ", end-star );
 
 	AfxMessageBox(szText);
 	::_endthreadex( 0 );

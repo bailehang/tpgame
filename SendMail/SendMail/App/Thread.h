@@ -66,11 +66,15 @@ namespace tp_ipc_peer_namespace
 			:tpool_running_( true )
 		{ 
 			pool_Count = 1;
+			task_result_.clear();
+			task_container_.clear();
 		}
 		ctpool ( unsigned threadsize )
 			:tpool_running_(true)
 		{
 			pool_Count = threadsize;
+			task_result_.clear();
+			task_container_.clear();
 		}
 
 		template< typename Function>
@@ -84,7 +88,7 @@ namespace tp_ipc_peer_namespace
 		void push_back( Function * f)
 		{
 			/// 枷锁
-			task_result.push_back( new tp_ipc_peer_namespace::task<Function>( f ) );
+			task_result_.push_back( new tp_ipc_peer_namespace::task<Function>( f ) );
 		}
 
 		/*void */
@@ -196,7 +200,7 @@ namespace tp_ipc_peer_namespace
 		/// 获取task
 		tp_ipc_peer_namespace::task_object * _m_read_task()
 		{
-			while( tpool_running_ )
+			//while( tpool_running_ )
 			{
 				tp_ipc_peer_namespace::task_object * task = NULL;
 				
@@ -214,23 +218,23 @@ namespace tp_ipc_peer_namespace
 					return task;
 				}
 
-				break;
+				//break;
 			}
 			return NULL;
 		}
 
 		tp_ipc_peer_namespace::task_object * _m_read_task_s()
 		{
-			while( tpool_running_ && Ras_running_ )
+			//while( tpool_running_ && Ras_running_ )
 			{
 				tp_ipc_peer_namespace::task_object * task = NULL;
 
 				/// 对共享区 枷锁
 				//task_lock_.enter();
-				if ( task_result.size() )
+				if ( task_result_.size() )
 				{
-					task = *( task_result.begin() );
-					task_result.erase( task_result.begin() );
+					task = *( task_result_.begin() );
+					task_result_.erase( task_result_.begin() );
 				}
 				//task_lock_.leave();
 
@@ -239,7 +243,7 @@ namespace tp_ipc_peer_namespace
 					return task;
 				}
 
-				break;
+				//break;
 			}
 			return NULL;
 		}
@@ -309,8 +313,8 @@ namespace tp_ipc_peer_namespace
 
 		/// user define var
 	private:
-		/// 线程运行状态
-		volatile bool				tpool_running_;
+		/// 线程运行状态	volatile
+		bool				tpool_running_;
 		/// 一个临界区类
 		sync::csectionlock			tlock_;                
 		/// 线程信息
@@ -320,7 +324,7 @@ namespace tp_ipc_peer_namespace
 		/// 一个回调函数
 		std::list<task_object* >    task_container_;
 		/// 一个回调函数
-		std::list<task_object* >	task_result;
+		std::list<task_object* >	task_result_;
 
 		/// 线程数量
 		volatile	static  long	pool_Count;

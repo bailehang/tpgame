@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0500 */
-/* at Tue Nov 09 23:06:05 2010
+/* at Wed Nov 10 22:35:21 2010
  */
 /* Compiler settings for .\SendMail.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
