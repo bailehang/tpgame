@@ -216,7 +216,7 @@ bool  SocketSendToMail::SendOther(std::string& strTmp,std::string & context)
 {	  
 	//strTmp+="Data: "+nowtime();
 	strTmp +="Content-Type: text/html; charset=gb2312\r\n";
-	strTmp +="Content-Transfer-Encoding: bit8\r\n";
+	strTmp +="Content-Transfer-Encoding: 8bit\r\n";
 
 	strTmp +=context+"\r\n";
 

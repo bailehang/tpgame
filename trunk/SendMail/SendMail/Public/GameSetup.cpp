@@ -20,42 +20,67 @@ CGameSetup::~CGameSetup()
 void CGameSetup::Load()
 {
 	LoadSetUp();
+	LoadSmtpList();
 
+	LoadSendAddrList();
 
-	LoadSendAddr();
+//	LoadSendAddr();
 //	LoadRecvAddr();
 	LoadContext();
 	LoadRole();
 	LoadSubTxt();
-	LoadSendAddrList();
+	
 }
 
-void CGameSetup::LoadSendAddr()
+long CGameSetup::LoadSendAddr(std::string str)
 {
-	tagGlobalSetup& GlobalSetup = GetInstObj(tagGlobalSetup);
-
-	ifstream file(GlobalSetup.SendAddrList.c_str());
+	ifstream file(str.c_str());
 
 	if ( !file.is_open() || file.eof() )
 	{
 		file.close();
-		return ;
+		return 0;
 	}
 
+	long num = 0;
 	std::vector<tagSend>& SendAddr = GetInstObj(MailLoginInfo).m_Vec;
-
-	char addr[100],pword[100],smtp[100];
-	char user[100];
+	SmtpList& SmtpIni = GetInstObj(SmtpList);
+	string addr,pword,smtp;
+	string user;
 	while ( !file.eof() )
 	{
-		file >> addr >> user >> pword >> smtp; 
+		// user smtp
+		file >> addr >> pword; 
+	
+		size_t inex = -1;
+		for ( size_t i = 0 ; i < SmtpIni.tSmtpList.size() ; i++ )
+		{
+			if ( addr.find( SmtpIni.tSmtpList[i].index ) != string::npos )
+			{
+				inex = i ;
+				break;
+			}
+		}
+		if ( inex < 0 )
+			continue;
+		if ( SmtpIni.tSmtpList[inex].value == 0 )
+		{
+			int len  = addr.find("@");
+			user = addr.substr(0,len);
+		}
+		else
+			user  = addr;
+
+		smtp = SmtpIni.tSmtpList[inex].smtp ;
 
 		tagSend  base(addr,user,user,pword,smtp);
 
 		SendAddr.push_back( base );
+		num ++;
 	}
 
 	file.close();
+	return num;
 }
 
 void CGameSetup::LoadRecvAddr(std::string Recvfile)
@@ -166,7 +191,8 @@ void  CGameSetup::LoadSetUp()
 			>>  str >> GlobalSetup.RecvAddrList
 			>>  str >> GlobalSetup.SendRole
 			>>  str >> GlobalSetup.MailContext
-			>>  str >> GlobalSetup.MailSub;
+			>>  str >> GlobalSetup.MailSub
+			>>	str	>> GlobalSetup.SmtpIni;
 	}
 
 	file.close();
@@ -243,6 +269,7 @@ void  CGameSetup::LoadSendAddrList()
 	}
 	
 	SendAddrList&  AddrList = GetInstObj(SendAddrList);
+	MailLoginInfo& LoginInfo = GetInstObj(MailLoginInfo);
 
 	byte   bbyte;
 	long   num ;
@@ -252,6 +279,7 @@ void  CGameSetup::LoadSendAddrList()
 		file >> bbyte >> AddrList.SendListOne.SendList;
 		file >> num;
 
+		LoginInfo.Num1 = LoadSendAddr( AddrList.SendListOne.SendList );
 		for ( int i = 0 ; i < num ; i++ )
 		{
 			file >> str;
@@ -261,6 +289,7 @@ void  CGameSetup::LoadSendAddrList()
 		file >> bbyte >> AddrList.SendListTwo.SendList;
 		file >> num;
 
+		LoginInfo.Num2 = LoadSendAddr( AddrList.SendListTwo.SendList );
 		for ( int i = 0 ; i < num ; i++ )
 		{
 			file >> str;
@@ -301,3 +330,27 @@ void  CGameSetup::LoadRecvAddrList()
 	file.close();
 }
 
+
+void   CGameSetup::LoadSmtpList()
+{
+	tagGlobalSetup& GlobalSetup = GetInstObj(tagGlobalSetup);
+	SmtpList& SmtpIni = GetInstObj(SmtpList);
+	ifstream file(GlobalSetup.SmtpIni.c_str());
+
+	if ( !file.is_open() || file.eof() )
+	{
+		file.close();
+		return ;
+	}
+
+	while ( !file.eof() )
+	{
+		tagSmtpList	 smtp;
+
+		file >> smtp.index >> smtp.value >> smtp.smtp;
+
+		SmtpIni.tSmtpList.push_back( smtp );
+	}										
+
+	file.close();
+}

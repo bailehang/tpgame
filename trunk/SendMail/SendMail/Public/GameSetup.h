@@ -13,7 +13,7 @@ public:
 	void  LoadSetUp();
 	
 private:
-	void  LoadSendAddr();
+	long  LoadSendAddr(std::string str);
 
 	void  LoadRecvAddr(std::string Recvfile);
 
@@ -26,4 +26,6 @@ private:
 	void  LoadSendAddrList();
 
 	void  LoadRecvAddrList();
+
+	void  LoadSmtpList();
 };

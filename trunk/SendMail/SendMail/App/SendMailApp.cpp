@@ -19,13 +19,12 @@ SendMailApp::SendMailApp()
 SendMailApp::~SendMailApp()
 {
 	SAFE_DELETE(m_RasDial);
-	SAFE_DELETE(m_TPool1);
-	SAFE_DELETE(m_TPool2);
+	SAFE_DELETE(m_TPool);
 }
 
 bool  SendMailApp::IsSendMail()
 {
-	return m_TPool1->IsExit() && m_TPool2->IsExit();
+	return m_TPool->IsExit();
 }
 
 
@@ -34,36 +33,45 @@ void  SendMailApp::Start()
 	if ( 1 /*m_RasDial && m_RasDial->Listen()*/ )
 	{
 		
-		InitPool( m_TPool1 , GetInstObj(DestList).m_SendListOne );
-		InitPool( m_TPool1 , GetInstObj(DestList).m_SendListTwo );
+		m_TPool = new tp_ipc_peer_namespace::ctpool( );
+		InitPool( m_TPool , GetInstObj(DestList).m_SendListOne , 1 );
+		InitPool( m_TPool , GetInstObj(DestList).m_SendListTwo , 2 );
 
-		m_TPool1->Start(1);
-		m_TPool2->Start(2);
+		m_TPool->Start( 1 );
 
 		/// 发送邮件
-		for ( ;  ; )
+		for ( ;  m_TPool->IsExit() ; )
 		{
-// 			bool Exit = m_TPool->IsExit();
-// 			if ( Exit )
-// 			{
-// 				break;
-// 			}
+ 			if( m_TPool->IsRas() )
+			{
+				//m_RasDial->Stop();
+				//m_RasDial->Listen();
+			}
 		}
+
+		SAFE_DELETE(m_TPool);
+		//	m_RasDial->Stop();
 	}
 
-//	m_RasDial->Stop();
+
 }
 
-void  SendMailApp::InitPool(tp_ipc_peer_namespace::ctpool* pool,std::list<std::string>& RsSendList)
+void  SendMailApp::InitPool(tp_ipc_peer_namespace::ctpool* pool,std::list<std::string>& RsSendList,long  index)
 {
-	pool = new tp_ipc_peer_namespace::ctpool( 1);
-
 	//std::list<std::string>& RsSendList = GetInstObj(DestList).m_SendListOne;
+	
+	if( pool == NULL )
+		return ;
 
 	/// 发送地址数量
 	long  DestCount = RsSendList.size();
+	
+	long  Num1 = GetInstObj( MailLoginInfo ).Num1;
+	long  Num2 = GetInstObj( MailLoginInfo ).Num2;
+
 	/// 发送帐号信息
-	long  AccountCount = GetInstObj( MailLoginInfo ).m_Vec.size();
+	long  AccountCount = (index == 1) ? Num1 : Num2 ;
+
 	/// 每次发送的联系人数量
 	const long  MTime = GetInstObj( tagGlobalSetup).SendNum ;
 	/// 
@@ -77,7 +85,8 @@ void  SendMailApp::InitPool(tp_ipc_peer_namespace::ctpool* pool,std::list<std::s
 	for (size_t i = 0 ; i < SendNum ; i ++  )
 	{
 		//SendToMail*  mail = new SendToMail( LinkNum % AccountCount );
-		SocketSendToMail*  mail = new SocketSendToMail( LinkNum % AccountCount );
+		long indx =	 (index == 2 ? Num1 : 0);
+		SocketSendToMail*  mail = new SocketSendToMail( indx+(LinkNum % AccountCount) );
 
 		std::list<std::string>  tmpList;
 
@@ -87,7 +96,10 @@ void  SendMailApp::InitPool(tp_ipc_peer_namespace::ctpool* pool,std::list<std::s
 		mail->AppendUser( tmpList );
 
 		//m_TPool->push<SendToMail>( mail );
-		pool->push<SocketSendToMail> ( mail );
+		if( index == 1)
+			pool->push<SocketSendToMail> ( mail );
+		else
+			pool->push_back<SocketSendToMail>( mail );
 
 		LinkNum ++ ;
 	}
