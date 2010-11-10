@@ -43,6 +43,8 @@ struct  tagMailBase
 struct  MailLoginInfo
 {
 	std::vector<tagSend>  m_Vec;
+	long				  Num1;
+	long				  Num2;
 };
 
 struct  DestList
@@ -75,6 +77,7 @@ struct  tagGlobalSetup
 	std::string   SendRole;
 	std::string	  MailContext;
 	std::string   MailSub;
+	std::string   SmtpIni;
 	
 };
 
@@ -109,4 +112,16 @@ struct	SendAddrList
 {
 	 tagSendAddrList	SendListOne;
 	 tagSendAddrList	SendListTwo; 
+};
+
+struct	tagSmtpList 
+{
+	long    value;
+	string  index;
+	string  smtp;
+};
+
+struct	SmtpList 
+{
+	std::vector<tagSmtpList>	tSmtpList;
 };

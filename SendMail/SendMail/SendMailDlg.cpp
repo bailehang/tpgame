@@ -206,15 +206,28 @@ BOOL CSendMailDlg::CanExit()
 	return TRUE;
 }
 
+unsigned __stdcall _m_main_thread(void * arg)
+{
+	long star = (long)time(NULL);
+	srand( star );
+
+	static SendMailApp SendApp;
+
+	SendApp.Start();
+
+	long end = (long)time(NULL);
+
+	char szText[256];
+	_snprintf( szText , 256 ,"Ê±¼ä %d ", end-star );
+
+	AfxMessageBox(szText);
+	::_endthreadex( 0 );
+	return 0;
+}
+
 
 void CSendMailDlg::OnBnClickedButton1()
 {
-	srand( time(NULL) );
-
-	//GetInstObj(CGameSetup).Load();
-
-	static SendMailApp SendApp;
 	
-	SendApp.Start();
-
+	::_beginthreadex( 0 , 0 , &_m_main_thread , NULL , NULL ,NULL);
 }

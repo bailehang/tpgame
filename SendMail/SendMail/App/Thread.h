@@ -77,28 +77,35 @@ namespace tp_ipc_peer_namespace
 		void push( Function * f)
 		{
 			/// 枷锁
-			task_lock_.enter();
-
 			task_container_.push_back( new tp_ipc_peer_namespace::task<Function>( f ) );
-			
-			task_lock_.leave();
+		}
 
+		template< typename Function>
+		void push_back( Function * f)
+		{
+			/// 枷锁
+			task_result.push_back( new tp_ipc_peer_namespace::task<Function>( f ) );
 		}
 
 		/*void */
 		
-		void Start( int size )
+		void Start( long size )
 		{
-			if( size == 1)
-				_m_start_threads( pool_Count );
-			else
-				_m_start_threads_s(pool_Count);
+			Ras_running_ = false;
+			_m_start_threads( 1 );
+			_m_start_threads_s(1);
+		}
+
+		void RasStates(bool  runing=true)
+		{
+			Ras_running_ =  true;
 		}
 
 		~ctpool(void){}
 
 
-		bool   IsExit()		{	return pool_Count <= 0 ; }
+		bool   IsExit()const		{	return pool_Count <= 0 ; }
+		bool   IsRas()const			{   return Ras_running_;	 }
 
 	private:
 
@@ -111,11 +118,7 @@ namespace tp_ipc_peer_namespace
 			for ( unsigned i = 0 ; i < size ; i++)
 			{
 				AfxSocketInit();
-				tinfo_type tinfo;
-				tinfo.state = 0;
-				/// (unsigned*)this 
-				tinfo.handle = (HANDLE)::_beginthreadex( 0 , 0 , &ctpool::_m_work_thread , this , NULL ,NULL);
-				threads_.push_back(  tinfo );
+				_beginthreadex( 0 , 0 , &ctpool::_m_work_thread , this , NULL ,NULL);
 			}
 
 			pool_Count = size ;
@@ -130,14 +133,10 @@ namespace tp_ipc_peer_namespace
 			for ( unsigned i = 0 ; i < size ; i++)
 			{
 				AfxSocketInit();
-				tinfo_type tinfo;
-				tinfo.state = 0;
-				/// (unsigned*)this 
-				tinfo.handle = (HANDLE)::_beginthreadex( 0 , 0 , &ctpool::_m_work_thread_s , this , NULL ,NULL);
-				threads_.push_back(  tinfo );
+				::_beginthreadex( 0 , 0 , &ctpool::_m_work_thread_s , this , NULL ,NULL);
 			}
 
-			pool_Count = size ;
+			pool_Count += size ;
 		}
 
 		/// 唤醒
@@ -202,13 +201,38 @@ namespace tp_ipc_peer_namespace
 				tp_ipc_peer_namespace::task_object * task = NULL;
 				
 				/// 对共享区 枷锁
-				task_lock_.enter();
+				//task_lock_.enter();
 				if ( task_container_.size() )
 				{
 					task = *( task_container_.begin() );
 					task_container_.erase( task_container_.begin() );
 				}
-				task_lock_.leave();
+				//task_lock_.leave();
+
+				if ( task )
+				{
+					return task;
+				}
+
+				break;
+			}
+			return NULL;
+		}
+
+		tp_ipc_peer_namespace::task_object * _m_read_task_s()
+		{
+			while( tpool_running_ && Ras_running_ )
+			{
+				tp_ipc_peer_namespace::task_object * task = NULL;
+
+				/// 对共享区 枷锁
+				//task_lock_.enter();
+				if ( task_result.size() )
+				{
+					task = *( task_result.begin() );
+					task_result.erase( task_result.begin() );
+				}
+				//task_lock_.leave();
 
 				if ( task )
 				{
@@ -222,13 +246,14 @@ namespace tp_ipc_peer_namespace
 
 	private:
 		static unsigned __stdcall _m_work_thread(void * arg)
-		{
-			
+		{					 			
 			self_type & self = *reinterpret_cast<self_type*>(arg);
 			tp_ipc_peer_namespace::task_object * task = 0;
 
 			while( true )
 			{
+				//if( Ras_running_ )
+				//	continue;
 				task = self._m_read_task();
 				if ( task )
 				{
@@ -254,7 +279,9 @@ namespace tp_ipc_peer_namespace
 
 			while( true )
 			{
-				task = self._m_read_task();
+				//if( Ras_running_ )
+				//	continue;
+				task = self._m_read_task_s();
 				if ( task )
 				{
 					task->exec();
@@ -291,11 +318,17 @@ namespace tp_ipc_peer_namespace
 		/// 
 		sync::csectionlock			task_lock_;
 		/// 一个回调函数
-		std::vector<task_object* >  task_container_;
+		std::list<task_object* >    task_container_;
+		/// 一个回调函数
+		std::list<task_object* >	task_result;
+
 		/// 线程数量
-		static  long				pool_Count;
+		volatile	static  long	pool_Count;
+		/// 拨号阶段
+		volatile	bool	Ras_running_;
 
 	};
 
-	long  tp_ipc_peer_namespace::ctpool::pool_Count = 0;
+	volatile	long  tp_ipc_peer_namespace::ctpool::pool_Count = 0;
+	//volatile	bool  tp_ipc_peer_namespace::ctpool::Ras_running_ = false;
 }
