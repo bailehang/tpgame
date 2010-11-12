@@ -8,12 +8,10 @@
 #include "../Public/STLFun.h"
 #include "../Public/GameSetup.h"
 
-
+tp_ipc_peer_namespace::ctpool*  g_CurrThread = NULL;
 SendMailApp::SendMailApp()
 {
 	m_RasDial = new MyRasDial("test","test","¿í´øÁ¬½Ó");
-
-	GetInstObj(CGameSetup).Load();
 }
 
 SendMailApp::~SendMailApp()
@@ -34,6 +32,7 @@ void  SendMailApp::Start()
 	{
 		
 		m_TPool = new tp_ipc_peer_namespace::ctpool( );
+		g_CurrThread = m_TPool;
 		InitPool( m_TPool , GetInstObj(DestList).m_SendListOne , 1 );
 		InitPool( m_TPool , GetInstObj(DestList).m_SendListTwo , 2 );
 
@@ -46,10 +45,13 @@ void  SendMailApp::Start()
 			{
 				//m_RasDial->Stop();
 				//m_RasDial->Listen();
+				Sleep( 1000 );
+				m_TPool->RasStates( false );
 			}
 		}
 
 		SAFE_DELETE(m_TPool);
+		SAFE_DELETE(g_CurrThread);
 		//	m_RasDial->Stop();
 	}
 

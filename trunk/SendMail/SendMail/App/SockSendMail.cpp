@@ -216,7 +216,7 @@ bool  SocketSendToMail::SendOther(std::string& strTmp,std::string & context)
 {	  
 	//strTmp+="Data: "+nowtime();
 	strTmp +="Content-Type: text/html; charset=gb2312\r\n";
-	strTmp +="Content-Transfer-Encoding: 8bit\r\n";
+	strTmp +="Content-Transfer-Encoding: Base64\r\n";
 
 	strTmp +=context+"\r\n";
 
@@ -229,15 +229,6 @@ bool  SocketSendToMail::SendOther(std::string& strTmp,std::string & context)
 
 		return false;	
 	}
-	return true;
-	
-// 	strTmp ="\r\n.\r\n";
-// 	//将邮件内容发送出去
-// 	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
-// 	{
-// 		ReleaseSocket();
-// 
-// 		return false;	
-// 	}
 
+	return true;
 }

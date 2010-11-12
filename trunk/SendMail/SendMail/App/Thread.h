@@ -256,8 +256,8 @@ namespace tp_ipc_peer_namespace
 
 			while( true )
 			{
-				//if( Ras_running_ )
-				//	continue;
+				if( Ras_running_ )
+					continue;
 				task = self._m_read_task();
 				if ( task )
 				{
@@ -283,8 +283,8 @@ namespace tp_ipc_peer_namespace
 
 			while( true )
 			{
-				//if( Ras_running_ )
-				//	continue;
+				if( Ras_running_ )
+					continue;
 				task = self._m_read_task_s();
 				if ( task )
 				{
@@ -329,10 +329,8 @@ namespace tp_ipc_peer_namespace
 		/// 线程数量
 		volatile	static  long	pool_Count;
 		/// 拨号阶段
-		volatile	bool	Ras_running_;
+		volatile	static  bool	Ras_running_;
 
 	};
-
-	volatile	long  tp_ipc_peer_namespace::ctpool::pool_Count = 0;
 	//volatile	bool  tp_ipc_peer_namespace::ctpool::Ras_running_ = false;
 }
