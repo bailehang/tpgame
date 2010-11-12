@@ -302,6 +302,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\App\Thread.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\App\Thread.h"
 				>
 			</File>

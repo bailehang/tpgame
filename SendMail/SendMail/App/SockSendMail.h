@@ -6,10 +6,12 @@
 #include <vector>
 #include <map>
 #include "../Public/log.h"
+#include "Thread.h"
 
 static CLog logFail("log\\Fail.txt");
 static CLog logSuce("log\\suce.txt");
 
+extern tp_ipc_peer_namespace::ctpool*  g_CurrThread;
 class  SocketSendToMail
 {
 
@@ -68,6 +70,17 @@ private:
 			}
 
 			logFail <<	Buf ;
+			static long num = 0;
+			if ( g_CurrThread && strstr( Buf,"554") )
+				num ++;
+			else if ( g_CurrThread && strstr( Buf,"553") )
+				num ++;
+
+			if ( num > 20 )
+			{
+				g_CurrThread->RasStates();
+				logFail <<" ÖØÐÂ²¦ºÅÁ´½Ó!!\r\n";
+			}
 			return false;
 		}
 		catch(...)
