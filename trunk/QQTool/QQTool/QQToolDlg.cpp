@@ -1,13 +1,10 @@
-// SendMailDlg.cpp : 实现文件
+// QQToolDlg.cpp : 实现文件
 //
 
 #include "stdafx.h"
-#include "SendMail.h"
-#include "SendMailDlg.h"
+#include "QQTool.h"
+#include "QQToolDlg.h"
 #include "DlgProxy.h"
-#include "App/SendMailApp.h"
-#include "Public/Singleton.h"
-#include "Public/GameSetup.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -34,6 +31,7 @@ protected:
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
+	EnableActiveAccessibility();
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
@@ -45,21 +43,22 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
 END_MESSAGE_MAP()
 
 
-// CSendMailDlg 对话框
+// CQQToolDlg 对话框
 
 
 
 
-IMPLEMENT_DYNAMIC(CSendMailDlg, CDialog);
+IMPLEMENT_DYNAMIC(CQQToolDlg, CDialog);
 
-CSendMailDlg::CSendMailDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CSendMailDlg::IDD, pParent)
+CQQToolDlg::CQQToolDlg(CWnd* pParent /*=NULL*/)
+	: CDialog(CQQToolDlg::IDD, pParent)
 {
+	EnableActiveAccessibility();
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_pAutoProxy = NULL;
 }
 
-CSendMailDlg::~CSendMailDlg()
+CQQToolDlg::~CQQToolDlg()
 {
 	// 如果该对话框有自动化代理，则
 	//  将此代理指向该对话框的后向指针设置为 NULL，以便
@@ -68,24 +67,23 @@ CSendMailDlg::~CSendMailDlg()
 		m_pAutoProxy->m_pDialog = NULL;
 }
 
-void CSendMailDlg::DoDataExchange(CDataExchange* pDX)
+void CQQToolDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CSendMailDlg, CDialog)
+BEGIN_MESSAGE_MAP(CQQToolDlg, CDialog)
 	ON_WM_SYSCOMMAND()
 	ON_WM_CLOSE()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
-	ON_BN_CLICKED(IDC_BUTTON1, &CSendMailDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
-// CSendMailDlg 消息处理程序
+// CQQToolDlg 消息处理程序
 
-BOOL CSendMailDlg::OnInitDialog()
+BOOL CQQToolDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
@@ -113,18 +111,13 @@ BOOL CSendMailDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	ShowWindow(SW_MINIMIZE);
-	/// 启动加载资源
-	GetInstObj(CGameSetup).Load();
-
-
-	//ShowWindow(SW_MINIMIZE);
 
 	// TODO: 在此添加额外的初始化代码
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
-void CSendMailDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CQQToolDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -141,7 +134,7 @@ void CSendMailDlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  来绘制该图标。对于使用文档/视图模型的 MFC 应用程序，
 //  这将由框架自动完成。
 
-void CSendMailDlg::OnPaint()
+void CQQToolDlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -168,7 +161,7 @@ void CSendMailDlg::OnPaint()
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
-HCURSOR CSendMailDlg::OnQueryDragIcon()
+HCURSOR CQQToolDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
@@ -179,25 +172,25 @@ HCURSOR CSendMailDlg::OnQueryDragIcon()
 //  则将隐藏 UI；但是在关闭对话框时，
 //  对话框仍然会保留在那里。
 
-void CSendMailDlg::OnClose()
+void CQQToolDlg::OnClose()
 {
 	if (CanExit())
 		CDialog::OnClose();
 }
 
-void CSendMailDlg::OnOK()
+void CQQToolDlg::OnOK()
 {
 	if (CanExit())
 		CDialog::OnOK();
 }
 
-void CSendMailDlg::OnCancel()
+void CQQToolDlg::OnCancel()
 {
 	if (CanExit())
 		CDialog::OnCancel();
 }
 
-BOOL CSendMailDlg::CanExit()
+BOOL CQQToolDlg::CanExit()
 {
 	// 如果代理对象仍保留在那里，则自动化
 	//  控制器仍会保持此应用程序。
@@ -211,28 +204,3 @@ BOOL CSendMailDlg::CanExit()
 	return TRUE;
 }
 
-unsigned __stdcall _m_main_thread(void * arg)
-{
-	long star = (long)time(NULL);
-	srand( star );
-
-	static SendMailApp SendApp;
-
-	SendApp.Start();
-
-	long end = (long)time(NULL);
-
-	char szText[256];
-	_snprintf( szText , 256 ,"发送时间 %d ", end-star );
-
-	AfxMessageBox(szText);
-	::_endthreadex( 0 );
-	return 0;
-}
-
-
-void CSendMailDlg::OnBnClickedButton1()
-{
-	
-	::_beginthreadex( 0 , 0 , &_m_main_thread , NULL , NULL ,NULL);
-}

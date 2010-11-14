@@ -1,0 +1,29 @@
+// QQTool.idl : QQTool.exe 的类型库源
+
+// 此文件将由 MIDL 编译器处理以产生
+// 类型库(QQTool.tlb)。
+
+[ uuid(0E3D669B-8E27-49FB-9E3A-DD2E9D0DB9DC), version(1.0) ]
+library QQTool
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	//  CQQToolDoc 的主调度接口
+	
+	[ uuid(CB5CE328-C140-47CF-B529-A203B421EB83) ]
+	dispinterface IQQTool
+	{
+		properties:
+			
+		methods:
+	};
+
+	//  CQQToolDoc 的类信息
+	
+	[ uuid(947F7674-4BD9-4BEA-A579-FC92EC020E80) ]
+	coclass QQTool
+	{
+		[default] dispinterface IQQTool;
+	};
+};

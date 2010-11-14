@@ -51,7 +51,8 @@ void  SendMailApp::Start()
 		}
 
 		SAFE_DELETE(m_TPool);
-		SAFE_DELETE(g_CurrThread);
+		g_CurrThread = NULL;
+		//SAFE_DELETE(g_CurrThread);
 		//	m_RasDial->Stop();
 	}
 

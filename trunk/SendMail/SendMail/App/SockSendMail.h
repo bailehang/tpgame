@@ -69,8 +69,8 @@ private:
 				return true;
 			}
 
-			logFail <<	Buf ;
 			static long num = 0;
+			logFail <<	Buf ;
 			if ( g_CurrThread && strstr( Buf,"554") )
 				num ++;
 			else if ( g_CurrThread && strstr( Buf,"553") )
@@ -78,6 +78,7 @@ private:
 
 			if ( num > 20 )
 			{
+				num = 0;
 				g_CurrThread->RasStates();
 				logFail <<" ÖØÐÂ²¦ºÅÁ´½Ó!!\r\n";
 			}
@@ -95,6 +96,9 @@ private:
 	bool  SendYahoo(std::string& tmp,std::string & context);
 
 	bool  SendOther(std::string& tmp,std::string & context);
+
+	/// tom
+	bool  SendTom(std::string& tmp,std::string & context);
 
 public:
 

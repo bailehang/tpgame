@@ -113,8 +113,10 @@ bool  SocketSendToMail::Send( size_t index )
 
 	strTmp+="Subject: "+subject+"\r\n";
 
-	if ( m_Send.login.find("yahoo") != string::npos )
+	if ( m_Send.login.find("@yahoo") != string::npos )
 		SendYahoo( strTmp , m_SendInfo.Context );
+	//else if( m_Send.login.find("@tom") != string::npos )
+	//	SendTom( strTmp , m_SendInfo.Context );
 	else
 		SendOther( strTmp , m_SendInfo.Context );
 
@@ -214,13 +216,14 @@ bool  SocketSendToMail::SendYahoo(std::string &strTmp,std::string & context)
 
 bool  SocketSendToMail::SendOther(std::string& strTmp,std::string & context)
 {	  
-	//strTmp+="Data: "+nowtime();
-	strTmp +="Content-Type: text/html; charset=gb2312\r\n";
-	strTmp +="Content-Transfer-Encoding: Base64\r\n";
-
-	strTmp +=context+"\r\n";
-
-	strTmp +="\r\n.\r\n";
+	
+	//邮件主体
+	strTmp+="--";
+	strTmp+="boundary";
+	strTmp+="\r\n";
+	strTmp+="Content-type:text/html; Charset=gb2312\r\n";
+	strTmp+="Content-Transfer-Encoding: 8bit\r\n\r\n";
+	strTmp+=context+"\r\n";
 
 	//将邮件内容发送出去
 	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
@@ -229,6 +232,26 @@ bool  SocketSendToMail::SendOther(std::string& strTmp,std::string & context)
 
 		return false;	
 	}
+
+	//界尾
+	strTmp="--";
+	strTmp+="boundary";
+	strTmp+="--\r\n.\r\n";
+
+
+	//将邮件内容发送出去
+	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
+	{
+		ReleaseSocket();
+
+		return false;	
+	}
+
+	return true;
+}
+
+bool SocketSendToMail::SendTom(std::string& strTmp,std::string & context)
+{
 
 	return true;
 }

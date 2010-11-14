@@ -1,17 +1,13 @@
-
+/**
+ *  @brief 线程池
+ *
+ */
 #pragma once
 
-#include "../public/locks.h"
+#include "locks.h"
 #include <list>
 #include <vector>
 #include <process.h>
-
-using namespace std;
-
-namespace tp_ipc_peer_namespace
-{
-	class ctpool;
-}
 
 /// 线程池
 namespace tp_ipc_peer_namespace
@@ -50,35 +46,30 @@ namespace tp_ipc_peer_namespace
 		/// 执行
 		virtual void exec()
 		{
-			if( !(*functor_)() )
-			{
-				char szError[10] = "";
-				//std::cout << szError << std::endl;
-			}
+			/// 调用task
+			(*functor_)();
 		}
 
 	private:
 		Functor* functor_;
-		
+
 	};
 
 	class ctpool
 	{
 		typedef ctpool self_type;
-		
+
 	public:
 		ctpool(void)
 			:tpool_running_( true )
 		{ 
 			pool_Count = 1;
-			task_result_.clear();
 			task_container_.clear();
 		}
 		ctpool ( unsigned threadsize )
 			:tpool_running_(true)
 		{
 			pool_Count = threadsize;
-			task_result_.clear();
 			task_container_.clear();
 		}
 
@@ -89,20 +80,11 @@ namespace tp_ipc_peer_namespace
 			task_container_.push_back( new tp_ipc_peer_namespace::task<Function>( f ) );
 		}
 
-		template< typename Function>
-		void push_back( Function * f)
-		{
-			/// 枷锁
-			task_result_.push_back( new tp_ipc_peer_namespace::task<Function>( f ) );
-		}
-
 		/*void */
-		
 		void Start( long size )
 		{
 			Ras_running_ = false;
-			_m_start_threads( 1 );
-			//_m_start_threads_s(1);
+			_m_start_threads( pool_Count );
 		}
 
 		void RasStates(bool  runing=true)
@@ -112,8 +94,9 @@ namespace tp_ipc_peer_namespace
 
 		~ctpool(void){}
 
-
+		/// 判断线程池是否结束
 		bool   IsExit()const		{	return pool_Count <= 0 ; }
+		/// 判断是否进行拨号
 		bool   IsRas()const			{   return Ras_running_;	 }
 
 	private:
@@ -131,21 +114,6 @@ namespace tp_ipc_peer_namespace
 			}
 
 			pool_Count = size ;
-		}
-		
-
-		void _m_start_threads_s( unsigned size )
-		{
-			if ( size == 0 )
-				size = 4;
-
-			for ( unsigned i = 0 ; i < size ; i++)
-			{
-				AfxSocketInit();
-				::_beginthreadex( 0 , 0 , &ctpool::_m_work_thread_s , this , NULL ,NULL);
-			}
-
-			pool_Count += size ;
 		}
 
 		/// 唤醒
@@ -205,50 +173,25 @@ namespace tp_ipc_peer_namespace
 		/// 获取task
 		tp_ipc_peer_namespace::task_object * _m_read_task()
 		{
-			//while( tpool_running_ )
+			while( tpool_running_ )
 			{
 				tp_ipc_peer_namespace::task_object * task = NULL;
-				
+
 				/// 对共享区 枷锁
-				//task_lock_.enter();
+				task_lock_.enter();
 				if ( task_container_.size() )
 				{
 					task = *( task_container_.begin() );
 					task_container_.erase( task_container_.begin() );
 				}
-				//task_lock_.leave();
+				task_lock_.leave();
 
 				if ( task )
 				{
 					return task;
 				}
 
-				//break;
-			}
-			return NULL;
-		}
-
-		tp_ipc_peer_namespace::task_object * _m_read_task_s()
-		{
-			//while( tpool_running_ && Ras_running_ )
-			{
-				tp_ipc_peer_namespace::task_object * task = NULL;
-
-				/// 对共享区 枷锁
-				//task_lock_.enter();
-				if ( task_result_.size() )
-				{
-					task = *( task_result_.begin() );
-					task_result_.erase( task_result_.begin() );
-				}
-				//task_lock_.leave();
-
-				if ( task )
-				{
-					return task;
-				}
-
-				//break;
+				break;
 			}
 			return NULL;
 		}
@@ -264,33 +207,6 @@ namespace tp_ipc_peer_namespace
 				if( Ras_running_ )
 					continue;
 				task = self._m_read_task();
-				if ( task )
-				{
-					task->exec();
-
-					//Sleep( 1 );
-					delete task ;
-					task = 0;
-				}
-				else
-					break;
-			}
-			pool_Count -- ;
-			::_endthreadex( 0 );
-			return 0;
-		}
-
-		static unsigned __stdcall _m_work_thread_s(void * arg)
-		{
-
-			self_type & self = *reinterpret_cast<self_type*>(arg);
-			tp_ipc_peer_namespace::task_object * task = 0;
-
-			while( true )
-			{
-				if( Ras_running_ )
-					continue;
-				task = self._m_read_task_s();
 				if ( task )
 				{
 					task->exec();
@@ -328,15 +244,11 @@ namespace tp_ipc_peer_namespace
 		sync::csectionlock			task_lock_;
 		/// 一个回调函数
 		std::list<task_object* >    task_container_;
-		/// 一个回调函数
-		std::list<task_object* >	task_result_;
 		/// 拨号阶段
 		volatile	static  bool	Ras_running_;
-		
-		public:
-			/// 线程数量
-			volatile	static  long	pool_Count;
 
+	public:
+		/// 线程数量
+		volatile	static  long	pool_Count;
 	};
-	//volatile	bool  tp_ipc_peer_namespace::ctpool::Ras_running_ = false;
 }
