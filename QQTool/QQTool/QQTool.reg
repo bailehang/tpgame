@@ -1,0 +1,17 @@
+REGEDIT
+; 此 .REG 文件可能由 SETUP 程序使用。
+;   如果 SETUP 程序不可用，则调用
+;   CWinApp::RegisterShellFileTypes 和 COleObjectFactory::UpdateRegistryAll
+;   在 InitInstance 中对下列项自动进行注册。
+
+
+HKEY_CLASSES_ROOT\QQTool.Application = QQTool Application
+
+
+HKEY_CLASSES_ROOT\QQTool.Application\CLSID = {947F7674-4BD9-4BEA-A579-FC92EC020E80}
+
+HKEY_CLASSES_ROOT\CLSID\{947F7674-4BD9-4BEA-A579-FC92EC020E80} = QQTool Application
+HKEY_CLASSES_ROOT\CLSID\{947F7674-4BD9-4BEA-A579-FC92EC020E80}\ProgId = QQTool.Application
+
+
+HKEY_CLASSES_ROOT\CLSID\{947F7674-4BD9-4BEA-A579-FC92EC020E80}\LocalServer32 = QQTool.EXE

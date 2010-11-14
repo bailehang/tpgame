@@ -1,0 +1,13 @@
+--Boundary-=_bhsPtOlIuDdorWCCIXGJmUXFxMRY
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
+
+1eK49srH0ru49rLiytSho6GjoaMNCiANCtfWzOWy4srUoaOhoyANCg0K
+--Boundary-=_bhsPtOlIuDdorWCCIXGJmUXFxMRY
+Content-Type: text/html; charset="gb2312"
+Content-Transfer-Encoding: base64
+
+PERJVj7V4rj2ysfSu7j2suLK1KGjoaOhozwvRElWPg0KPERJVj4mbmJzcDs8L0RJVj4NCjxE
+SVY+PEZPTlQgY29sb3I9I2ZmMDBmZj7X1szlsuLK1KGjoaM8L0ZPTlQ+PC9ESVY+IDxicj48
+IS0tIHVybGZpbGVzIC0tPjxicj48YnI+PCEtLSBmb290ZXIgLS0+PGJyPg0KDQo=
+--Boundary-=_bhsPtOlIuDdorWCCIXGJmUXFxMRY--

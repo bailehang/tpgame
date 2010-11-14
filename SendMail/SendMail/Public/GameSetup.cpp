@@ -116,10 +116,10 @@ void CGameSetup::LoadRecvAddr(std::string Recvfile)
 				break;
 			}
 		}
-		if( flag )
-			RsSendList1.push_back( stmp );
-		else
-			RsSendList2.push_back( stmp );
+		//if( flag )
+		RsSendList1.push_back( stmp );
+		//else
+		//	RsSendList2.push_back( stmp );
 	}
 	file.close();
 }
