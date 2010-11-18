@@ -169,3 +169,4 @@ std::string   ttos( std::string& str,long max,long sNum,long Rand,long Rand1,lon
 	}
 	return pTmp;
 }
+

@@ -14,6 +14,7 @@ bool  SocketSendToMail::Send( size_t index )
 		return false ;
 	}				  
 
+	
 	tagSend		 m_Send     = GetInstObj(MailLoginInfo).m_Vec[ m_SendID ];
 
 	tagSendInfo& m_SendInfo = GetInstObj(tagSendInfo);
@@ -115,8 +116,8 @@ bool  SocketSendToMail::Send( size_t index )
 
 	if ( m_Send.login.find("@yahoo") != string::npos )
 		SendYahoo( strTmp , m_SendInfo.Context );
-	//else if( m_Send.login.find("@tom") != string::npos )
-	//	SendTom( strTmp , m_SendInfo.Context );
+	else if( m_Send.login.find("@tom") != string::npos )
+		SendTom( strTmp , m_SendInfo.Context );
 	else
 		SendOther( strTmp , m_SendInfo.Context );
 
@@ -252,6 +253,30 @@ bool  SocketSendToMail::SendOther(std::string& strTmp,std::string & context)
 
 bool SocketSendToMail::SendTom(std::string& strTmp,std::string & context)
 {
+	strTmp+="X-Mailer: Free Mail to Send by oohaha\r\nDate: ";
 
+	strTmp+=nowtime()+" +0800\r\n";
+
+	strTmp+="Content-Transfer-Encoding: Quoted-Printable\r\n";
+
+	strTmp+="Content-Type: text/html; charset=\"gb2312\"\r\n\r\n" ;
+
+	char str[1024];
+	EncodeQuoted((unsigned char*)context.c_str() , str, context.length() , 1024 );
+
+	//邮件内容
+	strTmp+=context;
+	strTmp+="\r\n\r\n";
+
+	strTmp+="\r\n.\r\n";
+
+	//strTmp="Subject: =?GB2312?Q?=B7=A2=CB=CD=C3=FB?=\r\nSender: \"=?GB2312?Q?juanfangw389?=\" <juanfangw389@tom.com>\r\nFrom: \"=?GB2312?Q?juanfangw389?=\" <juanfangw389@tom.com>\r\nDate: Fri, 19 Nov 2010 00:33:12 +0800\r\nTo: \"=?GB2312?Q?haha?=\" <283899487@qq.com>,\r\n\"=?GB2312?Q?haha?=\" <tangpeng918@126.com>\r\nX-Priority: 3\r\nX-MSMail-Priority: Normal\r\nContent-Transfer-Encoding: Quoted-Printable\r\nMIME-Version: 1.0\r\nX-Mailer: JMail 4.3.0 Free Version by Dimac\r\nContent-Type: text/plain;\r\ncharset=\"GB2312\"\r\n\r\n=D3=CA=BC=FE=B7=A2=CB=CD=C4=DA=C8=DD=B2=E2=CA=D4=D2=BB=B9=FE=D5=FD=CE=C4!\r\n\r\n\r\n.\r\n";
+	//将邮件内容发送出去
+	if(m_Socket.Send(strTmp.c_str(),strTmp.length() ) == SOCKET_ERROR)
+	{
+		ReleaseSocket();
+
+		return false;	
+	}
 	return true;
-}
+}	
