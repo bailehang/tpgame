@@ -45,14 +45,17 @@ obj->todo();
 
 2. 考虑到上面问题，我们利用visitor模式来
 那么同时得提供下面的操作接口:
-virtual void visit( BaseObj1 * obj1 );
-virtual void visit( BaseObj1 * obj2 );
+virtual void visit( BaseObj1& obj1 );
+virtual void visit( BaseObj2& obj2 );
 
 /// 如果有多个子类型的话，需要重写visit，此时fuction
 void function( Base  *obj )
 {
-visit( obj );
+	/// 
+	visit( obj );
 }
+
+此时visit还得通过多态类型来区分具体的类型，因为visit接口为对象的引用.
 
 3. 一个新解决方式.
 */
@@ -66,9 +69,6 @@ template < typename type>
 class Base
 {
 public:
-	Base( type tp ) 
-	{ m_type = tp;}
-
 	class Handle
 	{
 	public:
@@ -76,95 +76,93 @@ public:
 		{
 			Base<type>::m_handlelist.push_back( this );
 		}
-		virtual void todo( Base<type> * base)
-		{
-			std::cout <<" Handle base " << std::endl;
-		}
+		virtual void todo( const Base& base) = 0 ;
 	};
 
 public:
-	virtual void   todo()
+	static void   todo(const Base<type>* tp)
 	{
 		for( std::list<Handle*>::iterator itr = m_handlelist.begin() ; itr != m_handlelist.end() ; itr ++ )
-		{
-			(*itr)->todo(this);
+		{			
+			(*itr)->todo( *(type*) tp );
 		}  
 	}
 
-
-protected:
-	static  type            		m_type;
-	static  std::list<Handle*>  	m_handlelist;
+	void  todo()
+	{
+		type::todo( this );
+	}
+public:
+	typedef  std::list<Handle*>	    ListHandle;
+	static   ListHandle   			m_handlelist;
 };
 
-template < typename type > 
-class BaseObj1 : public Base< type >
+class BaseObj1 : public Base< BaseObj1 >
 {
 public:
-	BaseObj1( type tp ) : Base ( tp )
-	{		}
-
-	void print()
+	void print() const
 	{
 		std::cout << " BaseObj1 print() " << std::endl;
-		todo();
-	}	
+	}
 };
 
-template < typename type >
-class BaseObj2 : public Base < type >
+class BaseObj2 : public Base < BaseObj2 >
 {
 public:
-	BaseObj2( type tp ) : Base ( tp )
-	{		}
-
-	void display()
+	void display() const
 	{
-		//todo();
+		std::cout <<"BaseObj2 display() " << std::endl;
 	}
 };
 
-template < typename type >
-class Print : public Base< type >::Handle
+class Print : public BaseObj1::Handle,
+		      public BaseObj2::Handle			  
 {
 public:
-	virtual	void todo( Base<type> * base )
+	virtual	void todo(const BaseObj1& base ) 
 	{
-		std::cout << " 	baseobj1  m_type address " << std::endl;
+		std::cout << " baseobj1  todo " << std::endl;
+		base.print();
 	}
 };
 
-template < typename type >
-class display : public Base < type >::Handle 
-{
-public: 
-	virtual void todo( BaseObj2<type> * base )
-	{
-		std::cout <<" baseobj2 m_type address " << std::endl;
-	}
-};	
+Base< BaseObj1 >::ListHandle	Base< BaseObj1 >::m_handlelist;
+Base< BaseObj2 >::ListHandle	Base< BaseObj2 >::m_handlelist;
 
-
-
-
-
-template < typename type >
-std::list<typename Base<type>::Handle*>		 Base<type>::m_handlelist;
-
-template < typename type >
-type Base<type>::m_type;
+// template < typename type >
+// std::list<typename Base<type>::Handle*>		 Base<type>::m_handlelist;
+// 
+// template < typename type >
+// type Base<type>::m_type;
 
 // template < typename type >
 // std::list<typename BaseObj1<type>::Handle*>  BaseObj1<type>::m_handlelist;
 // template < typename type >
 // std::list<typename BaseObj2<type>::Handle*>  BaseObj2<type>::m_handlelist;
 
+template<typename type>
+void  fun( Base<type> * base)
+{
+	base->todo();
+}
 int _tmain(int argc, _TCHAR* argv[])
 {
-	BaseObj1<int>  b1(1);
-	Print<int>     p1;
+	//BaseObj1<int>  b1(1);
+	//Print<int>     p1;
 
-	b1.todo();
+	//b1.todo();
+	
+	
+	Print     p;
+	BaseObj1  b1;
+	//BaseObj2  b2;
+
+	
+	//b1.todo();
+	//b2.todo();
+
+	fun( &b1 );
+	//fun( &b2 );
 
 	return 0;
 }
