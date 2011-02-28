@@ -64,6 +64,7 @@
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
+				Profile="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -217,10 +218,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ObjTest.h"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
@@ -243,27 +240,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Pool\BlockPool.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Pool\BlockPool.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Pool\FixBlockPool.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Pool\FreeList.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Pool\HeapPool.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Pool\HeapPool.h"
 				>
 			</File>
 			<File

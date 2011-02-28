@@ -71,17 +71,20 @@ inline T * Alloc(unsigned long lSize, DP_MTMP_##paramcount( tp, p ) ){\
 }
 
 ///  二分查找索引
-static  inline  int FindIndx(unsigned long * Arr, int l , int r ,unsigned long Value)
+static  inline  long FindIndx(unsigned long * Arr, int l , int r ,unsigned long Value)
 {
-	if ( l >= r )
-		return l;
+	int low = ( l+r )/2;
 
-	int  m = (l+r)/2 - 1 ;
-	if ( Arr[m] == Value )
-		return m;
-	else if ( Arr[m] > Value )
-	{
-		return FindIndx( Arr , l , m  , Value );
+	if( Arr[low] == Value ) return low;
+	else if( low == 0 )
+	{ 
+		if( Arr[low] >= Value)
+			return low;
+		return r;
 	}
-	return  FindIndx( Arr , m+1 , r , Value);
+	else if ( low == r )    return r;
+	else if ( low > 0 && low <= r-2 && Value > Arr[low-1] && Value < Arr[low] ) return low;
+	else if ( Arr[low] < Value ) return FindIndx(Arr,low+1,r,Value); 
+	else if ( Arr[low] > Value ) return FindIndx(Arr,l,low-1,Value);
+	return low;
 }

@@ -152,6 +152,16 @@ public:
 		}
 	}
 
+	T*  PopNode()
+	{
+		T* head = GetHead();
+		if( head != NULL )
+		{
+			RemoveNode(head);
+		}
+		return head;
+	}
+
 
 private:
 	long    m_Size;

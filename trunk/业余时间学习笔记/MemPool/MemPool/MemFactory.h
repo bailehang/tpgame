@@ -3,9 +3,11 @@
 
 #include "Pool\BlockPool.h"
 #include "Pool\HeapPool.h"
-#include "Factory.h"
 #include "Pool\SamllObjAllocator.h"
+#include "Pool\DynamicPool.h"
+#include "Factory.h"
 #include <set>
+#include <map>
 using namespace std;
 
 class CMemFactory
@@ -13,7 +15,8 @@ class CMemFactory
 	typedef  void* (SmallObjAllocator::*AllocMem)();
 	typedef  bool  (SmallObjAllocator::*Destory)(void*);
 
-	typedef  std::set<void*>	SetMap;
+	typedef  std::set<void*>						SetMap;
+	typedef  std::map<long,DynamicPool* >			DynamicMap;
 
 public:
 	CMemFactory();
@@ -31,8 +34,17 @@ public:
 
 	void*     Alloc(unsigned long size);
 
-	void      Free(void* pAddr, unsigned long size);
+	void      Free(void* pAddr, unsigned long size = 0);
 
+	template< class T >
+	T * Alloc(unsigned long lSize)
+	{
+		void* ptMem = Alloc(lSize);
+		if( !ptMem) return NULL; 
+		T * pt = new(ptMem)T ;
+		return pt;
+	}
+	
 	DEFINE_CALL_CON(1); 
 	DEFINE_CALL_CON(2); 
 	DEFINE_CALL_CON(3); 
@@ -45,7 +57,7 @@ public:
 	DEFINE_CALL_CON(10); 
 
 	template <class T> 
-	void     FreeObj( T * pt , unsigned long size) 
+	void     FreeObj( T * pt , unsigned long size = 0) 
 	{ 
 		if( !pt ) return ;
 		pt->~T(); 
@@ -54,6 +66,11 @@ public:
 	} 
 
 	int		  Index(unsigned long size);
+
+	void      Print()
+	{
+		m_factory->Print();
+	}
 	
 private:
 
@@ -63,5 +80,7 @@ private:
 
 	Factory<long,SmallObjAllocator*,AllocMem,Destory>* m_factory;
 
-	SetMap				m_setList;
+	DynamicMap				m_dynamic;
+	AllocMem				m_alloc  ;
+	Destory					m_destory;
 };
