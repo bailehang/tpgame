@@ -6,27 +6,20 @@
 #include <list>
 using namespace std;
 
-template < typename ID, typename Class,typename AlloFun , typename Rel>
+template < typename Id, typename Type,typename Alloc, typename Destory>
 class  Factory
 {
-	struct  FWapper
-	{
-		FWapper(AlloFun a,Rel r,class wp):crtor(a),ret(r),Wapper(wp)
-		{
-		}
-		AlloFun  crtor;
-		Rel		 ret;
-		Class	 Wapper;
-	};
-
-	typedef std::map<ID,Class> CallMap;
-
+	typedef Factory		 SelfObj;
+	typedef Alloc		 AllocFun;
+	typedef	Destory		 DestoryFun;
+	typedef typename Id  FactoryId;
+	typedef std::map<Id,Type> AllocMap;
 public:
-	Factory( AlloFun fun, Rel rel )
+	Factory( AllocFun alloc,DestoryFun destory)
 	{
 		Clear();
- 		m_Alloc = fun;
- 		m_Rel   = rel;
+ 		m_AllocFun = alloc ;
+		m_DestoryFun= destory;
 	}
 
 	~Factory()
@@ -36,41 +29,60 @@ public:
 	
 	void Clear()
 	{
-		CallMap::iterator  itr = m_MapList.begin();
-		for( ; itr != m_MapList.end() ; itr ++ )
+		AllocMap::iterator  itr = m_MapAlloc.begin();
+		for( ; itr != m_MapAlloc.end() ; itr ++ )
 		{
 			delete itr->second;
 		}
-		m_MapList.clear();
+		m_MapAlloc.clear();
 	}
 
-	void  Add(ID id,Class cl)
+	void  Add(Id size , Type type )
 	{
-		m_MapList.insert( std::pair<ID,Class>(id,cl) );
+		m_MapAlloc.insert( std::pair<Id,Type>(size,type) );
 	}
 
-	void* Alloc( ID id )
+	void* Alloc( Id id )
 	{
-		CallMap::iterator  itr = m_MapList.find( id );
-		if ( itr != m_MapList.end() )
+		AllocMap::iterator  itr = m_MapAlloc.find( id );
+		if ( itr != m_MapAlloc.end() )
 		{
-			return  (itr->second->*m_Alloc)();
+			return  (itr->second->*m_AllocFun)();
 		}
 		return NULL;
 	}
 
-	bool   Release(ID id , void* p )
+	bool   Release(Id id , void* p )
 	{
-		CallMap::iterator  itr = m_MapList.find( id );
-		if ( itr != m_MapList.end() )
+		AllocMap::iterator  itr = m_MapAlloc.find( id );
+		if ( itr != m_MapAlloc.end() )
 		{
-			return  (itr->second->*m_Rel)(p);
+			return  (itr->second->*m_DestoryFun)( p );
 		}
 		return false;
 	}
 
+	bool	CheckExist( Id id)
+	{
+		AllocMap::iterator  itr = m_MapAlloc.find( id );
+		if ( itr != m_MapAlloc.end() )
+		{
+			return true;
+		}
+		return false;
+	}
+
+	void  Print()
+	{
+		AllocMap::iterator  itr = m_MapAlloc.begin();
+		for( ; itr != m_MapAlloc.end() ; itr ++ )
+		{
+			itr->second->Print();
+		}
+	}
+
 private:
-	CallMap   m_MapList;
-	AlloFun	  m_Alloc;
-	Rel		  m_Rel;
+	AllocMap   m_MapAlloc;
+	AllocFun   m_AllocFun;	
+	DestoryFun m_DestoryFun;
 };

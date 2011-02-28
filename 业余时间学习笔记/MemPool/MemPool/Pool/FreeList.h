@@ -4,41 +4,39 @@
 #define  MaxSize  ((1<<15)-1)
 class Chunk
 {
-
 	friend class SmallObjAllocator;
 public:
 
 	Chunk( int blocksize, long  len )
 	{
-		ReleaseAll();
+		//ReleaseAll();
 
 		if( MaxSize < len )
 		{
 			len = MaxSize;
 		}
-		m_blockSize = blocksize;
+		m_blockSize = blocksize+4;
 		m_availSize = len;
 		m_Length  = len;
 		m_firstBlock = 0;
-		m_pData = new  char [ blocksize * len ];
+
+		m_pData = (char*)VirtualAlloc(NULL,m_blockSize * len,MEM_COMMIT,PAGE_READWRITE);
 
 		char* p = m_pData;
-		for ( short i = 0 ; i < len ; p+=blocksize)
+		for ( long i = 0 ; i < len ; p+=m_blockSize)
 		{
-			*(short*) p = ++i;
+			*(long*) p = ++i;
 		}
-
-		//std::cout <<" 分配信息 ";
-		//print();
 	}
 
 	~Chunk()
 	{
-		ReleaseAll();
+		ReleaseAll();		
 	}
 
 	void ReleaseAll()
 	{
+		std::cout << " ~Chuck 析构函数调用 Size = " <<  m_blockSize - 4 << std::endl ;
 		m_blockSize = m_firstBlock = m_availSize = 0;
 		if( !m_pData )
 		{
@@ -52,27 +50,31 @@ public:
 		if ( m_availSize <= 0 ) return NULL;
 		
 		char* pReuslt = m_pData + ( m_firstBlock * m_blockSize );
-		m_firstBlock = *(short*) pReuslt;
+		m_firstBlock = *(long*) pReuslt;
 
 		-- m_availSize;
-		return pReuslt;
+
+		*(long*)pReuslt = m_blockSize - 4 ;
+				
+		return pReuslt+4;
 	}
 
 	bool   Release(void* pData)
 	{   
-		char*  plist = (char*)pData;
-		*(short*)plist = m_firstBlock;
-		m_firstBlock = ( plist - m_pData ) / m_blockSize;
+		char*  plist = (char*)pData-4;
 
+		*(long*)plist = m_firstBlock;
+
+		m_firstBlock = ( plist - m_pData ) / m_blockSize;
+		
 		++ m_availSize;
-		//print();
 		return true;
 	}
 
 	bool   Check(void* pData)
 	{
 		if ( !pData || pData < m_pData ) return false;
-		char*  plist = (char*)pData;
+		char*  plist = (char*)pData-4;
 		if ( (plist-m_pData)% m_blockSize != 0 || (plist-m_pData)/ m_blockSize > m_Length )
 		{
 			//std::cout <<" release mem failed !" << std::endl;
@@ -81,18 +83,23 @@ public:
 		return true;
 	}
 
+	bool   Full()
+	{
+		return m_availSize == m_Length;
+	}
+
 	void   print()
 	{
-		std::cout <<" blocksize  " << m_blockSize 
-				  <<" m_firstBlock "<< m_firstBlock
-				  <<" m_availSize "<< m_availSize << std::endl;
+		std::cout <<"\tblocksize    "  << m_blockSize - 4 
+				  <<" m_firstBlock "   << m_firstBlock
+				  <<" m_availSize  "   << m_availSize << std::endl;
 	}
 
 private:
 	///  字段大小
-	int   m_blockSize;
-	char* m_pData;
-	short m_firstBlock;
-	short m_availSize;
-	short m_Length;
+	int			m_blockSize;
+	char*		m_pData;
+	long		m_firstBlock;
+	long		m_availSize;
+	long		m_Length;
 };
