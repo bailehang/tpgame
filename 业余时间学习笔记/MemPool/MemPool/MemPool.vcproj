@@ -240,6 +240,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Pool\DynamicPool.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Pool\DynamicPool.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Pool\FixBlockPool.h"
 				>
 			</File>

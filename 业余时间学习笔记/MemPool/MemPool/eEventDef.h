@@ -71,6 +71,7 @@ inline T * Alloc(unsigned long lSize, DP_MTMP_##paramcount( tp, p ) ){\
 }
 
 ///  二分查找索引
+sstatic  inline  int FindIndx(unsigned long * Arr, int l , int r ,unsigned long Value)
 static  inline  long FindIndx(unsigned long * Arr, int l , int r ,unsigned long Value)
 {
 	int low = ( l+r )/2;

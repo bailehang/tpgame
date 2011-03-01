@@ -45,17 +45,14 @@ obj->todo();
 
 2. 考虑到上面问题，我们利用visitor模式来
 那么同时得提供下面的操作接口:
-virtual void visit( BaseObj1& obj1 );
-virtual void visit( BaseObj2& obj2 );
+virtual void visit( BaseObj1 * obj1 );
+virtual void visit( BaseObj1 * obj2 );
 
 /// 如果有多个子类型的话，需要重写visit，此时fuction
 void function( Base  *obj )
 {
-	/// 
 	visit( obj );
 }
-
-此时visit还得通过多态类型来区分具体的类型，因为visit接口为对象的引用.
 
 3. 一个新解决方式.
 */
@@ -76,25 +73,26 @@ public:
 		{
 			Base<type>::m_handlelist.push_back( this );
 		}
-		virtual void todo( const Base& base) = 0 ;
+		virtual void todo( const type& tp)   = 0;
 	};
 
 public:
-	static void   todo(const Base<type>* tp)
+	static void   todo(Base<type> * base)
 	{
-		for( std::list<Handle*>::iterator itr = m_handlelist.begin() ; itr != m_handlelist.end() ; itr ++ )
-		{			
-			(*itr)->todo( *(type*) tp );
+		for( std::list<Handle*>::iterator itr = m_handlelist.begin() ; 
+			 itr != m_handlelist.end() ; itr ++ )
+		{
+			(*itr)->todo( *(type*)base );
 		}  
-	}
-
+	}  
 	void  todo()
 	{
 		type::todo( this );
 	}
-public:
-	typedef  std::list<Handle*>	    ListHandle;
-	static   ListHandle   			m_handlelist;
+
+protected:
+	typedef std::list<Handle*>		listtype;
+	static  listtype			 	m_handlelist;
 };
 
 class BaseObj1 : public Base< BaseObj1 >
@@ -103,7 +101,7 @@ public:
 	void print() const
 	{
 		std::cout << " BaseObj1 print() " << std::endl;
-	}
+	}	
 };
 
 class BaseObj2 : public Base < BaseObj2 >
@@ -111,23 +109,30 @@ class BaseObj2 : public Base < BaseObj2 >
 public:
 	void display() const
 	{
-		std::cout <<"BaseObj2 display() " << std::endl;
+		std::cout << " BaseObj2 display() " << std::endl;
 	}
 };
 
-class Print : public BaseObj1::Handle,
-		      public BaseObj2::Handle			  
+class DoHandle : public BaseObj1::Handle ,
+				 public BaseObj2::Handle				 
 {
 public:
-	virtual	void todo(const BaseObj1& base ) 
+	virtual	void todo(const BaseObj1 & obj1)
 	{
-		std::cout << " baseobj1  todo " << std::endl;
-		base.print();
+		std::cout <<" baseobj1  m_type address " << std::endl;
+		obj1.print();
+	}
+	virtual void todo(const BaseObj2 & obj2)
+	{
+		std::cout <<" baseobj2 m_type address " << std::endl;
+		obj2.display();
 	}
 };
 
-Base< BaseObj1 >::ListHandle	Base< BaseObj1 >::m_handlelist;
-Base< BaseObj2 >::ListHandle	Base< BaseObj2 >::m_handlelist;
+
+
+
+
 
 // template < typename type >
 // std::list<typename Base<type>::Handle*>		 Base<type>::m_handlelist;
@@ -140,29 +145,44 @@ Base< BaseObj2 >::ListHandle	Base< BaseObj2 >::m_handlelist;
 // template < typename type >
 // std::list<typename BaseObj2<type>::Handle*>  BaseObj2<type>::m_handlelist;
 
+Base<BaseObj1>::listtype Base<BaseObj1>::m_handlelist ;
+Base<BaseObj2>::listtype Base<BaseObj2>::m_handlelist ;
+
+/*
+void  fun( BaseObj1 * obj1)
+{
+	obj1->print();
+}
+
+void  fun( BaseObj2 * obj2)
+{
+	obj2->display();
+}
+*/
+
 template<typename type>
 void  fun( Base<type> * base)
 {
 	base->todo();
 }
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	//BaseObj1<int>  b1(1);
 	//Print<int>     p1;
 
 	//b1.todo();
-	
-	
-	Print     p;
-	BaseObj1  b1;
-	//BaseObj2  b2;
 
-	
-	//b1.todo();
-	//b2.todo();
+	BaseObj1  obj1;
+	BaseObj2  obj2;
 
-	fun( &b1 );
-	//fun( &b2 );
+	DoHandle  handle;
+
+	//obj1.todo();
+	//obj2.todo();
+
+	fun( & obj1 );
+	fun( & obj2 );
 
 	return 0;
 }
