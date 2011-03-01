@@ -83,4 +83,5 @@ private:
 	DynamicMap				m_dynamic;
 	AllocMem				m_alloc  ;
 	Destory					m_destory;
+	Dynamic				m_mapList;
 };

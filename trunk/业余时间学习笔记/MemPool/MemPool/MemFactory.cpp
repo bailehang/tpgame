@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MemFactory.h"
 
+const long  blocksize = 5120;
 
 #define  BINDTOFAC(Size,Alloc)\
 	m_factory->Add(Size,new Alloc(Size,AALLOCSIZE/Size) )
@@ -35,7 +36,7 @@ int     CMemFactory::Index(unsigned long size)
 
 void*   CMemFactory::Alloc(unsigned long size)
 {
-	if( size <= 5120 )
+	if( size <= blocksize )
 	{
 		long idx = Index(size);
 		return  m_factory->Alloc(idx);
