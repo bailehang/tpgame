@@ -18,13 +18,18 @@ public:
 
 	void  Exit();
 
-	void  Execute();
+	void  Execute()
+	{
+		//lual_pcall( funname , skillparam );
+	};
 
 	void  OnEvent();
 
 private:
 
 	type		*m_type;
+
+	lua_State  * L;
 	lua_State   *m_luastate;
 	std::string  m_bname;
 	std::string  m_timeout;
