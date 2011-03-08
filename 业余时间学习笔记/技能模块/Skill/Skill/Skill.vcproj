@@ -223,7 +223,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\pclua.h"
+				RelativePath=".\pcall.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pclua11.h"
 				>
 			</File>
 			<File
