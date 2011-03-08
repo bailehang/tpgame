@@ -3,6 +3,10 @@
  * http://blog.csdn.net/firebird321/archive/2008/05/19/2458455.aspx
  */	   
 template <typename T>
+
+#include "pcall.h"
+
+template < class T >
 class  skillmachine
 {
 	typedef  T  type;
@@ -11,9 +15,14 @@ public:
 
 	void  Enter()
 	{
-		lua_State *L;
-		L = luaL_newstate();
+		long id =  static_cast< BufSkill* > ( m_type )->getId();
 
+		char str[100];
+		
+		fprintf( str , "script/skill/%d.lua" , id); 
+
+		RunScript( str );
+		
 	}
 
 	void  Exit();

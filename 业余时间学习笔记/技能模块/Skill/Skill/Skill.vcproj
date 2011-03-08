@@ -223,6 +223,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\pclua.h"
+				>
+			</File>
+			<File
 				RelativePath=".\skillaction.h"
 				>
 			</File>
